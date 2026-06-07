@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:drishtavidya.com)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s \"https://drishtavidya.com/wp-content/uploads/2023/04/Layer-2.png\" -o /Users/anbu_/mbplocal/pers/myprojects/dv-website-26/assets/images/dv-logo.png)",
+      "Bash(open \"http://localhost:3456/index.html\")",
+      "Bash(grep -n \"courses-data.js\\\\|main.js\" /Users/anbu_/mbplocal/pers/myprojects/dv-website-26/*.html)"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+# Block direct browser access to includes/ folder
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^includes/ - [F,L]
+</IfModule>

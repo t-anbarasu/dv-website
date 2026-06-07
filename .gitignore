@@ -1,0 +1,9 @@
+# Environment Files
+env.php
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
