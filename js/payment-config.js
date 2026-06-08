@@ -8,8 +8,9 @@
  */
 const RAZORPAY_CONFIG = {
   key: "rzp_test_XXXXXXXXXXXXXXXX",   // ← Paste your Razorpay Key ID here
-  businessName: "Drishta Vidya LLP",
-  logo: "assets/images/dv-logo.png",
+  businessName: "Drishta Vidya",
+  description: "Program Enrollment",
+  logo: "assets/images/dv-logo-header.png",
   currency: "INR",
   theme: { color: "#c8960c" },
 };

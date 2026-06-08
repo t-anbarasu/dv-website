@@ -173,7 +173,7 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: 90px;
 }
 
 .nav-logo {
@@ -183,7 +183,7 @@ ul { list-style: none; }
 }
 
 .nav-logo-img {
-  height: 42px;
+  height: 74px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -1769,7 +1769,7 @@ textarea.form-control {
 }
 
 .footer-logo-img {
-  height: 36px;
+  height: 62px;
   width: auto;
   display: block;
   object-fit: contain;

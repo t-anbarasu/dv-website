@@ -218,7 +218,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 /* ── Sidebar ── */
 .sidebar { position:fixed; top:0; left:0; width:220px; height:100vh; background:#0d2137; color:#fff; display:flex; flex-direction:column; z-index:100; }
 .sidebar-logo { padding:24px 20px 16px; border-bottom:1px solid rgba(255,255,255,.1); }
-.sidebar-logo img { height:36px; filter:brightness(0) invert(1); }
+.sidebar-logo img { height:48px; filter:brightness(0) invert(1); }
 .sidebar-nav { flex:1; padding:16px 0; }
 .sidebar-nav a { display:flex; align-items:center; gap:10px; padding:11px 20px; color:rgba(255,255,255,.75); text-decoration:none; font-size:14px; font-weight:500; transition:background .15s,color .15s; }
 .sidebar-nav a:hover { background:rgba(255,255,255,.08); color:#fff; }
@@ -310,7 +310,7 @@ tr:hover td { background:#f8fafc; }
 <!-- Sidebar -->
 <nav class="sidebar">
   <div class="sidebar-logo">
-    <img src="../assets/images/dv-logo.png" alt="Drishta Vidya">
+    <img src="../assets/images/dv-logo-header.png" alt="Drishta Vidya">
   </div>
   <div class="sidebar-nav">
     <a href="?tab=overview"       class="<?= $tab==='overview'       ? 'active' : '' ?>">📊 <span>Overview</span></a>

@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     text-align: center;
     margin-bottom: 32px;
   }
-  .login-logo img { height: 44px; }
+  .login-logo img { height: 58px; }
   .login-title {
     font-size: 20px;
     font-weight: 700;
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="login-card">
   <div class="login-logo">
-    <img src="../assets/images/dv-logo.png" alt="Drishta Vidya">
+    <img src="../assets/images/dv-logo-header.png" alt="Drishta Vidya">
   </div>
   <div class="login-title">Admin Panel</div>
   <div class="login-subtitle">Sign in to manage registrations & events</div>
