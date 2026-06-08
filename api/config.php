@@ -5,9 +5,13 @@
  * Fill in your Hostinger MySQL credentials from cPanel > Databases.
  */
 // Load environment configuration safely
-$envPath = __DIR__ . '/../env.php';
-if (file_exists($envPath)) {
-    require_once $envPath;
+$localEnvPath = __DIR__ . '/../env.php'; // Standard local path
+$secureEnvPath = __DIR__ . '/../../env.php'; // Secure Hostinger path (outside public_html)
+
+if (file_exists($secureEnvPath)) {
+    require_once $secureEnvPath;
+} elseif (file_exists($localEnvPath)) {
+    require_once $localEnvPath;
 } else {
     // Fail securely if env.php is missing (prevents revealing errors)
     header('HTTP/1.1 500 Internal Server Error');

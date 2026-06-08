@@ -5,9 +5,15 @@
  * Then replace ADMIN_PASS_HASH below with the output.
  */
 // Load environment configuration safely if not already loaded
-$envPath = __DIR__ . '/../../env.php';
-if (!defined('ADMIN_USER') && file_exists($envPath)) {
-    require_once $envPath;
+$localEnvPath = __DIR__ . '/../../env.php'; // Standard local path
+$secureEnvPath = __DIR__ . '/../../../env.php'; // Secure Hostinger path (outside public_html)
+
+if (!defined('ADMIN_USER')) {
+    if (file_exists($secureEnvPath)) {
+        require_once $secureEnvPath;
+    } elseif (file_exists($localEnvPath)) {
+        require_once $localEnvPath;
+    }
 }
 if (!defined('ADMIN_USER')) {
     define('ADMIN_USER', 'admin');
