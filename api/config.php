@@ -8,9 +8,9 @@
 $localEnvPath = __DIR__ . '/../env.php'; // Standard local path
 $secureEnvPath = __DIR__ . '/../../env.php'; // Secure Hostinger path (outside public_html)
 
-if (file_exists($secureEnvPath)) {
+if (@file_exists($secureEnvPath)) {
     require_once $secureEnvPath;
-} elseif (file_exists($localEnvPath)) {
+} elseif (@file_exists($localEnvPath)) {
     require_once $localEnvPath;
 } else {
     // Fail securely if env.php is missing (prevents revealing errors)
