@@ -63,51 +63,28 @@
         <p class="section-subtitle">Take your personal development into your own hands with these curated tools.</p>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 32px; max-width: 800px; margin: 0 auto;">
+      <div class="tabs-container" style="max-width: 800px; margin: 0 auto;">
         
-        <!-- Book -->
-        <div class="service-card reveal" style="text-align: left; padding: 40px;">
-          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-            <div style="font-size: 48px;">📚</div>
-            <h3 class="service-title" style="margin: 0; font-size: 1.8rem;">Everyday EQ</h3>
-          </div>
-          <p class="service-desc" style="margin-bottom: 16px;">
-            In a world where AI accelerates tasks and information moves faster than attention, Emotional Intelligence has become the ultimate human edge. <strong>EVERYDAY EQ</strong> is a practical, science-backed guide that helps you strengthen that edge through simple, repeatable habits that fit perfectly into your real life—no hours of training, no complex theories, and no overwhelm.
-          </p>
-          <p class="service-desc">
-            Drawing on more than a decade of teaching high-performance programs, this book breaks EQ into three clear parts: the foundations that steady your system, the core skills that shape relationships, and the daily practices that turn awareness into action. Through 70+ Micropractices and 14 Anchor Practices, you will learn how to notice inner signals, regulate reactions, communicate clearly, navigate conflict, and read the room with precision.
-          </p>
-          <a href="https://www.amazon.in/EVERYDAY-Practical-Improving-Emotional-Intelligence/dp/B0GD1K8DP5" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 24px; display: inline-flex;">
-            Get the Book
-          </a>
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav reveal">
+          <button class="tab-btn active" data-target="tab-books">📚 Books</button>
+          <button class="tab-btn" data-target="tab-apps">📱 Apps</button>
+          <button class="tab-btn" data-target="tab-newsletters">✉️ Newsletters</button>
         </div>
 
-        <!-- App -->
-        <div class="service-card reveal animate-delay-1" style="text-align: left; padding: 40px;">
-          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-            <div style="font-size: 48px;">📱</div>
-            <h3 class="service-title" style="margin: 0; font-size: 1.8rem;">EQ-T App</h3>
-          </div>
-          <p class="service-desc">
-            Build your EQ through consistent micro-practices right from your smartphone. As the perfect companion to <em>Everyday EQ</em>, the EQ-T App helps you seamlessly integrate high-performance routines into your daily life. Learn how to tune into your inner signals, regulate your emotional reactions, and track your behavioral growth over time.
-          </p>
-          <a href="https://eq-t.app" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 24px; display: inline-flex;">
-            Open App
-          </a>
+        <!-- Tab Content: Books -->
+        <div id="tab-books" class="tab-pane active">
+          <!-- Populated dynamically via JS -->
         </div>
 
-        <!-- Newsletter -->
-        <div class="service-card reveal animate-delay-2" style="text-align: left; padding: 40px;">
-          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
-            <div style="font-size: 48px;">✉️</div>
-            <h3 class="service-title" style="margin: 0; font-size: 1.8rem;">The EQnomist</h3>
-          </div>
-          <p class="service-desc">
-            Get everyday insights, actionable tips, and behavioral science breakdowns delivered straight to your feed. The EQnomist equips you to continuously refine your Emotional Intelligence and stay relevant, adaptable, and empathetic in the age of AI.
-          </p>
-          <a href="https://www.linkedin.com/newsletters/the-eqnomist-6895196782586925056/" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 24px; display: inline-flex;">
-            Subscribe Now
-          </a>
+        <!-- Tab Content: Apps -->
+        <div id="tab-apps" class="tab-pane">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Tab Content: Newsletters -->
+        <div id="tab-newsletters" class="tab-pane">
+          <!-- Populated dynamically via JS -->
         </div>
 
       </div>

@@ -54,6 +54,33 @@ if ($eventType === 'payment.captured') {
                   AND payment_status = 'pending'
             ");
             $stmt->execute([$paymentId]);
+            
+            // If the status was successfully updated from pending to completed
+            if ($stmt->rowCount() > 0) {
+                // Fetch details to send email
+                $stmtDetails = getDB()->prepare("
+                    SELECT reg.email, reg.first_name, reg.last_name,
+                           p.title, r.date_display, r.venue
+                    FROM registrations reg
+                    JOIN program_runs r ON reg.run_id = r.id
+                    JOIN programs p ON reg.program_id = p.id
+                    WHERE reg.razorpay_payment_id = ?
+                ");
+                $stmtDetails->execute([$paymentId]);
+                $details = $stmtDetails->fetch();
+                
+                if ($details) {
+                    require_once __DIR__ . '/send-email.php';
+                    $fullName = trim($details['first_name'] . ' ' . $details['last_name']);
+                    sendWelcomeEmail(
+                        $details['email'], 
+                        $fullName, 
+                        $details['title'], 
+                        $details['date_display'], 
+                        $details['venue']
+                    );
+                }
+            }
         } catch (PDOException $e) {
             http_response_code(500);
             exit('DB error');

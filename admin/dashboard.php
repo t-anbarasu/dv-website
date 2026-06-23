@@ -122,6 +122,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'toggl
     exit;
 }
 
+// Add/Edit resource
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save_resource') {
+    $id = (int)($_POST['resource_id'] ?? 0);
+    $category = trim($_POST['category'] ?? '');
+    $title = trim($_POST['title'] ?? '');
+    $description = trim($_POST['description'] ?? '');
+    $link = trim($_POST['link'] ?? '');
+    
+    // Handle image upload
+    $image_path = trim($_POST['existing_image'] ?? '');
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . '/../assets/images/resources/';
+        $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        $filename = uniqid('res_') . '.' . $ext;
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename)) {
+            $image_path = 'assets/images/resources/' . $filename;
+        }
+    }
+
+    try {
+        if ($id > 0) {
+            $db->prepare("UPDATE resources SET category=?, title=?, description=?, link=?, image_path=? WHERE id=?")
+               ->execute([$category, $title, $description, $link, $image_path, $id]);
+        } else {
+            $db->prepare("INSERT INTO resources (category, title, description, link, image_path) VALUES (?,?,?,?,?)")
+               ->execute([$category, $title, $description, $link, $image_path]);
+        }
+        header('Location: dashboard.php?tab=resources&saved=1');
+    } catch (PDOException $e) {
+        header('Location: dashboard.php?tab=resources&err=1');
+    }
+    exit;
+}
+
+// Delete resource
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete_resource') {
+    $id = (int)($_POST['resource_id'] ?? 0);
+    if ($id) {
+        $db->prepare("DELETE FROM resources WHERE id=?")->execute([$id]);
+    }
+    header('Location: dashboard.php?tab=resources&saved=1');
+    exit;
+}
+
 // CSV Export
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $filterRun  = $_GET['run_id'] ?? '';
@@ -202,6 +246,12 @@ $allPrograms = $db->query("SELECT id, title, program_family, price_label, is_act
 
 // All runs dropdown for filter
 $allRunsDropdown = $db->query("SELECT id, date_display, location, program_id FROM program_runs ORDER BY run_date_start DESC")->fetchAll();
+
+// Resources tab
+$allResources = [];
+if ($tab === 'resources') {
+    $allResources = $db->query("SELECT * FROM resources ORDER BY id DESC")->fetchAll();
+}
 
 ?>
 <!DOCTYPE html>
@@ -317,6 +367,7 @@ tr:hover td { background:#f8fafc; }
     <a href="?tab=registrations"  class="<?= $tab==='registrations'  ? 'active' : '' ?>">📋 <span>Registrations</span></a>
     <a href="?tab=events"         class="<?= $tab==='events'         ? 'active' : '' ?>">📅 <span>Events</span></a>
     <a href="?tab=courses"        class="<?= $tab==='courses'        ? 'active' : '' ?>">🎓 <span>Courses</span></a>
+    <a href="?tab=resources"      class="<?= $tab==='resources'      ? 'active' : '' ?>">📚 <span>Resources</span></a>
   </div>
   <div class="sidebar-footer">
     <a href="../index.html" target="_blank">↗ View Website</a><br><br>
@@ -759,6 +810,116 @@ function editProgram(id) {
         </td>
       </tr>
     <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+
+<?php endif; ?>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<?php if ($tab === 'resources'): ?>
+
+<div class="page-title">Resources</div>
+
+<!-- Add new resource toggle -->
+<button class="btn btn-gold" onclick="document.getElementById('add-resource-panel').style.display='block'; document.getElementById('resource-form').reset(); document.getElementById('resource-id').value=''; document.getElementById('resource-panel-title').innerText='Add New Resource';">
+  + Add New Resource
+</button>
+<div style="margin-bottom:16px"></div>
+
+<div id="add-resource-panel" style="display:none; background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:20px; margin-bottom:20px;">
+  <div id="resource-panel-title" style="font-size:15px;font-weight:700;color:#0d2137;margin-bottom:16px">Add New Resource</div>
+  <form id="resource-form" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="action" value="save_resource">
+    <input type="hidden" name="resource_id" id="resource-id" value="">
+    <input type="hidden" name="existing_image" id="existing-image" value="">
+    
+    <div class="form-row">
+      <div class="form-group">
+        <label>Title *</label>
+        <input type="text" name="title" id="resource-title" required>
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select name="category" id="resource-category" required>
+          <option value="books">Book</option>
+          <option value="apps">App</option>
+          <option value="newsletters">Newsletter</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group">
+        <label>Description (2-3 lines) *</label>
+        <textarea name="description" id="resource-desc" rows="3" required></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Resource URL *</label>
+        <input type="url" name="link" id="resource-link" required placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>Image *</label>
+        <input type="file" name="image" id="resource-image" accept="image/*">
+        <div style="font-size:11px;color:#6b7280;margin-top:4px" id="resource-image-help">Leave blank to keep existing image on edit.</div>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button type="submit" class="btn btn-gold">Save Resource</button>
+      <button type="button" class="btn btn-gray" onclick="document.getElementById('add-resource-panel').style.display='none'">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<script>
+const allResourcesData = <?= json_encode($allResources, JSON_UNESCAPED_UNICODE) ?>;
+function editResource(id) {
+    const r = allResourcesData.find(x => x.id == id);
+    if(!r) return;
+    document.getElementById('add-resource-panel').style.display = 'block';
+    document.getElementById('resource-panel-title').innerText = 'Edit Resource';
+    document.getElementById('resource-id').value = r.id;
+    document.getElementById('resource-title').value = r.title;
+    document.getElementById('resource-category').value = r.category;
+    document.getElementById('resource-desc').value = r.description;
+    document.getElementById('resource-link').value = r.link;
+    document.getElementById('existing-image').value = r.image_path;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Image</th><th>Title</th><th>Category</th><th>Link</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    <?php foreach ($allResources as $r): ?>
+      <tr>
+        <td><?= (int)$r['id'] ?></td>
+        <td>
+            <?php if ($r['image_path']): ?>
+            <img src="../<?= htmlspecialchars($r['image_path']) ?>" alt="" style="height:40px;border-radius:4px;">
+            <?php else: ?>
+            —
+            <?php endif; ?>
+        </td>
+        <td><?= htmlspecialchars($r['title']) ?></td>
+        <td><span class="badge badge-blue"><?= ucfirst(htmlspecialchars($r['category'])) ?></span></td>
+        <td><a href="<?= htmlspecialchars($r['link']) ?>" target="_blank" style="color:#1e40af;text-decoration:none">Link ↗</a></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-navy btn-sm" onclick="editResource(<?= (int)$r['id'] ?>)">Edit</button>
+          <form method="post" style="display:inline" onsubmit="return confirm('Delete this resource?')">
+            <input type="hidden" name="action" value="delete_resource">
+            <input type="hidden" name="resource_id" value="<?= (int)$r['id'] ?>">
+            <button class="btn btn-red btn-sm" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+    <?php if (!$allResources): ?><tr><td colspan="6" style="text-align:center;color:#6b7280;padding:32px">No resources yet. Add one above.</td></tr><?php endif; ?>
     </tbody>
   </table>
 </div>

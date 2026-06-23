@@ -7,7 +7,7 @@
  * Use rzp_test_... for testing, rzp_live_... for production.
  */
 const RAZORPAY_CONFIG = {
-  key: "rzp_test_XXXXXXXXXXXXXXXX",   // ← Paste your Razorpay Key ID here
+  key: "rzp_test_T4iNdGHLmJkZe9",   // ← Paste your Razorpay Key ID here
   businessName: "Drishta Vidya",
   description: "Program Enrollment",
   logo: "assets/images/dv-logo-header.png",

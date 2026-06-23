@@ -361,6 +361,49 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function showNoDatesAlert(course) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.style.zIndex = '3000'; // Above other modals if any
+  
+  const title = course ? encodeURIComponent(course.title) : '';
+  const redirectUrl = `contact.html?course=${title}`;
+
+  overlay.innerHTML = `
+    <div class="modal" style="max-width: 400px; text-align: center;">
+      <div class="modal-header" style="padding: 30px 20px 20px; background: transparent; border: none;">
+        <div style="font-size: 48px; margin-bottom: 16px;">📅</div>
+        <h3 style="color: var(--navy); font-size: 20px; margin: 0; font-family: 'Playfair Display', serif; font-weight: 700;">No Scheduled Dates</h3>
+      </div>
+      <div class="modal-body" style="padding: 0 28px 30px;">
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          There are currently no upcoming dates scheduled for this program. We can notify you when new dates are announced or discuss a custom session for your team.
+        </p>
+        <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="window.location.href='${redirectUrl}'">
+          Enquire Now
+        </button>
+        <button class="btn btn-outline" style="width: 100%; justify-content: center; margin-top: 10px; border: none; background: transparent; color: var(--text-muted);" onclick="this.closest('.modal-overlay').remove()">
+          Close
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  // Trigger animation
+  setTimeout(() => overlay.classList.add('open'), 10);
+}
+
+function openRegForCourse(courseId) {
+  if (typeof upcomingPrograms === 'undefined') return;
+  const runIdx = upcomingPrograms.findIndex(p => p.courseId === courseId);
+  if (runIdx >= 0) {
+    openRegModal(runIdx);
+  } else {
+    const course = (typeof coursesData !== 'undefined') ? coursesData.find(c => c.id === courseId) : null;
+    showNoDatesAlert(course);
+  }
+}
+
 /* =============================================
    COURSE CARD RENDERER
    ============================================= */
@@ -404,7 +447,7 @@ function buildCourseCard(course, showEnquireBtn = true) {
            Enquire
          </a>
          ${course.price > 0
-           ? `<button class="btn btn-primary" onclick="openPaymentModal(${course.id})">
+           ? `<button class="btn btn-primary" onclick="openRegForCourse(${course.id})">
                 💳 Pay &amp; Enroll
               </button>`
            : `<a href="contact.html?course=${encodeURIComponent(course.title)}" class="btn btn-primary">
@@ -666,4 +709,88 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
+});
+
+/* =============================================
+   GENERIC TABS
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.target;
+      const group = btn.closest('.tabs-container') || document;
+      
+      group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      group.querySelectorAll('.tab-pane').forEach(p => {
+        p.classList.remove('active');
+        if (p.id === target) p.classList.add('active');
+      });
+    });
+  });
+});
+
+/* =============================================
+   RESOURCES DYNAMIC LOADING
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const booksTab = document.getElementById('tab-books');
+  const appsTab = document.getElementById('tab-apps');
+  const newslettersTab = document.getElementById('tab-newsletters');
+
+  if (!booksTab && !appsTab && !newslettersTab) return; // Only run on resources page
+
+  fetch('api/get-resources.php')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        renderResources(data.data.books || [], booksTab, 'Get the Book');
+        renderResources(data.data.apps || [], appsTab, 'Open App');
+        renderResources(data.data.newsletters || [], newslettersTab, 'Subscribe Now');
+      } else {
+        console.error('Failed to load resources:', data.error);
+      }
+    })
+    .catch(err => console.error('Error fetching resources:', err));
+
+  function renderResources(items, container, btnText) {
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (items.length === 0) {
+      container.innerHTML = '<p style="text-align:center; padding:40px; color:#6b7280;">More resources coming soon.</p>';
+      return;
+    }
+
+    items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'service-card';
+      card.style.cssText = 'display: flex; gap: 32px; align-items: flex-start; text-align: left; padding: 40px; flex-wrap: wrap; margin-bottom: 24px;';
+      
+      let imgHtml = '';
+      if (item.image_path) {
+        imgHtml = `<img src="${item.image_path}" alt="${item.title}" style="width: 180px; border-radius: 8px; box-shadow: var(--shadow-sm); flex-shrink: 0;" />`;
+      } else {
+        imgHtml = `<div style="width: 180px; height: 250px; background: #e5e7eb; border-radius: 8px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; color:#9ca3af;">No Image</div>`;
+      }
+
+      // Convert newlines to paragraphs for description
+      const descHtml = item.description.split('\\n').filter(p => p.trim() !== '').map(p => `<p style="margin-bottom: 12px; font-size: 15px; line-height: 1.6; color: #4b5563;">${p}</p>`).join('');
+
+      card.innerHTML = `
+        ${imgHtml}
+        <div style="flex: 1; min-width: 250px;">
+          <h3 style="margin: 0 0 16px 0; font-size: 1.8rem; color: #111827; font-weight: 700;">${item.title}</h3>
+          ${descHtml}
+        </div>
+        <div style="flex-shrink: 0; min-width: 160px; text-align: center;">
+          <a href="${item.link}" target="_blank" rel="noopener" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 14px 24px;">
+            ${btnText}
+          </a>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
 });

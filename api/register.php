@@ -99,6 +99,25 @@ try {
         $razorpayId, $amountInr
     ]);
 
+    // ─── Send Welcome Email ──────────────────────────────────────
+    if ($paymentStatus === 'completed' || $paymentStatus === 'free') {
+        require_once __DIR__ . '/send-email.php';
+        $stmtDetails = getDB()->prepare("
+            SELECT p.title, r.date_display, r.venue 
+            FROM programs p 
+            JOIN program_runs r ON p.id = r.program_id 
+            WHERE r.id = ?
+        ");
+        $stmtDetails->execute([$runId]);
+        $details = $stmtDetails->fetch();
+        
+        if ($details) {
+            $fullName = trim($firstName . ' ' . $lastName);
+            // Send email but don't block/fail registration if it fails
+            sendWelcomeEmail($email, $fullName, $details['title'], $details['date_display'], $details['venue']);
+        }
+    }
+
     echo json_encode(['success' => true, 'id' => $uuid]);
 
 } catch (PDOException $e) {

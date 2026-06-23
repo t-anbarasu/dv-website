@@ -228,6 +228,92 @@
     </div>
   </div>
 
+  <!-- REGISTRATION & PAYMENT MODAL -->
+  <div class="modal-overlay" id="reg-modal" role="dialog" aria-modal="true">
+    <div class="modal reg-modal">
+
+      <!-- Step 1: Registration Form -->
+      <div id="reg-step-1">
+        <div class="modal-header">
+          <div class="modal-program-badge" id="reg-program-badge">ECLIPSE</div>
+          <div class="modal-title" id="reg-program-title">Program Title</div>
+          <div class="reg-meta-row">
+            <span id="reg-date-badge" class="reg-meta-badge">📅 Date</span>
+            <span id="reg-location-badge" class="reg-meta-badge">📍 Location</span>
+            <span id="reg-mode-badge" class="reg-meta-badge">Mode</span>
+          </div>
+          <div class="modal-price-row" id="reg-price-row">
+            <div class="modal-price-amount" id="reg-price">₹15,000</div>
+            <div class="modal-price-note">per participant + 18% GST</div>
+          </div>
+          <button class="modal-close" id="reg-modal-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-section-label">Your Details</div>
+          <form id="reg-form" novalidate>
+            <div class="reg-form-row">
+              <div class="reg-field">
+                <label class="reg-label">First Name *</label>
+                <input type="text" class="reg-input" id="reg-fname" placeholder="Ravi" required />
+              </div>
+              <div class="reg-field">
+                <label class="reg-label">Last Name *</label>
+                <input type="text" class="reg-input" id="reg-lname" placeholder="Kumar" required />
+              </div>
+            </div>
+            <div class="reg-field">
+              <label class="reg-label">Email Address *</label>
+              <input type="email" class="reg-input" id="reg-email" placeholder="ravi@company.com" required />
+            </div>
+            <div class="reg-field">
+              <label class="reg-label">Mobile Number *</label>
+              <input type="tel" class="reg-input" id="reg-phone" placeholder="+91 98765 43210" required />
+            </div>
+            <div class="reg-field">
+              <label class="reg-label">Organization / Company</label>
+              <input type="text" class="reg-input" id="reg-org" placeholder="Your company name" />
+            </div>
+            <div class="reg-field">
+              <label class="reg-label">Designation</label>
+              <input type="text" class="reg-input" id="reg-role" placeholder="e.g. Manager, Director" />
+            </div>
+            <!-- Honeypot: hidden from real users, catches bots -->
+            <input type="text" id="reg-honeypot" name="website" style="display:none" tabindex="-1" autocomplete="off">
+            <div id="reg-error" class="reg-error" style="display:none;"></div>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;" id="reg-pay-btn">
+              <span id="reg-pay-btn-text">Proceed to Pay</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <p style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;">
+              Secured by Razorpay · 256-bit SSL encryption
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Step 2: Success Screen -->
+      <div id="reg-step-2" style="display:none;">
+        <div class="modal-header" style="text-align:center;padding:32px 28px;">
+          <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+          <div class="modal-title">Registration Confirmed!</div>
+          <div class="modal-price-note" style="margin-top:8px;color:rgba(255,255,255,.7);">
+            Payment successful. Check your email for confirmation.
+          </div>
+          <button class="modal-close" id="reg-success-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="reg-success-details" id="reg-success-details"></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:20px;" onclick="closeRegModal()">
+            Done
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="js/payment-config.js"></script>
   <script src="api/get-data.js.php"></script>
   <script src="js/main.js?v=2"></script>
 </body>
