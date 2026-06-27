@@ -79,16 +79,19 @@ $paymentStatus  = in_array($body['payment_status'] ?? '', ['pending','completed'
                     ? $body['payment_status'] : 'pending';
 $razorpayId     = !empty($body['razorpay_payment_id']) ? substr(trim($body['razorpay_payment_id']), 0, 100) : null;
 $amountInr      = isset($body['amount_paid_inr']) ? (int) $body['amount_paid_inr'] : null;
-
+$baseAmountInr  = isset($body['base_amount_inr']) ? (int) $body['base_amount_inr'] : $amountInr;
+$promoCode      = !empty($body['promo_code']) ? substr(trim($body['promo_code']), 0, 50) : null;
+$discountAmount = isset($body['discount_amount_inr']) ? (int) $body['discount_amount_inr'] : 0;
+$taxAmount      = isset($body['tax_amount_inr']) ? (int) $body['tax_amount_inr'] : 0;
 // ─── Insert ──────────────────────────────────────────────────
 try {
     $stmt = getDB()->prepare("
         INSERT INTO registrations
             (id, run_id, program_id, first_name, last_name, email, phone,
              organization, designation, payment_method, payment_status,
-             razorpay_payment_id, amount_paid_inr)
+             razorpay_payment_id, amount_paid_inr, base_amount_inr, promo_code, discount_amount_inr, tax_amount_inr)
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
     $stmt->execute([
@@ -96,8 +99,15 @@ try {
         $firstName, $lastName, $email, $phone,
         $organization, $designation,
         $paymentMethod, $paymentStatus,
-        $razorpayId, $amountInr
+        $razorpayId, $amountInr,
+        $baseAmountInr, $promoCode, $discountAmount, $taxAmount
     ]);
+
+    // Update promo code usage
+    if ($promoCode && ($paymentStatus === 'completed' || $paymentStatus === 'free')) {
+        $stmtPromo = getDB()->prepare("UPDATE promo_codes SET times_used = times_used + 1 WHERE code = ?");
+        $stmtPromo->execute([$promoCode]);
+    }
 
     // ─── Send Welcome Email ──────────────────────────────────────
     if ($paymentStatus === 'completed' || $paymentStatus === 'free') {

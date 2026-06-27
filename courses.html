@@ -277,6 +277,37 @@
               <label class="reg-label">Designation</label>
               <input type="text" class="reg-input" id="reg-role" placeholder="e.g. Manager, Director" />
             </div>
+            
+            <div class="modal-section-label" style="margin-top: 24px;">Payment Summary</div>
+            <div class="reg-field">
+              <label class="reg-label">Have a Promo Code?</label>
+              <div style="display: flex; gap: 8px;">
+                <input type="text" class="reg-input" id="reg-promo-code" placeholder="Enter code" style="text-transform: uppercase;" />
+                <button type="button" class="btn btn-secondary" id="reg-promo-btn" style="padding: 0 16px;">Apply</button>
+              </div>
+              <div id="promo-message" style="font-size: 12px; margin-top: 4px;"></div>
+            </div>
+
+            <div class="price-breakdown" style="background: var(--bg-card); padding: 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Base Amount</span>
+                <span id="summary-base">₹0</span>
+              </div>
+              <div id="summary-discount-row" style="display: none; justify-content: space-between; margin-bottom: 8px; color: #16a34a;">
+                <span>Discount</span>
+                <span id="summary-discount">-₹0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>GST (18%)</span>
+                <span id="summary-tax">₹0</span>
+              </div>
+              <hr style="border: none; border-top: 1px solid var(--border-color); margin: 8px 0;" />
+              <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;">
+                <span>Total Amount</span>
+                <span id="summary-total">₹0</span>
+              </div>
+            </div>
+
             <!-- Honeypot: hidden from real users, catches bots -->
             <input type="text" id="reg-honeypot" name="website" style="display:none" tabindex="-1" autocomplete="off">
             <div id="reg-error" class="reg-error" style="display:none;"></div>

@@ -57,9 +57,9 @@ if ($eventType === 'payment.captured') {
             
             // If the status was successfully updated from pending to completed
             if ($stmt->rowCount() > 0) {
-                // Fetch details to send email
+                // Fetch details to send email and update promo
                 $stmtDetails = getDB()->prepare("
-                    SELECT reg.email, reg.first_name, reg.last_name,
+                    SELECT reg.email, reg.first_name, reg.last_name, reg.promo_code,
                            p.title, r.date_display, r.venue
                     FROM registrations reg
                     JOIN program_runs r ON reg.run_id = r.id
@@ -70,6 +70,11 @@ if ($eventType === 'payment.captured') {
                 $details = $stmtDetails->fetch();
                 
                 if ($details) {
+                    if (!empty($details['promo_code'])) {
+                        $stmtPromo = getDB()->prepare("UPDATE promo_codes SET times_used = times_used + 1 WHERE code = ?");
+                        $stmtPromo->execute([$details['promo_code']]);
+                    }
+
                     require_once __DIR__ . '/send-email.php';
                     $fullName = trim($details['first_name'] . ' ' . $details['last_name']);
                     sendWelcomeEmail(
