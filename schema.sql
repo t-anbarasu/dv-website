@@ -156,3 +156,24 @@ VALUES
 
 ('GAB-JUL26-BLR', 5, '2026-07-12', NULL, 'July 12, 2026',
  'Bangalore', 'Bangalore, Karnataka', 'In-Person', 25, 10, 1);
+
+-- ─── TABLE: special_events ────────────────────────────────────
+CREATE TABLE IF NOT EXISTS special_events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(200) NOT NULL,
+  description TEXT NOT NULL,
+  icon VARCHAR(20),
+  badge_text VARCHAR(100),
+  link_url VARCHAR(500),
+  start_date DATETIME NOT NULL,
+  end_date DATETIME NOT NULL,
+  is_active TINYINT(1) DEFAULT 1,
+  is_default TINYINT(1) DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ─── SEED: special_events ────────────────────────────────────
+INSERT INTO special_events (title, description, icon, badge_text, link_url, start_date, end_date, is_active, is_default)
+VALUES 
+('Special Demo Event', 'This is a time-limited special event designed to showcase the new dynamic feature.', '🌟', '📅 Available until next week', 'courses.html', '2026-07-01 00:00:00', '2026-07-15 23:59:59', 1, 0);

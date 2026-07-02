@@ -900,3 +900,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+/* =============================================
+   SPECIAL EVENT FETCHING
+   ============================================= */
+(function() {
+  const linkEl = document.getElementById('special-event-link');
+  if (!linkEl) return; // Only run on pages with the special event hero card
+
+  const iconEl = document.getElementById('special-event-icon');
+  const titleEl = document.getElementById('special-event-title');
+  const descEl = document.getElementById('special-event-desc');
+  const badgeEl = document.getElementById('special-event-badge');
+
+  fetch('api/get-special-event.php')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.event) {
+        const ev = data.event;
+        if (ev.title) titleEl.textContent = ev.title;
+        if (ev.description) descEl.textContent = ev.description;
+        if (ev.icon) iconEl.textContent = ev.icon;
+        if (ev.badge_text) badgeEl.textContent = ev.badge_text;
+        if (ev.link_url) linkEl.href = ev.link_url;
+        
+        if (ev.is_default != 1) {
+          linkEl.classList.add('hero-card-special');
+        }
+      }
+    })
+    .catch(err => {
+      console.error('Error fetching special event:', err);
+    });
+})();

@@ -378,6 +378,17 @@ ul { list-style: none; }
   z-index: 2;
 }
 
+.hero-card-special {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(234, 88, 12, 0.9));
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 40px rgba(234, 88, 12, 0.3);
+}
+
+.hero-card-special .hero-card-title {
+  font-size: 21px;
+  color: #FFFFFF;
+}
+
 .hero-card-back {
   width: 280px;
   top: 20px; left: 40px;
@@ -403,6 +414,7 @@ ul { list-style: none; }
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 8px;
+  color: #FFFFFF;
 }
 
 .hero-card-text {
