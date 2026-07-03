@@ -1918,7 +1918,6 @@ textarea.form-control {
    ============================================= */
 @media (max-width: 1024px) {
   .hero-grid { grid-template-columns: 1fr; gap: 40px; padding: 60px 0; }
-  .hero-visual { display: none; }
   .steps-grid { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
