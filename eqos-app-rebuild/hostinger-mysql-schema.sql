@@ -375,7 +375,7 @@ CREATE TABLE IF NOT EXISTS ai_usage (
     id VARCHAR(64) PRIMARY KEY,
     user_id VARCHAR(64) NOT NULL,
     task VARCHAR(100) NOT NULL,
-    usage_date DATE DEFAULT (CURRENT_DATE),
+    usage_date DATE NULL,
     calls INT DEFAULT 1,
     input_tokens INT DEFAULT 0,
     output_tokens INT DEFAULT 0,
@@ -383,27 +383,8 @@ CREATE TABLE IF NOT EXISTS ai_usage (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_ai_usage_user (user_id),
     CONSTRAINT fk_usage_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
--- ==============================================================================
--- 10. MIGRATIONS FOR EXISTING HOSTINGER MYSQL DATABASES
--- Copy-paste and run this block in Hostinger phpMyAdmin if your tables already exist
--- ==============================================================================
-ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(50) NULL AFTER email;
-ALTER TABLE users ADD INDEX IF NOT EXISTS idx_users_phone (phone);
-
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS email VARCHAR(255) NULL AFTER display_name;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS phone VARCHAR(50) NULL AFTER email;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS languages JSON NULL AFTER phone;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS preferred_language VARCHAR(50) DEFAULT 'en' AFTER languages;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS city VARCHAR(100) NULL AFTER country;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS household VARCHAR(255) NULL AFTER goal;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS children VARCHAR(100) NULL AFTER household;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS caregiving VARCHAR(100) NULL AFTER children;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS role VARCHAR(255) NULL AFTER caregiving;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS work_pattern VARCHAR(255) NULL AFTER role;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS cultural_setting VARCHAR(255) NULL AFTER work_pattern;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS faith VARCHAR(255) NULL AFTER cultural_setting;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS gender VARCHAR(100) NULL AFTER faith;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS guidance_switches JSON NULL AFTER gender;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
 

@@ -17,11 +17,13 @@ CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(64) PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255) UNIQUE,
+    phone VARCHAR(50),
     email_verified DATETIME,
     image VARCHAR(500),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_users_email (email)
+    INDEX idx_users_email (email),
+    INDEX idx_users_phone (phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- OAuth Accounts (Google OAuth tokens)
@@ -66,14 +68,27 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
 -- 2. PERSONAL TABLES (Strictly isolated by user_id in API queries)
 -- ==============================================================================
 
--- Extended User Profiles
+-- Extended User Profiles (What the OS knows)
 CREATE TABLE IF NOT EXISTS profiles (
     user_id VARCHAR(64) PRIMARY KEY,
     display_name VARCHAR(255),
-    language ENUM('en', 'ta') DEFAULT 'en',
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    languages JSON, -- Array of spoken languages e.g. ["ta", "en"]
+    preferred_language VARCHAR(50) DEFAULT 'en', -- Primary greeting language e.g. "ta", "en", "hi", "pt", "es"
     age_band VARCHAR(50),
-    country VARCHAR(10) DEFAULT 'IN',
-    goal TEXT,
+    country VARCHAR(100) DEFAULT 'India',
+    city VARCHAR(100),
+    goal VARCHAR(100),
+    household VARCHAR(255),
+    children VARCHAR(100),
+    caregiving VARCHAR(100),
+    role VARCHAR(255),
+    work_pattern VARCHAR(255),
+    cultural_setting VARCHAR(255),
+    faith VARCHAR(255),
+    gender VARCHAR(100),
+    guidance_switches JSON, -- Granular guidance toggles
     intent TEXT,
     path_id VARCHAR(100),
     path_day INT DEFAULT 1,
@@ -360,7 +375,7 @@ CREATE TABLE IF NOT EXISTS ai_usage (
     id VARCHAR(64) PRIMARY KEY,
     user_id VARCHAR(64) NOT NULL,
     task VARCHAR(100) NOT NULL,
-    usage_date DATE DEFAULT (CURRENT_DATE),
+    usage_date DATE NULL,
     calls INT DEFAULT 1,
     input_tokens INT DEFAULT 0,
     output_tokens INT DEFAULT 0,
@@ -371,3 +386,5 @@ CREATE TABLE IF NOT EXISTS ai_usage (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
