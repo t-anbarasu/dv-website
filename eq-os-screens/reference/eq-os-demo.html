@@ -1,0 +1,1575 @@
+<title>EQ OS by Drishta Vidya</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a presenter's console beside a phone-width app; the console explains each adaptation while the app runs. */
+:root{
+  --bg:#EEF0F5; --surface:#FFFFFF; --surface-2:#F4F5F9; --sunk:#E6E9F1;
+  --ink:#151925; --muted:#5A6175; --faint:#8A90A2; --line:#DCE0EA;
+  --accent:#C8661A; --accent-ink:#FFFFFF; --accent-soft:#FCEBDB;
+  --ok:#2F7D5B; --warn:#B7791F; --crit:#B83A2E; --crit-soft:#FBE7E4;
+  --f-anger:#C2412F; --f-fear:#6B4FB8; --f-overwhelm:#B7791F; --f-sadness:#2F62B5; --f-lonely:#4F6F8F;
+  --f-shame:#9B3F7A; --f-guilt:#8A5A3B; --f-envy:#3C8A4A; --f-contempt:#6F7A2E; --f-surprise:#1F8A8A; --f-joy:#D08A12;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Figtree", "Segoe UI", system-ui, -apple-system, "Noto Sans Tamil", "Noto Sans Devanagari", sans-serif;
+  --shadow:0 1px 2px rgba(20,25,40,.06), 0 8px 24px rgba(20,25,40,.08);
+  --radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1018; --surface:#161A25; --surface-2:#1C2130; --sunk:#232939; --ink:#ECEEF5; --muted:#A1A8BB; --faint:#7A8196; --line:#2A3043;
+    --accent:#F0913E; --accent-ink:#1A1206; --accent-soft:#3A2817; --ok:#5DBA8E; --warn:#E3A84A; --crit:#EE7466; --crit-soft:#3B1F1C;
+    --f-anger:#EE7466; --f-fear:#A38CF0; --f-overwhelm:#E3A84A; --f-sadness:#6E9CEB; --f-lonely:#8EA9C6;
+    --f-shame:#D77FB6; --f-guilt:#C99673; --f-envy:#6CC27C; --f-contempt:#B4C064; --f-surprise:#4FC6C6; --f-joy:#F2BE4C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1018; --surface:#161A25; --surface-2:#1C2130; --sunk:#232939; --ink:#ECEEF5; --muted:#A1A8BB; --faint:#7A8196; --line:#2A3043;
+  --accent:#F0913E; --accent-ink:#1A1206; --accent-soft:#3A2817; --ok:#5DBA8E; --warn:#E3A84A; --crit:#EE7466; --crit-soft:#3B1F1C;
+  --f-anger:#EE7466; --f-fear:#A38CF0; --f-overwhelm:#E3A84A; --f-sadness:#6E9CEB; --f-lonely:#8EA9C6;
+  --f-shame:#D77FB6; --f-guilt:#C99673; --f-envy:#6CC27C; --f-contempt:#B4C064; --f-surprise:#4FC6C6; --f-joy:#F2BE4C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+.eyebrow{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* Shell */
+.wrap{height:100%;display:grid;grid-template-columns:minmax(0,1fr)}
+.frame{position:relative;display:flex;flex-direction:column;height:100%;background:var(--surface);overflow:hidden;min-width:0}
+.rail{display:none}
+@media (min-width:920px){
+  .wrap{grid-template-columns:340px 420px;justify-content:center;gap:40px;padding-block:24px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px))}
+  .rail{display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto;min-width:0;padding-right:4px}
+  .frame{height:min(880px,100%);border:1px solid var(--line);border-radius:34px;box-shadow:var(--shadow)}
+  .appbar .demo-btn{display:none !important}
+  .wrap.collapsed{grid-template-columns:420px}
+  .wrap.collapsed .rail{display:none}
+  .wrap.collapsed .appbar .demo-btn{display:inline-flex !important}
+}
+@media (max-width:919.98px){
+  .rail.open{display:flex;flex-direction:column;gap:20px;position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;
+    padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+}
+
+/* Rail */
+.rail-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:34px;height:34px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:15px}
+.brand b{font-family:var(--display);font-size:18px;display:block;line-height:1.1}
+.brand small{color:var(--muted);font-size:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px}
+.panel h3{font-size:15px}
+.people{display:flex;flex-direction:column;gap:6px}
+.person{display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:1px solid transparent;border-radius:12px;padding:8px}
+.person:hover{background:var(--surface-2)}
+.person.on{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.avatar{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;background:var(--sunk);color:var(--ink)}
+.person b{display:block;font-size:14px}
+.person span{display:block;font-size:12px;color:var(--muted);line-height:1.35}
+.person .avatar{display:grid;place-items:center;font-size:13px;color:var(--ink)}
+.signals{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sig{background:var(--surface-2);border-radius:12px;padding:10px;min-width:0}
+.sig .eyebrow{font-size:10.5px}
+.sig p{font-size:12.5px;line-height:1.4;margin-top:4px;overflow-wrap:anywhere}
+.log{display:flex;flex-direction:column;gap:10px;max-height:340px;overflow-y:auto}
+.log-item{border-left:2px solid var(--line);padding-left:10px}
+.log-item.new{border-left-color:var(--accent)}
+.log-item b{font-size:13px;display:block}
+.log-item time{font-size:11px;color:var(--faint)}
+.log-item ul{margin:4px 0 0;padding-left:16px;font-size:12px;color:var(--muted)}
+.ai-status{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:none}
+.dot.live{background:var(--ok)}
+
+/* App bar + nav */
+.appbar{flex:none;display:flex;align-items:center;gap:8px;min-height:56px;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--surface)}
+.appbar h2{font-size:17px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;flex:none}
+.icon-btn svg{width:18px;height:18px}
+.demo-btn{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);font-size:13px;font-weight:600}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding-top:16px;padding-bottom:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px;min-width:0}
+.nav{flex:none;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);background:var(--surface);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.nav button{background:none;border:0;padding:8px 0 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;color:var(--muted);font-weight:500}
+.nav button svg{width:22px;height:22px}
+.nav button.on{color:var(--accent);font-weight:700}
+svg.i{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Building blocks */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.soft{background:var(--surface-2);border-color:transparent}
+.card.accent{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.row{display:flex;align-items:center;gap:10px;min-width:0}
+.row.between{justify-content:space-between}
+.wrap-row{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14.5px;text-align:center}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn.small{min-height:34px;padding:0 12px;font-size:13px;border-radius:10px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.5;cursor:default}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13.5px;font-weight:500}
+.chip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.tag{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.tag.pub{background:var(--accent-soft);color:var(--accent)}
+.why{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.why .tag{font-weight:500}
+.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.section-title h3{font-size:16px}
+.link{background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13.5px}
+.bar{height:6px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.note{font-size:12.5px;color:var(--muted)}
+textarea,input[type=text],select{width:100%;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:10px 12px;font-size:15px}
+textarea{min-height:96px;resize:vertical}
+input[type=range]{width:100%;accent-color:var(--accent)}
+
+/* Home */
+.hello h1{font-size:28px;line-height:1.15}
+.hello .local{font-size:13px;color:var(--muted)}
+.ask{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface-2);border-radius:16px;padding:14px 14px;color:var(--muted);font-size:15px}
+.ask svg{width:20px;height:20px;flex:none;color:var(--accent)}
+.sos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.sos button{border:0;border-radius:12px;padding:10px 4px;font-size:12.5px;font-weight:600;background:color-mix(in srgb,var(--fc) 14%,var(--surface));color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:6px}
+.sos button i{width:10px;height:10px;border-radius:50%;background:var(--fc)}
+.moment h3{font-size:19px}
+.engine-label{font-size:12px;color:var(--muted);font-weight:600}
+
+/* Feel */
+.fam-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fam{text-align:left;border:0;border-radius:14px;padding:12px;background:color-mix(in srgb,var(--fc) 13%,var(--surface));display:flex;flex-direction:column;gap:4px;min-height:84px;position:relative;overflow:hidden}
+.fam::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--fc)}
+.fam b{font-family:var(--display);font-size:16px}
+.fam span{font-size:12px;color:var(--muted);line-height:1.35}
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:flex;align-items:center;gap:12px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px}
+.rung .lvl{display:flex;gap:2px;flex:none}
+.rung .lvl i{width:5px;height:14px;border-radius:2px;background:var(--sunk)}
+.rung .lvl i.f{background:var(--fc)}
+.rung b{display:block;font-size:15px;text-transform:capitalize}
+.rung span{display:block;font-size:12.5px;color:var(--muted)}
+.emo-head{border-radius:16px;padding:16px;background:color-mix(in srgb,var(--fc) 14%,var(--surface));display:flex;flex-direction:column;gap:6px}
+.emo-head h1{font-size:30px;text-transform:capitalize}
+.scale{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+.big-num{font-family:var(--display);font-size:34px;font-weight:700;line-height:1}
+.band{font-size:13px;font-weight:600}
+.strategy{display:grid;gap:8px}
+.strategy div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;font-size:13.5px}
+.strategy dt,.strategy b{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.never{border-top:1px dashed var(--line);padding-top:8px}
+
+/* Tools */
+.engine{display:flex;flex-direction:column;gap:8px}
+.engine-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.engine-head h3{font-size:15px}
+.tool{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px}
+.tool .gly{width:36px;height:36px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;flex:none;color:var(--accent)}
+.tool .gly svg{width:18px;height:18px}
+.tool b{display:block;font-size:14.5px}
+.tool span{display:block;font-size:12.5px;color:var(--muted)}
+.tool .meta{margin-left:auto;font-size:12px;color:var(--faint);flex:none}
+
+/* Player */
+.player{display:flex;flex-direction:column;align-items:center;gap:16px;padding-block:8px}
+.orb-wrap{width:220px;height:220px;max-width:100%;display:grid;place-items:center;position:relative}
+.orb-ring{position:absolute;inset:0;border-radius:50%;border:1px dashed var(--line)}
+.orb{width:220px;height:220px;max-width:100%;border-radius:50%;background:radial-gradient(circle at 35% 30%, color-mix(in srgb,var(--accent) 55%,var(--surface)), var(--accent));transform:scale(.55);transition-property:transform;transition-timing-function:ease-in-out;opacity:.9}
+.orb.in{transform:scale(1)}
+.orb.out{transform:scale(.55)}
+.phase{font-family:var(--display);font-size:24px;font-weight:600;text-align:center;min-height:36px}
+.say{font-size:15px;text-align:center;color:var(--muted);max-width:30ch;min-height:44px}
+@media (prefers-reduced-motion:reduce){.orb{transition:none !important}}
+
+/* Steps / script */
+.stepper{display:flex;gap:4px}
+.stepper i{flex:1;height:4px;border-radius:2px;background:var(--sunk)}
+.stepper i.d{background:var(--accent)}
+.prompt{font-family:var(--display);font-size:21px;font-weight:600;line-height:1.25}
+.script-step{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px}
+.script-step .n{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13px}
+.script-step b{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.script-step p{font-size:15px}
+.seg{display:inline-flex;background:var(--sunk);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 10px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* Chat */
+.chat{display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:14.5px;line-height:1.5;overflow-wrap:anywhere}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--surface);border-bottom-right-radius:6px}
+.msg.ai{align-self:flex-start;background:var(--surface-2);border-bottom-left-radius:6px}
+.msg.them{align-self:flex-start;background:color-mix(in srgb,var(--f-fear) 12%,var(--surface));border-bottom-left-radius:6px}
+.msg .who{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em}
+.msg .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.composer{display:flex;gap:8px;align-items:flex-end}
+.composer textarea{min-height:46px;height:46px;flex:1}
+.thinking{display:inline-flex;gap:4px}
+.thinking i{width:6px;height:6px;border-radius:50%;background:var(--faint);animation:blink 1.2s infinite}
+.thinking i:nth-child(2){animation-delay:.2s}.thinking i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.thinking i{animation:none;opacity:.6}}
+
+/* Crisis */
+.crisis{border:1.5px solid var(--crit);background:var(--crit-soft)}
+.crisis h3{color:var(--crit)}
+.number{font-family:var(--display);font-size:26px;font-weight:700;user-select:all}
+
+/* Grow */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px}
+.chain span{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 8px;font-weight:600}
+.chain em{font-style:normal;color:var(--faint)}
+.module{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start}
+.module .st{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);margin-top:2px}
+.module .st.done{background:var(--ok);border-color:var(--ok)}
+.module .st.now{border-color:var(--accent);background:var(--accent-soft)}
+.module b{font-size:14.5px;display:block}
+.module span{font-size:12.5px;color:var(--muted)}
+.spark{width:100%;height:84px;display:block}
+.cap{display:grid;grid-template-columns:118px minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:13px}
+.cap .track{position:relative;height:8px;background:var(--sunk);border-radius:999px}
+.cap .track i{position:absolute;left:0;top:0;bottom:0;border-radius:999px}
+.cap .track i.b{background:color-mix(in srgb,var(--accent) 35%,var(--sunk))}
+.cap .track i.n{background:var(--accent);height:8px}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* Me */
+.prof{display:flex;flex-direction:column}
+.prof-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.prof-row:last-child{border-bottom:0}
+.prof-row b{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.prof-row span{display:block;font-size:14px}
+.prof-row.off span{color:var(--faint);text-decoration:line-through}
+.switch{position:relative;width:44px;height:26px;flex:none}
+.switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.switch i{position:absolute;inset:0;border-radius:999px;background:var(--sunk);transition:background .15s}
+.switch i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+.switch input:checked + i{background:var(--accent)}
+.switch input:checked + i::after{transform:translateX(18px)}
+.switch input:focus-visible + i{outline:2px solid var(--accent);outline-offset:2px}
+.req{font-size:11.5px;color:var(--faint);font-weight:600}
+
+/* Onboarding */
+.ob{display:flex;flex-direction:column;gap:18px}
+.ob h1{font-size:28px;line-height:1.15}
+.opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px;text-align:left;font-weight:600;font-size:14.5px}
+.opt small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.opt.on{border-color:var(--accent);background:var(--accent-soft)}
+.drishti{--s:30px;width:var(--s);height:var(--s);border-radius:50%;flex:none;background:radial-gradient(circle at 35% 30%, color-mix(in srgb,var(--accent) 40%,var(--surface)), var(--accent));animation:breathe 6s ease-in-out infinite}
+.drishti.lg{--s:76px}
+.drishti.busy{animation-duration:1.4s}
+@keyframes breathe{0%,100%{transform:scale(.82);opacity:.82}50%{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion:reduce){.drishti{animation:none}}
+.d-head{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding-block:4px 6px}
+.d-head b{font-family:var(--display);font-size:22px}
+.ask-label{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:-8px}
+.clip{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;align-items:center;text-align:left;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px}
+.poster{aspect-ratio:9/16;width:100%;max-width:100%;border-radius:10px;border:1.5px dashed var(--faint);background:repeating-linear-gradient(135deg,var(--surface-2) 0 8px,var(--sunk) 8px 16px);display:grid;place-items:center;position:relative}
+.poster .play{width:34px;height:34px;border-radius:50%;background:var(--surface);color:var(--accent);display:grid;place-items:center;box-shadow:var(--shadow)}
+.poster .play svg{width:16px;height:16px}
+.poster .dur{position:absolute;bottom:6px;right:6px;font-size:11px;font-weight:700;background:var(--surface);color:var(--ink);border-radius:6px;padding:1px 5px}
+.clip b{display:block;font-size:14px;line-height:1.3}
+.clip .m{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.clips-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.clips-row .clip{grid-template-columns:1fr;width:140px;flex:none;align-items:start}
+.big-poster{width:min(220px,64%);margin-inline:auto}
+.big-poster .play{width:52px;height:52px}
+.weather{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.wcell{aspect-ratio:1;border-radius:9px;background:color-mix(in srgb,var(--fc) 62%,var(--surface));display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--ink)}
+.wcell.empty{background:var(--sunk);color:var(--faint)}
+.wcell.today{outline:2px solid var(--ink);outline-offset:1px}
+.wlegend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted)}
+.wlegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:color-mix(in srgb,var(--fc) 62%,var(--surface))}
+.noticed p{font-size:13.5px;padding-left:14px;position:relative}
+.noticed p::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.share-card{border-radius:16px;padding:16px;background:var(--ink);color:var(--surface);display:flex;flex-direction:column;gap:8px}
+.share-card .eyebrow{color:color-mix(in srgb,var(--surface) 70%,var(--ink))}
+.share-card p.big{font-family:var(--display);font-size:19px;font-weight:600;line-height:1.3}
+.widgets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lock{border-radius:18px;padding:12px;background:var(--ink);color:var(--surface);display:flex;flex-direction:column;gap:10px;min-width:0}
+.lock-time{font-family:var(--display);font-size:28px;font-weight:600;line-height:1}
+.lock-row{display:flex;gap:10px}
+.comp{border:0;background:color-mix(in srgb,var(--surface) 14%,var(--ink));color:var(--surface);border-radius:999px;width:52px;height:52px;display:grid;place-items:center;padding:0}
+.comp svg{width:20px;height:20px}
+.comp-l{font-size:10.5px;opacity:.75;text-align:center;width:52px}
+.hw{border:0;border-radius:22px;padding:12px;background:var(--accent-soft);display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;aspect-ratio:1;min-width:0}
+.hw b{font-family:var(--display);font-size:17px;margin-top:auto}
+.hw small{font-size:11.5px;color:var(--muted);line-height:1.3}
+.panic{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:0;border-radius:18px;padding:14px 16px;background:var(--ink);color:var(--surface)}
+.panic b{display:block;font-family:var(--display);font-size:17px}
+.panic span.s{display:block;font-size:12.5px;opacity:.75}
+.calib{border:1.5px dashed var(--accent);background:var(--accent-soft)}
+.maybe{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;font-size:13.5px;align-items:baseline}
+.maybe b{text-transform:capitalize}
+.fold{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;background:none;border:0;padding:0;text-align:left;color:var(--ink)}
+.fold h3{font-size:15px}
+.fold .sub{font-size:12px;color:var(--muted);font-weight:500;margin-left:auto;margin-right:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.fold svg{width:18px;height:18px;flex:none;transition:transform .15s;color:var(--muted)}
+.panel.shut .fold svg{transform:rotate(-90deg)}
+.panel.shut{gap:0}
+.rail-actions{display:flex;gap:6px;flex:none}
+.rail-head .brand small{white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.fold svg{transition:none}}
+.toast{pointer-events:none;position:absolute;left:16px;right:16px;bottom:76px;background:var(--ink);color:var(--surface);border-radius:12px;padding:10px 14px;font-size:13.5px;z-index:5;box-shadow:var(--shadow)}
+</style>
+
+<div class="wrap">
+  <aside class="rail" id="rail" aria-label="Demo controls"></aside>
+  <main class="frame" id="frame">
+    <header class="appbar" id="appbar"></header>
+    <section class="screen" id="screen" aria-live="polite"></section>
+    <nav class="nav" id="nav" aria-label="Main"></nav>
+  </main>
+</div>
+
+<script>
+/* ---------- Icons ---------- */
+const I = {
+  home:'<svg class="i" viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>',
+  feel:'<svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  tools:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>',
+  grow:'<svg class="i" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7.5-6.5 0 4.2-3 6.5-7.5 6.5z"/><path d="M12 14.5c0-3-2.2-5.2-6.5-5.2 0 3 2.2 5.2 6.5 5.2z"/></svg>',
+  me:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c1-3.5 3.8-5.5 7-5.5s6 2 7 5.5"/></svg>',
+  back:'<svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+  spark:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></svg>',
+  send:'<svg class="i" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>',
+  wave:'<svg class="i" viewBox="0 0 24 24"><path d="M3 12c2 0 2-4 4.5-4S10 16 12 16s2.5-8 4.5-8S19 12 21 12"/></svg>',
+  chat:'<svg class="i" viewBox="0 0 24 24"><path d="M5 18l-1 3 4-1.5A8 8 0 1 0 5 18z"/></svg>',
+  steps:'<svg class="i" viewBox="0 0 24 24"><path d="M5 6h14M5 12h10M5 18h6"/></svg>',
+  card:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8M8 14h5"/></svg>',
+  gauge:'<svg class="i" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/></svg>',
+  loop:'<svg class="i" viewBox="0 0 24 24"><path d="M17 3l3 3-3 3"/><path d="M4 12a6 6 0 0 1 6-6h10"/><path d="M7 21l-3-3 3-3"/><path d="M20 12a6 6 0 0 1-6 6H4"/></svg>',
+  people:'<svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 19c.8-3 3.2-4.5 6-4.5s5.2 1.5 6 4.5"/><path d="M15 15c2.6-.3 4.6.9 5.5 3.5"/></svg>',
+  bell:'<svg class="i" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>',
+  path:'<svg class="i" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h5a3 3 0 0 0 0-6h-2a3 3 0 0 1 0-6h5"/></svg>',
+  chev:'<svg class="i" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>',
+  play:'<svg class="i" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>',
+  shield:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/></svg>'
+};
+const ENGINE_ICON = {reset:I.wave, script:I.chat, steps:I.steps, card:I.card, checkin:I.gauge, practice:I.loop, circle:I.people};
+
+/* ---------- Content: emotion families (Emotion Atlas) ---------- */
+const FAM = {
+  anger:{name:'Anger', c:'--f-anger', words:[['irritated','A small itch of annoyance.'],['frustrated','Blocked from something you are trying to do.'],['resentful','Unfairness that keeps replaying, often unspoken.'],['angry','A strong push against something that feels wrong.'],['furious','Anger that has taken the steering wheel.']],
+    body:'Heat in the face, tight jaw, fast breathing', triggers:'Blocked goals, unfairness, disrespect, broken promises', need:'A boundary or value was crossed; something needs to change',
+    now:'Move, slow the exhale, pause before you send anything', after:'Which value was crossed? What hurt or fear sits underneath?', over:'Ask for what you need early; practise assertive scripts', never:'Tell you not to be angry, or encourage venting at someone'},
+  fear:{name:'Fear', c:'--f-fear', words:[['uneasy','Something feels off.'],['nervous','Jitters before something that matters.'],['anxious','Worry about what might happen.'],['scared','Fear of a clear threat.'],['panicked','Fear so strong that thinking shuts down.']],
+    body:'Racing heart, shallow breath, knot in the stomach', triggers:'Uncertainty, evaluations, change, health, money', need:'A threat or unknown ahead; prepare or seek safety',
+    now:'Ground in the present; name the worst case and the likely case', after:'Plan what is in your control; set a worry window', over:'Face feared situations step by step; build preparation routines', never:'Promise that everything will be fine'},
+  overwhelm:{name:'Overwhelm', c:'--f-overwhelm', words:[['stretched','Running near your limit.'],['pressured','Demands pushing from many sides.'],['swamped','More than you can handle today.'],['overwhelmed','Too much at once; hard to start anywhere.'],['shutting down','Numb or frozen from overload.']],
+    body:'Heavy head, scattered attention, shallow breath', triggers:'Too many demands, caregiving, deadlines, no recovery time', need:'The load is bigger than your capacity right now',
+    now:'One breath, one next step', after:'Sort the list: drop, delegate, defer, do', over:'Plan capacity honestly; protect recovery time', never:'Add more to your list'},
+  sadness:{name:'Sadness', c:'--f-sadness', words:[['disappointed','An expectation did not come true.'],['hurt','Pain from what someone did or did not do.'],['sad','Heaviness after a loss or letdown.'],['heartbroken','Deep pain about someone you love.'],['grieving','Sorrow after a death or a major loss.']],
+    body:'Heavy chest, low energy, tears close', triggers:'Loss, rejection, unmet expectations, endings', need:'Something mattered; you need comfort and connection',
+    now:'Allow the feeling; do one soothing thing; reach out to someone', after:'Name what mattered; do one small act of meaning', over:'Rituals, connection, gentle activity', never:'Rush you to move on'},
+  lonely:{name:'Loneliness', c:'--f-lonely', words:[['left out','Not included when you hoped to be.'],['disconnected','Present, but not close to anyone.'],['lonely','Wanting more connection than you have.'],['isolated','Cut off from people for a long stretch.'],['abandoned','Left by someone you relied on.']],
+    body:'Hollow feeling, restlessness, endless scrolling', triggers:'New city, remote work, loss, quiet evenings', need:'Connection with real people',
+    now:'Message one person now', after:'Who could be closer? Is there a group to join?', over:'Regular connection rituals', never:'Present itself as a substitute friend'},
+  shame:{name:'Shame', c:'--f-shame', words:[['awkward','Unsure how you came across.'],['embarrassed','Exposed in front of others for a moment.'],['inadequate','Feeling not good enough.'],['ashamed','Feeling that something is wrong with you.'],['humiliated','Shamed in front of others.']],
+    body:'Hot face, wanting to hide, eyes down', triggers:'Public criticism, mistakes, comparison, falling short in a role', need:'To separate who you are from what happened',
+    now:'Ask: what would I say to a friend in this spot?', after:'Keep the lesson, drop the verdict on yourself', over:'Quiet the inner critic; share with a safe person', never:'Pile on, or dismiss it as nothing'},
+  guilt:{name:'Guilt', c:'--f-guilt', words:[['regretful','Wishing you had done it differently.'],['apologetic','Ready to own a mistake.'],['guilty','Knowing you crossed your own line.'],['remorseful','Deep regret for harm you caused.'],['weighed down','Guilt that will not let you rest.']],
+    body:'Heavy stomach, replaying the moment', triggers:'Hurting someone, broken commitments, divided loyalties', need:'Repair, or a check on whether the guilt is fair',
+    now:'Name what you would do differently', after:'Apologise or make amends', over:'Check if the guilt is proportionate, as with much working-parent guilt', never:'Wave away a real wrong'},
+  envy:{name:'Envy and jealousy', c:'--f-envy', words:[['wistful','A soft wish for what someone has.'],['envious','Wanting what someone else has.'],['jealous','Fear of losing someone to another.'],['inferior','Feeling less than others.'],['bitter','Envy that has gone sour.']],
+    body:'Tight chest, sinking feeling while scrolling', triggers:'Peers promoted, relatives’ remarks, social feeds, salaries', need:'Information about what you want, or a fear of losing someone',
+    now:'Name what you want, plainly', after:'Take one step towards it; for jealousy, talk about trust', over:'Gratitude for your own path; fewer comparison triggers', never:'Shame you for feeling it'},
+  contempt:{name:'Disgust and contempt', c:'--f-contempt', words:[['dislike','A mild turning away.'],['disapproving','Judging something as wrong.'],['disgusted','Something feels morally or physically off.'],['contemptuous','Looking down on a person.'],['revolted','Strong disgust that pushes you away.']],
+    body:'Curled lip, turning away, eye-roll', triggers:'Dishonesty, values violated, unfair treatment of others', need:'A value is at stake',
+    now:'Pause before judging the person', after:'Name the value and what you will ask of them', over:'Practise appreciation; contempt corrodes close relationships', never:'Endorse contempt for a person'},
+  surprise:{name:'Surprise and confusion', c:'--f-surprise', words:[['puzzled','Something does not add up.'],['confused','Not sure what is going on.'],['surprised','Something unexpected happened.'],['stunned','Shaken by sudden news.'],['shocked','Knocked off balance by sudden news.']],
+    body:'Raised brows, held breath, scattered thoughts', triggers:'Sudden news, unclear instructions, change without explanation', need:'A gap in understanding',
+    now:'Ask: what do I know, and what do I not?', after:'List the questions to ask', over:'Build comfort with uncertainty', never:'Push a fast decision'},
+  joy:{name:'Joy and calm', c:'--f-joy', words:[['content','Quietly at ease.'],['calm','Settled and steady.'],['grateful','Thankful for something or someone.'],['proud','Glad about something you did.'],['loved','Cared for and close.'],['joyful','Lit up with happiness.']],
+    body:'Open chest, easy breath, lightness', triggers:'Progress, recognition, play, connection, rest', need:'This is worth protecting and repeating',
+    now:'Pause and notice it; tell someone', after:'What made this possible?', over:'Gratitude and savouring habits', never:'Skip past good feelings'}
+};
+const SAUDADE = ['saudade','Portuguese: a deep longing for someone or something absent, with love in it.'];
+
+/* ---------- Tools (configurations running on engines) ---------- */
+const ENGINES = {
+  reset:{name:'Reset player', d:'Guided breathing, grounding and short resets'},
+  script:{name:'Conversation studio', d:'Scripts for hard conversations, with AI rehearsal'},
+  steps:{name:'Reflection and planning', d:'Guided questions before and after a moment'},
+  card:{name:'Learning cards', d:'Three-minute ideas from the programs'},
+  checkin:{name:'Check-in and assessment', d:'Feeling, intensity, EQ self-check, micro-360'},
+  practice:{name:'Practice and challenges', d:'Daily practices and 21-day challenges'},
+  circle:{name:'Circle', d:'Buddy, cohort and win huddles'}
+};
+const T = {
+  'slow-exhale':{e:'reset', name:'Slow-exhale breathing', mins:'1 min', phase:'During', seq:[['Breathe in',4,'in'],['Breathe out slowly',6,'out']], cycles:6, d:'A longer out-breath helps the body settle. Six rounds.'},
+  'box-breath':{e:'reset', name:'Box breathing', mins:'2 min', phase:'During', seq:[['Breathe in',4,'in'],['Hold',4,'hold'],['Breathe out',4,'out'],['Hold',4,'hold']], cycles:7, d:'Even four-count breathing for steadiness under pressure.'},
+  'cool-down':{e:'reset', name:'Cool-down for anger', mins:'1 min', phase:'During', d:'Shake out the heat, slow the breath, name the feeling.', custom:[
+    ['Shake out your hands',8,'say','Let the heat move out through your hands and shoulders.'],
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Breathe in',4,'in'],['Breathe out slowly',6,'out'],
+    ['Name it',8,'say','Say silently: “This is anger. It will pass.”'],
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],
+    ['Before you reply',8,'say','Wait. Nothing needs to be sent in the next ten minutes.']]},
+  'shift-reset':{e:'reset', name:'Shift-handover reset', mins:'90 sec', phase:'After', aud:'healthcare', d:'Close one shift before you carry it home.', custom:[
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Breathe in',4,'in'],['Breathe out slowly',6,'out'],
+    ['One thing done well',12,'say','Name one thing you did well this shift, however small.'],
+    ['Leave it here',12,'say','Name one thing you are leaving at the door. Someone else holds it now.'],
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Breathe in',4,'in'],['Breathe out slowly',6,'out'],
+    ['Arrive',12,'say','Who are you going home to? Picture their face.']]},
+  'pre-performance':{e:'reset', name:'Pre-performance routine', mins:'2 min', phase:'Before', d:'For exams, pitches, interviews and matches.', custom:[
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Breathe in',4,'in'],['Breathe out slowly',6,'out'],
+    ['Name the feeling',10,'say','Nerves and excitement feel the same in the body. Call it “ready”.'],
+    ['Your first line',12,'say','Say your first sentence silently, slowly, twice.'],
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Go',8,'say','Shoulders down. One task at a time.']]},
+  'grounding':{e:'steps', name:'5-4-3-2-1 grounding', mins:'2 min', phase:'During', guided:true, d:'Bring attention back to the room.', steps:['Name five things you can see.','Name four things you can feel: your feet, the chair, your clothes.','Name three things you can hear.','Name two things you can smell, or two smells you like.','Name one thing you can taste, or take one sip of water.']},
+  'feeling-under':{e:'steps', name:'The feeling under the feeling', mins:'4 min', phase:'After', d:'Anger often arrives second. Find what came first.', steps:['What happened, in one line?','What did you feel first, before the anger or the silence?','What did you need that you did not get?','What could you ask for, and from whom?']},
+  'story-fact':{e:'steps', name:'Story vs fact', mins:'3 min', phase:'After', d:'Separate what happened from the story about it.', steps:['What would a camera have recorded? Facts only.','What story are you telling yourself about it?','What else could be true?','What will you check before you act?']},
+  'comparison-reset':{e:'steps', name:'Comparison reset', mins:'3 min', phase:'After', d:'Turn “I’m behind” into information.', steps:['Who or what are you comparing yourself with?','What do they have that you want? Name it plainly.','What is one small step towards it this week?','Name two things you have done this year that last year’s you would be proud of.']},
+  'grief-checkin':{e:'steps', name:'A gentle grief check-in', mins:'4 min', phase:'After', d:'For days when the loss feels close.', steps:['How is your heart today, in a word or two?','Did a memory come to you today? You can write it here.','Who could you share that memory with?','What is one small kind thing you can do for yourself today?'],
+    pt:{name:'Um momento para o luto', steps:['Como está o seu coração hoje, em uma ou duas palavras?','Alguma lembrança veio hoje? Pode escrever aqui.','Com quem você poderia compartilhar essa lembrança?','Qual é uma pequena gentileza que você pode fazer por si hoje?']}},
+  'after-moment':{e:'steps', name:'After the moment', mins:'3 min', phase:'After', d:'A short debrief once things have cooled.', steps:['What happened?','What did you do that you are glad about?','What would you do differently?','Is there anything to repair?']},
+  'connect-now':{e:'steps', name:'Reach out to one person', mins:'2 min', phase:'After', d:'Loneliness eases through real people.', steps:['Who would be good to hear from today?','What would you like to say? “Thinking of you” is enough.','When will you send it?'],
+    pt:{name:'Fale com uma pessoa', steps:['Quem seria bom ouvir hoje?','O que você gostaria de dizer? “Pensando em você” já basta.','Quando você vai enviar?']}},
+  'triage':{e:'steps', name:'Drop, delegate, defer, do', mins:'4 min', phase:'Before', d:'Shrink the load to fit your capacity.', steps:['List everything on your mind right now.','Which one thing can you drop?','What can someone else take?','What can wait until next week?','What is the one thing you will do next?']},
+  'self-kind':{e:'steps', name:'What would you say to a friend?', mins:'3 min', phase:'After', d:'Separate the person from the act.', steps:['What happened that you feel bad about?','If a close friend told you this, what would you say to them?','Now say it to yourself. Write it down.','What is the one lesson worth keeping?']},
+  'savour':{e:'steps', name:'Savour it', mins:'2 min', phase:'After', d:'Good feelings grow when you notice them.', steps:['What went well?','What made it possible?','Who could you tell?']},
+  'meeting-plan':{e:'steps', name:'2-minute prep', mins:'2 min', phase:'Before', d:'Walk in with a plan for your feelings, not just the agenda.', steps:['What outcome do you want from this meeting?','What might trigger you, and how will you notice it in your body?','Write your opening line.','What will you not say in the room?']},
+  'one-to-one':{e:'steps', name:'1:1 prep', mins:'4 min', phase:'Before', d:'Prepare for a supportive conversation.', steps:['What have you noticed about this person lately? Facts only.','What might they be feeling?','Your first question.','What support can you offer?']},
+  'remembrance':{e:'steps', name:'Plan a remembrance', mins:'5 min', phase:'Before', d:'A small ritual for an anniversary.', steps:['What would you like to honour about her?','Who would you like with you?','What simple thing could you do together?'],
+    pt:{name:'Planejar uma homenagem', steps:['O que você gostaria de honrar nela?','Quem você gostaria de ter por perto?','Que coisa simples vocês poderiam fazer juntos?']}},
+  'say-no-senior':{e:'script', name:'Saying no to a senior', mins:'5 min', phase:'Before', d:'Protect your priorities without loss of face.', who:'your manager, who wants a new report today', when:'A senior asks for something you cannot take on without dropping something important.',
+    steps:[['Acknowledge','I can see this matters, and I want it done well.','Thank you for trusting me with this. I want to do it justice.'],
+      ['Constraint','Right now I am on the client release due Friday.','I am giving full attention to the client release you asked me to prioritise for Friday.'],
+      ['Offer','I can start this on Monday, or hand the release to Arjun.','Would it help if I begin this on Monday, or should I check with Arjun about sharing the release?'],
+      ['Ask','Which do you prefer?','Please guide me on which matters more right now.']],
+    lines:['I really need this today. Can you not stay late?','Hmm. The release cannot slip either.','Fine. Start Monday, but send me a plan by tomorrow.']},
+  'hard-feedback':{e:'script', name:'Feedback that lands', mins:'5 min', phase:'Before', d:'Situation, behaviour, impact, ask.', who:'a team member who tends to get defensive', when:'Someone’s behaviour is hurting the work and you have been avoiding saying it.',
+    steps:[['Situation','In yesterday’s client call,','I wanted to share something from yesterday’s client call, and I may have missed some context.'],
+      ['Behaviour','you interrupted the client twice while they were explaining the problem.','I noticed the client was interrupted a couple of times.'],
+      ['Impact','They went quiet, and we did not learn what they needed.','I worry we did not hear everything they needed.'],
+      ['Ask','What happened from your side? Can we agree to let clients finish first?','How did it look from your side? Could we try letting them finish first next time?']],
+    lines:['I was just trying to move things along. They were going in circles.','Okay, but nobody told me that was a problem before.','All right. I can try that on Thursday’s call.']},
+  'cousin-employee':{e:'script', name:'When the employee is family', mins:'6 min', phase:'Before', d:'Performance conversation with a relative on the payroll.', who:'your cousin Tunde, who runs the Ikeja depot and is older than you', when:'A relative’s performance is hurting the business and family loyalty makes it hard to say.',
+    steps:[['Relationship first','Tunde, you are family and that does not change. Today I am speaking as your manager.','Tunde, you know how much you mean to this family. Today I need to speak as your manager, with respect.'],
+      ['Facts','Ikeja deliveries were late six times this month. Two clients complained.','This month, six Ikeja deliveries ran late, and two of our oldest clients called me.'],
+      ['Impact','If this continues, we lose those accounts and the drivers lose bonuses.','I am worried for the business our fathers built, and for the drivers who depend on it.'],
+      ['Support and deadline','What is getting in the way? I will help, and I need on-time deliveries by month end.','Tell me what is in your way. I will stand with you, and I need us back on time by month end.']],
+    lines:['Amina, I have been running that depot since you were in school.','The trucks are old. You know this. Nobody listens when I say it.','If you get me two new drivers, I can fix the timing.']},
+  'ask-for-need':{e:'script', name:'Ask for what you need', mins:'4 min', phase:'Before', d:'Say the expectation out loud before it becomes resentment.', who:'your partner', when:'You keep hoping someone will notice what you need, and they do not.',
+    steps:[['When','When I came home tonight and the kitchen was still a mess,','Tonight when I got home, the kitchen was still waiting,'],
+      ['I feel','I felt tired and a bit alone.','and I noticed I felt tired and a little alone.'],
+      ['I need','What I need is to feel we share the load.','I think what I need is to feel we are in this together.'],
+      ['Would you','Would you take the dishes on weeknights?','Could we try you taking the dishes on weeknights?']],
+    lines:['I had a long day too, you know.','I did not know it bothered you that much.','Okay. Weeknights. Remind me on Monday?']},
+  'repair-apology':{e:'script', name:'Repair after a rupture', mins:'4 min', phase:'After', d:'Name it, own the impact, repair, ask.', who:'someone you snapped at', when:'You reacted in a way you regret.',
+    steps:[['Name it','Earlier, I snapped at you about the report.','About earlier, I spoke sharply about the report.'],
+      ['Own the impact','That was unfair, and I can see it stung.','That was not fair to you, and I think it hurt.'],
+      ['Repair','I am sorry. I will go through it with you properly tomorrow.','I am sorry. Let me sit with you tomorrow and do it properly.'],
+      ['Ask','Is there anything else you need from me?','Is there anything else that would help?']],
+    lines:['It did sting, honestly.','Thanks for saying it.','Tomorrow at ten works.']},
+  'talk-teen':{e:'script', name:'When a teenager goes quiet', mins:'5 min', phase:'Before', d:'Open a door without forcing it.', who:'your 17-year-old, who has gone quiet', when:'Your teenager has withdrawn and questions get one-word answers.',
+    steps:[['No agenda','Want to come for a drive? No big talk.','I am going for a drive. Come along if you like, no big talk.'],
+      ['Name what you see','You have seemed tired lately.','I have noticed things seem heavy lately.'],
+      ['Listen','I am listening. Take your time.','You do not have to explain. I am here.'],
+      ['Offer','Is there one thing I could take off your plate?','Is there anything I can do that would help, even a little?']],
+    lines:['I’m fine.','It’s just exams. And everyone else seems to have it sorted.','Maybe. Can we get food on the way?']},
+  'card-secondary':{e:'card', name:'Anger is often a secondary emotion', mins:'2 min', phase:'Grow', src:'From EQ Sundays, Drishta Vidya', next:'feeling-under', body:['Anger usually arrives second. Underneath it there is often hurt, fear, embarrassment or exhaustion.','When you only deal with the anger, the real need stays unmet and the anger comes back.','Try this: the next time you feel the heat, ask “what came just before this?”']},
+  'card-expect':{e:'card', name:'What I expect vs what I express', mins:'2 min', phase:'Grow', src:'From EQ Sundays, Drishta Vidya', next:'ask-for-need', body:['We often expect people to notice what we need. Usually they do not.','Unspoken expectations turn into disappointment, then resentment.','Try this: say the need out loud, early and specifically.']},
+  'card-impact':{e:'card', name:'Impact vs intention', mins:'2 min', phase:'Grow', src:'From EQUIP, Drishta Vidya', next:'repair-apology', body:['Your intention lives in your head. Your impact lands in theirs.','Both are real. Start with the impact, then share the intention.','Try this: “I did not mean it that way, and I can see it hurt. I am sorry.”']},
+  'card-naming':{e:'card', name:'Why naming a feeling helps', mins:'2 min', phase:'Grow', src:'Lieberman et al., Psychological Science, 2007', next:null, body:['Putting a feeling into words can turn down the brain’s alarm.','In a UCLA brain-imaging study, labelling feelings reduced the amygdala’s response to upsetting images.','Try this: be precise. “Resentful” points to a different action than “angry”.']},
+  'panic':{e:'reset', name:'60-second reset', mins:'60 sec', phase:'During', d:'No questions. Breathe and steady your body first.', custom:[
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Breathe in',4,'in'],['Breathe out slowly',6,'out'],['Breathe in',4,'in'],['Breathe out slowly',6,'out'],
+    ['Feet on the floor',10,'say','Press your feet into the floor. Feel the ground hold you.'],
+    ['Look around',10,'say','Find three things you can see. Name them silently.'],
+    ['Breathe in',4,'in'],['Breathe out slowly',6,'out']]},
+  'decode':{e:'script', decode:true, name:'Decode someone else', mins:'2 min', phase:'After', d:'Understand what might be going on for them, before you react.'},
+  'set-day':{e:'steps', name:'Set the day', mins:'60 sec', phase:'Before', ritual:true, d:'Choose how you want to show up today.', steps:['How do you want to show up today? One word is enough.','What might test that today?','What will you do when it does?'],
+    pt:{name:'Comece o dia', steps:['Como voc\u00ea quer estar hoje? Uma palavra basta.','O que pode testar isso hoje?','O que voc\u00ea vai fazer quando acontecer?']}},
+  'close-day':{e:'steps', name:'Close the day', mins:'2 min', phase:'After', ritual:true, d:'One good moment, one hard one, one feeling.', steps:['One good moment from today.','One hard moment, if there was one.','One word for how you feel now.'],
+    pt:{name:'Feche o dia', steps:['Um bom momento de hoje.','Um momento dif\u00edcil, se houve.','Uma palavra para como voc\u00ea se sente agora.']}},
+  'calm-reply':{e:'script', rewrite:true, name:'Calm my reply', mins:'1 min', phase:'Before', d:'Paste a message before you send it. Drishti keeps your point and takes the heat out.'},
+  'mood-check':{e:'checkin', name:'Check in', mins:'30 sec', phase:'Grow', d:'A feeling word and how strong it is.'},
+  'eq-self':{e:'checkin', name:'Self-check', mins:'2 min', phase:'Grow', preview:true, d:'An optional five-question self-check every 90 days. Your capability map otherwise grows from how you use the tools. A full validated assessment runs only inside facilitated programs.'},
+  'micro-360':{e:'checkin', name:'360 feedback (programs only)', mins:'With a coach', phase:'Grow', preview:true, d:'Only inside facilitated Drishta Vidya cohorts, debriefed by a coach. The self-serve app has no peer ratings, and your Mirror stays private.'},
+  'listening-21':{e:'practice', name:'21-day listening challenge', mins:'2 min a day', phase:'Grow', preview:true, d:'One listening experiment a day, with a 10-second log.'},
+  'pause-daily':{e:'practice', name:'Daily pause', mins:'2 min a day', phase:'Grow', preview:true, d:'A short pause practice at a time you choose.'},
+  'buddy':{e:'circle', name:'Your buddy', mins:'Weekly', phase:'Grow', preview:true, d:'A peer from your cohort for weekly check-ins.'},
+  'win-huddle':{e:'circle', name:'Monthly win huddle', mins:'45 min', phase:'Grow', preview:true, d:'Share one moment you handled differently.'}
+};
+Object.values(T).forEach(t=>{ if(!t.pub) t.pub='Drishta Vidya'; });
+
+/* ---------- Paths and programs ---------- */
+const PATHS = {
+  know:{name:'Know yourself', days:21, today:'card-naming', mods:[['Name what you feel','Days 1–5'],['Comparison and self-worth','Days 6–10'],['Taking criticism','Days 11–15'],['Your values','Days 16–21']]},
+  pressure:{name:'Under pressure', days:30, today:'ask-for-need', mods:[['Stress signals','Days 1–7'],['Hard conversations','Days 8–15'],['Partner check-ins','Days 16–22'],['Recovery habits','Days 23–30']]},
+  energy:{name:'Energy and boundaries', days:30, today:'triage', mods:[['Notice your energy','Days 1–2'],['Shift transitions','Days 3–9'],['Saying no at work and home','Days 10–20'],['Caring without burning out','Days 21–30']]},
+  legacy:{name:'Lead and let go', days:45, today:'card-impact', mods:[['What you want to pass on','Days 1–10'],['Mentoring','Days 11–25'],['Leading change','Days 26–35'],['Purpose','Days 36–45']]},
+  meaning:{name:'Connection and meaning', days:60, today:'connect-now', mods:[['Daily rhythm','Days 1–15'],['Staying connected','Days 16–30'],['Contribution','Days 31–45'],['New learning','Days 46–60']]},
+  'lead-family':{name:'Leading people in a family business', days:45, today:'card-impact', mods:[['Your leadership style','Days 1–7'],['Hard conversations with family on the payroll','Days 8–18'],['Decisions: feelings vs facts','Days 19–30'],['Building the next layer of leaders','Days 31–45']]},
+  lead:{name:'Leading people', days:45, today:'hard-feedback', mods:[['Your leadership style','Days 1–7'],['Feedback that lands','Days 8–18'],['Team emotions','Days 19–30'],['Leading change','Days 31–45']]},
+  'meaning-grief':{name:'Connection and meaning, after loss', days:60, today:'connect-now', mods:[['Making room for grief','Days 1–10'],['Staying connected','Days 11–25'],['Rituals and remembrance','Days 26–40'],['Purpose and contribution','Days 41–60']]},
+  hard:{name:'Getting through a hard time', days:30, today:'after-moment', mods:[['Steady the days','Days 1–7'],['Name what is happening','Days 8–14'],['Ask for support','Days 15–22'],['Small steps forward','Days 23–30']]},
+  relate:{name:'Closer relationships', days:30, today:'card-expect', mods:[['Expect vs express','Days 1–7'],['Listening','Days 8–15'],['Repair','Days 16–22'],['Weekly check-ins','Days 23–30']]}
+};
+const PROGRAMS = [
+  {id:'baseqs', name:'BASEQS', sub:'EQ basics', d:'The core of emotions and emotional intelligence: self-awareness and emotional agility.', mods:[['Emotions as data',['card-naming','mood-check']],['Naming feelings',['card-naming','grounding']],['The pause',['slow-exhale','cool-down']]]},
+  {id:'equip', name:'EQUIP', sub:'Up your EQ', d:'Deeper EQ for accountability, creativity and empathy.', mods:[['Anger is a secondary emotion',['card-secondary','feeling-under']],['Expect vs express',['card-expect','ask-for-need']],['Repair after a rupture',['card-impact','repair-apology']]]},
+  {id:'upshift', name:'UPSHIFT', sub:'First-time managers', d:'From individual contributor to team leader.', mods:[['Feedback without fear',['hard-feedback']],['1:1s that matter',['one-to-one']],['Saying no upward',['say-no-senior']]]},
+  {id:'xo', name:'XTREME OWNERSHIP', sub:'Accountability mindset', d:'Total accountability and initiative.', mods:[['From blame to facts',['story-fact']],['Owning a mistake',['repair-apology','self-kind']]]},
+  {id:'neuro', name:'NEUROZOOM', sub:'Focus', d:'Staying focused and sharp in a world of distractions.', mods:[['Reset the nervous system',['box-breath','slow-exhale']],['Before high-stakes moments',['pre-performance']]]}
+];
+
+/* ---------- Video placeholders (to be recorded) ---------- */
+const VIDEOS = {
+  'v-secondary':{title:'Anger arrives second', who:'Anbarasu Thangavelu', secs:75, kind:'Facilitator clip', purpose:'Make the idea memorable with a real scene before the card text.', beats:['A moment from EQ Sundays: the anger that came out at dinner','What was underneath: hurt that was never voiced','The one question to ask: what came just before this?'], on:'card-secondary'},
+  'v-expect':{title:'What I expect vs what I express', who:'Deepa Kannan', secs:70, kind:'Facilitator clip', purpose:'Show how unspoken expectations turn into resentment.', beats:['A couple, both working, one silently carrying more','The disappointment that follows','Say the need early and specifically'], on:'card-expect'},
+  'v-impact':{title:'Impact vs intention', who:'Deepa Kannan', secs:60, kind:'Facilitator clip', purpose:'Help people apologise for impact without arguing about intent.', beats:['A harmless-meant correction in public','How it landed','The sentence that repairs it'], on:'card-impact'},
+  'v-naming':{title:'Name it to tame it', who:'Dr. Gabriel', secs:80, kind:'Facilitator clip', purpose:'Explain simply why naming a feeling lowers its intensity.', beats:['The brain\u2019s alarm, in plain words','What the research found','Try it now: one precise word'], on:'card-naming'},
+  'v-feedback':{title:'Feedback, two ways', who:'Two actors', secs:45, kind:'Modelled conversation', purpose:'Show a poor and a good version of the same feedback.', beats:['Version one: vague and blaming','Pause: what went wrong','Version two: situation, behaviour, impact, ask'], on:'hard-feedback'},
+  'v-sayno':{title:'Saying no to a senior', who:'Two actors', secs:50, kind:'Modelled conversation', purpose:'Model a respectful no in a hierarchical workplace.', beats:['The request at 6 pm','A face-saving no with an offer','The senior chooses'], on:'say-no-senior'},
+  'v-cousin':{title:'When the employee is family', who:'Two actors', secs:60, kind:'Modelled conversation', purpose:'Model a firm conversation that keeps family respect intact.', beats:['Relationship first','Facts and impact','Support plus a deadline'], on:'cousin-employee'},
+  'v-askneed':{title:'Asking for what you need', who:'Two actors', secs:45, kind:'Modelled conversation', purpose:'Show the when, feel, need, ask pattern at home.', beats:['The silent version','The spoken version','How the partner responds'], on:'ask-for-need'},
+  'v-repair':{title:'Repair after a rupture', who:'Two actors', secs:45, kind:'Modelled conversation', purpose:'Model a short, real apology.', beats:['Name it','Own the impact','Repair and ask'], on:'repair-apology'},
+  'v-teen':{title:'When a teenager goes quiet', who:'Two actors', secs:60, kind:'Modelled conversation', purpose:'Show opening a door without forcing it.', beats:['The drive with no agenda','Naming what you see','Listening past \u201cI\u2019m fine\u201d'], on:'talk-teen'},
+  'v-grounding':{title:'5-4-3-2-1 grounding walkthrough', who:'Dr. Gabriel', secs:40, kind:'Walkthrough', purpose:'Teach the technique once, calmly, so it can be used later without video.', beats:['Why the senses bring you back','Doing it together','When to use it'], on:'grounding'},
+  'v-preperf':{title:'Before you walk in', who:'Anbarasu Thangavelu', secs:50, kind:'Walkthrough', purpose:'Teach the pre-performance routine once.', beats:['Nerves and excitement feel the same','Breath and first line','Shoulders down, one task'], on:'pre-performance'},
+  'v-fine':{title:'\u201cI\u2019m fine\u201d', who:'Deepa Kannan and Anbarasu Thangavelu', secs:90, kind:'Scenario story', purpose:'An EQ Sundays scene about displaced anger, cut to 90 seconds.', beats:['The scene','What she needed','What he could have asked'], on:'grow'},
+  'v-presentation':{title:'The presentation nobody asked about', who:'Deepa Kannan and Anbarasu Thangavelu', secs:85, kind:'Scenario story', purpose:'An EQ Sundays scene about being seen and supported.', beats:['A big day at work, unnoticed at home','The anger that came later','Emotional attunement in one question'], on:'grow'},
+  'v-alumni':{title:'Alumni win: a 1:1 that went differently', who:'A past participant', secs:60, kind:'Alumni win', purpose:'Peer proof that the tools work in real life.', beats:['The old pattern','What they tried','What changed'], on:'grow'}
+};
+const CARD_VID = {}; Object.entries(VIDEOS).forEach(([k,v])=>{ if(v.on && v.on!=='grow') CARD_VID[v.on]=k; });
+function getClip(id){
+  if(VIDEOS[id]) return VIDEOS[id];
+  const m = /^prog:(\w+):(\d+)$/.exec(id); if(!m) return null;
+  const pr = PROGRAMS.find(x=>x.id===m[1]); const mod = pr && pr.mods[+m[2]]; if(!mod) return null;
+  const who = ['Deepa Kannan','Anbarasu Thangavelu','Dr. Gabriel'][+m[2]%3];
+  return {title:mod[0], who, secs:75, kind:'Facilitator clip', purpose:'Opens the module in the facilitator\u2019s own voice, so the program continues after the workshop.', beats:['The idea in one sentence','A real example from the workshop','What to try this week'], on:'program '+pr.name};
+}
+const mmss = n => Math.floor(n/60)+':'+String(n%60).padStart(2,'0');
+function clipHtml(id, label){
+  const v=getClip(id); if(!v) return '';
+  return `<button class="clip" data-a="clip" data-id="${id}"><span class="poster" aria-hidden="true"><span class="play">${I.play}</span><span class="dur tnum">${mmss(v.secs)}</span></span><span style="min-width:0">${label?`<span class="eyebrow">${esc(label)}</span>`:''}<b>${esc(v.title)}</b><span class="m">${esc(v.kind)} \u00b7 ${esc(v.who)}</span><span class="m">Placeholder \u00b7 to be recorded</span></span></button>`;
+}
+
+/* ---------- People (illustrative) ---------- */
+const HELP = {
+  India:{name:'Tele-MANAS (national mental health helpline)', num:'14416  or  1-800-891-4416', note:'Free, 24 hours, in about 20 languages.'},
+  'United Kingdom':{name:'Samaritans', num:'116 123', note:'Free, 24 hours.'},
+  Brazil:{name:'CVV – Centro de Valorização da Vida', num:'188', note:'Free, 24 hours.'},
+  'United States':{name:'988 Suicide & Crisis Lifeline', num:'988', note:'Call or text, 24 hours.'},
+  Germany:{name:'TelefonSeelsorge', num:'0800 111 0 111', note:'Free, 24 hours.'},
+  _:{name:'Find A Helpline', num:'findahelpline.com', note:'Verified helplines in more than 175 countries, by phone, text, chat or WhatsApp.', url:'https://findahelpline.com'}
+};
+const TZ = {India:'Asia/Kolkata','United Kingdom':'Europe/London',Brazil:'America/Sao_Paulo','United States':'America/New_York',Germany:'Europe/Berlin',Nigeria:'Africa/Lagos','United Arab Emirates':'Asia/Dubai',Other:null};
+const GOALS = {self:'Understand myself', stress:'Handle stress', relate:'Improve a relationship', lead:'Lead people', perform:'Perform under pressure', hardtime:'Get through a hard time'};
+const LANGS = {en:'English', ta:'தமிழ் (Tamil)', hi:'हिन्दी (Hindi)', pt:'Português', es:'Español'};
+const GREET = {
+  en:['Good morning','Good afternoon','Good evening'],
+  ta:['காலை வணக்கம்','வணக்கம்','மாலை வணக்கம்'],
+  hi:['सुप्रभात','नमस्ते','शुभ संध्या'],
+  pt:['Bom dia','Boa tarde','Boa noite'],
+  es:['Buenos días','Buenas tardes','Buenas noches']
+};
+const ASK = {en:'What’s happening right now?', ta:'இப்போது என்ன நடக்கிறது?', hi:'अभी क्या हो रहा है?', pt:'O que está acontecendo agora?', es:'¿Qué está pasando ahora?'};
+
+const PEOPLE = {
+  priya:{id:'priya', name:'Priya', ini:'P', blurb:'23 · software engineer · Bengaluru', band:'18–24', country:'India', city:'Bengaluru', lang:'ta', langLabel:'Tamil + English', channel:'Web app + WhatsApp reminders', goal:'self',
+    role:'Software engineer', rg:'knowledge', household:'Shared hostel; family in Madurai', children:'None', caregiving:'None', pattern:'Hybrid, long evenings online', culture:'Family-first at home; strong hierarchy at work', faith:'Not shared', gender:'Not shared',
+    path:'know', day:6, ci:{word:'behind', fam:'envy', n:5},
+    season:'Festival season ahead; appraisal cycle in March', nudge:{text:'Sunday evenings have felt lonely in your recent check-ins. Call Amma or a friend tonight?', tool:'connect-now', why:'Pattern from your check-ins: lower mood on Sunday evenings'},
+    perf:['Deep work','First-boss feedback'], ratings:{'slow-exhale':'yes','comparison-reset':'yes'},
+    chips:['My manager ignored my idea in standup','Everyone from my batch seems ahead of me','Amma keeps asking about marriage'],
+    trend:[6,6,5,7,5,6,5,5,4,6,5,4,5,5], caps:[[42,55],[38,46],[50,54],[35,41],[40,49]],
+    moments:['Asked my lead for feedback instead of guessing','Paused before replying to a sharp Slack message','Called Appa on Sunday instead of scrolling']},
+  mark:{id:'mark', name:'Mark', ini:'M', blurb:'46 · nurse manager · Manchester', band:'35–49', country:'United Kingdom', city:'Manchester', lang:'en', langLabel:'English', channel:'App + smartwatch', goal:'stress',
+    role:'Nurse manager', rg:'healthcare', household:'Married; two teenagers', children:'Two teenagers (14, 17)', caregiving:'Mother with dementia', pattern:'Some night shifts', culture:'Direct; restraint at work is normal', faith:'Not shared', gender:'Not shared',
+    path:'energy', day:3, ci:{word:'stretched', fam:'overwhelm', n:7},
+    season:'Winter pressure building on hospital wards', nudge:{text:'You picked your 1:1 with Sam, a struggling nurse, as this week\u2019s big one. It is at 3:00 pm and your prep card is ready.', tool:'one-to-one', why:'You chose it on Monday'},
+    perf:['Shift transition','Team mood'], ratings:{'shift-reset':'yes','box-breath':'bit'},
+    chips:['I snapped at my daughter after a night shift','One of my nurses cried in the corridor','I can’t switch off at night'],
+    trend:[8,7,7,8,6,7,7,6,7,8,7,6,7,7], caps:[[55,61],[40,47],[62,66],[52,57],[38,44]],
+    moments:['Did the handover reset before driving home, four times this week','Asked Sam how she was before asking about the rota','Said no to an extra Saturday shift']},
+  amina:{id:'amina', name:'Amina', ini:'A', blurb:'38 · family logistics firm · Lagos', band:'35–49', country:'Nigeria', city:'Lagos', lang:'en', langLabel:'English (Nigerian examples)', channel:'Web app + WhatsApp reminders', goal:'lead',
+    role:'Co-owner, family logistics firm', rg:'founder', household:'Married; three children; relatives on the payroll', children:'Three (6, 10, 13)', caregiving:'None', pattern:'Long days, frequent travel', culture:'Respect for elders; family loyalty in business', faith:'Opted in: faith-based reflection', gender:'Not shared',
+    path:'lead-family', day:9, ci:{word:'frustrated', fam:'anger', n:6},
+    season:'Q4 business push; year-end family meeting', nudge:{text:'You picked Monday\u2019s family shareholders\u2019 meeting as this week\u2019s big one. Plan how you will raise the Ikeja delays?', tool:'meeting-plan', why:'You chose it on Monday'},
+    perf:['Decision mode','Hard conversations'], ratings:{'meeting-plan':'yes','slow-exhale':'no'},
+    chips:['My cousin missed another delivery deadline','My father overruled me in front of staff','I need to let someone go'],
+    trend:[6,7,5,6,6,5,7,6,5,6,5,6,6,6], caps:[[48,54],[45,50],[52,58],[44,53],[50,56]],
+    moments:['Raised the late-delivery issue privately, not in the staff meeting','Separated feelings from facts before the pricing decision','Thanked the dispatch team by name']},
+  lucas:{id:'lucas', name:'Lucas', ini:'L', blurb:'67 · retired · São Paulo', band:'65+', country:'Brazil', city:'São Paulo', lang:'pt', langLabel:'Português', channel:'Voice-first', goal:'hardtime',
+    role:'Retired bank manager', rg:'retired', household:'Lives alone; widowed last year', children:'Two adult children', caregiving:'None', pattern:'Retired', culture:'Warm, expressive family culture', faith:'Not shared', gender:'Not shared',
+    path:'meaning-grief', day:12, ci:{word:'saudade', fam:'sadness', n:4},
+    season:'Spring; quieter weeks after the holidays', nudge:{text:'The first anniversary of your wife’s passing is in three weeks, a date you chose to share. Would you like to plan a small remembrance with your children?', tool:'remembrance', why:'A date you shared: anniversary in 3 weeks'},
+    perf:[], ratings:{'grief-checkin':'yes','connect-now':'bit'},
+    chips:['Hoje a casa está muito silenciosa','Não sei o que fazer com meus dias','Meus filhos estão longe'],
+    trend:[7,7,6,8,6,6,5,6,5,5,6,5,4,4], caps:[[40,48],[35,42],[58,60],[50,56],[30,36]],
+    moments:['Called my daughter on Sunday','Went to the café where we used to go, and stayed','Wrote down a memory instead of keeping it in']}
+};
+const INTENTS = {pause:['Pause before I react','cool-down'], need:['Say what I need','ask-for-need'], kind:['Be kinder to myself','self-kind'], rest:['Rest and recover','box-breath'], calm:['Lead with calm','meeting-plan'], connect:['Stay connected','connect-now'], focus:['Focus on what matters','triage']};
+Object.assign(PEOPLE.priya, {intent:'kind', deeper:{pid:'equip', why:'You used \u201cthe feeling under the feeling\u201d five times this month'},
+  example:'Why was my idea ignored AGAIN in standup?? Nobody here listens to juniors.', exTo:'Senior',
+  calm:'Hi, I wanted to follow up on the idea I shared in standup today. Could we find five minutes for me to walk you through it? I would value your view.',
+  patterns:['Sunday evenings are your hardest hour.','You feel calmer on days you message home.','Good days often follow a deep-work morning.'], share:'This week I paused before reacting three times and called home twice.'});
+Object.assign(PEOPLE.mark, {intent:'rest', deeper:{pid:'neuro', why:'You did nine resets this month'},
+  example:'I have told you THREE times, the rota is final. Stop asking me.', exTo:'Team member',
+  calm:'I know the rota is hard on everyone this month. It is final for now, but let us sit down on Friday and look at what we can change for next month.',
+  patterns:['Your hardest days follow night shifts.','On days you did the handover reset, evenings were calmer.','Heavy days are easing: four fewer than last month.'], share:'This week I left four shifts at the door before driving home.'});
+Object.assign(PEOPLE.amina, {intent:'calm', deeper:{pid:'upshift', why:'You rehearsed hard conversations six times this month'},
+  example:'Tunde this is the SIXTH late delivery!! Are you even trying??', exTo:'Family',
+  calm:'Tunde, this is the sixth late delivery this month and clients are noticing. Can we meet tomorrow at 10 to understand what is getting in the way? I want us to fix this together.',
+  patterns:['Frustration peaks on Mondays, before dispatch meetings.','Calm days follow early starts at the depot.','You logged eleven good days this month.'], share:'This week I raised a hard issue privately, not in front of the team.'});
+Object.assign(PEOPLE.lucas, {intent:'connect', deeper:null,
+  example:'Voc\u00eas NUNCA ligam. Eu fico aqui sozinho o tempo todo.', exTo:'Family',
+  calm:'Sinto falta de voc\u00eas. Que tal combinarmos uma liga\u00e7\u00e3o no domingo? Seria muito bom ouvir a voz de voc\u00eas.',
+  patterns:['Mornings after you call your daughter are lighter.','Sad days are becoming fewer this week.','Saudade often comes on Sunday afternoons.'], share:'Esta semana liguei para minha filha e voltei ao nosso caf\u00e9.'});
+Object.assign(PEOPLE.priya, {dcWho:'Senior', dcText:'My manager went quiet and looked at his phone when I shared my idea in standup.', week:['Sprint demo, Wednesday','1:1 with my lead, Thursday','Call with Amma, Sunday'], weekPick:null,
+  dcOut:{maybe:[['distracted','standups are rushed and something urgent may have come up'],['unsure','he may not have understood the idea yet'],['wary','new ideas can feel like extra work for the team']], need:'Time to think, or a clearer link to the team’s goals.', say:'Could I take five minutes later to walk you through the idea properly?', avoid:'Deciding from one meeting that he does not value you.'}});
+Object.assign(PEOPLE.mark, {dcWho:'Team member', dcText:'Sam snapped at a patient’s family, then told me she was fine.', week:['1:1 with Sam, today 3 pm','Rota meeting, Thursday','Mum’s care review, Friday'], weekPick:'1:1 with Sam, today 3 pm',
+  dcOut:{maybe:[['overwhelmed','long shifts and a hard case this week'],['ashamed','snapping may have embarrassed her'],['scared','of being seen as not coping']], need:'Safety to admit she is struggling without it counting against her.', say:'That looked like a hard moment. How are you really doing?', avoid:'Starting with the complaint before asking how she is.'}});
+Object.assign(PEOPLE.amina, {dcWho:'Family', dcText:'Tunde laughed and said “you are still young” when I raised the late deliveries.', week:['Family shareholders’ meeting, Monday','Dispatch review, Wednesday','Bank loan meeting, Friday'], weekPick:'Family shareholders’ meeting, Monday',
+  dcOut:{maybe:[['embarrassed','being corrected by a younger cousin'],['defensive','the delays may feel like his own failure'],['anxious','about his place in the family business']], need:'Respect for his seniority while the problem gets fixed.', say:'You have run Ikeja for years, and I need your help to fix the timing. What is getting in the way?', avoid:'Raising it in front of the staff or the wider family.'}});
+Object.assign(PEOPLE.lucas, {dcWho:'Family', dcText:'Minha filha desligou rápido e disse que estava ocupada.', week:['Almoço com meu filho, sábado','Consulta médica, quinta'], weekPick:null,
+  dcOut:{maybe:[['sobrecarregada','trabalho e filhos pequenos'],['culpada','por não ligar mais vezes'],['triste','ela também sente falta da mãe']], need:'Saber que você entende a rotina dela.', say:'Sei que sua semana está corrida. Podemos marcar uma ligação curta no domingo?', avoid:'Cobrar que ela ligue mais.'}});
+PEOPLE.priya.patterns.unshift('You used Decode someone else three times this week, each time about your lead. Managing upward may be your theme this month.');
+PEOPLE.mark.patterns.unshift('You used the 60-second reset twice this week, both times after night shifts.');
+PEOPLE.amina.patterns.unshift('You calmed four messages this week; three were to family members on the payroll.');
+PEOPLE.lucas.patterns.unshift('You used “Reach out to one person” four times; the mornings after were lighter.');
+const SCRIPT_DOMAIN = {'say-no-senior':'work','hard-feedback':'work','cousin-employee':'work','repair-apology':'work','ask-for-need':'home','talk-teen':'home'};
+const WORK_WHO = ['Senior','Colleague','Team member','Customer'];
+function calibFor(dom){ return state.calib[dom] || null; }
+function styleLine(dom){ const c=calibFor(dom); return c==='diplomatic' ? 'hierarchical and diplomatic: indirect, respectful of seniority, face-saving' : (c==='direct' ? 'direct and flat: plain, respectful, to the point' : 'not set by the person: use neutral, polite, professional wording'); }
+const WEIGHTS = {priya:{joy:5,envy:2,lonely:2,fear:1,anger:1}, mark:{joy:3,overwhelm:4,fear:1,guilt:1,sadness:1}, amina:{joy:4,anger:3,overwhelm:2,fear:1}, lucas:{sadness:4,lonely:2,joy:3}};
+function rng(seed){ let x=7; for(const c of seed) x=(x*31+c.charCodeAt(0))>>>0; return ()=>{ x=(x*1664525+1013904223)>>>0; return x/4294967296; }; }
+function weatherDays(){
+  const p=state.p, w=WEIGHTS[p.id], r=rng(p.id), out=[];
+  for(let i=27;i>=0;i--){
+    const d=new Date(Date.now()-i*864e5); let f=null;
+    if(w){ const keys=Object.keys(w), tot=keys.reduce((a,k)=>a+w[k],0); let x=r()*tot; for(const k of keys){ x-=w[k]; if(x<=0){ f=k; break; } } f=f||keys[0];
+      if(p.id==='priya' && d.getDay()===0) f='lonely';
+      if(p.id==='lucas' && i<7 && f==='sadness' && r()<.5) f='joy'; }
+    out.push({d, f});
+  }
+  out[out.length-1].f = state.ci ? state.ci.fam : out[out.length-1].f;
+  return out;
+}
+const CAP_NAMES = ['Self-awareness','Self-management','Social awareness','Relationship skills','Performance'];
+
+/* ---------- State ---------- */
+const state = {pid:'priya', p:null, off:{}, ci:null, ratings:{}, log:[], stack:[{v:'home'}], chat:[], ai:undefined, aiNote:'', ob:null, steps:null, reh:null, variant:null, moment:null, toast:'', calib:{}, dc:null, weekPick:null};
+let timers = [];
+const clearTimers = ()=>{ timers.forEach(clearTimeout); timers=[]; };
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = s => document.querySelector(s);
+const on = k => !state.off[k];
+const fc = fam => `--fc:var(${FAM[fam]?FAM[fam].c:'--accent'})`;
+const toolName = id => { const t=T[id]; if(!t) return id; return (state.p.lang==='pt' && t.pt) ? t.pt.name : t.name; };
+
+function localTime(){
+  const tz = state.p ? TZ[state.p.country] : null;
+  const d = new Date(); const o1={hour:'numeric',hourCycle:'h23'}, o2={weekday:'long',hour:'numeric',minute:'2-digit'};
+  if(tz){ o1.timeZone=tz; o2.timeZone=tz; }
+  let h=12, label='';
+  try { h = Number(new Intl.DateTimeFormat('en-GB',o1).format(d)); } catch(e){}
+  try { label = new Intl.DateTimeFormat('en-GB',o2).format(d); } catch(e){}
+  let hm=''; try { const o3={hour:'2-digit',minute:'2-digit',hourCycle:'h23'}; if(tz) o3.timeZone=tz; hm=new Intl.DateTimeFormat('en-GB',o3).format(d); } catch(e){}
+  return {h, label, hm};
+}
+function nowStamp(){ return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+
+/* ---------- Adaptation engine ---------- */
+function resetFor(fam){
+  const p=state.p, why=[];
+  let id='slow-exhale';
+  if(fam==='anger'||fam==='contempt') id='cool-down';
+  else if(fam==='overwhelm') id = (on('role') && p.rg==='healthcare') ? 'shift-reset' : 'box-breath';
+  else if(fam==='fear') id='slow-exhale';
+  else if(fam==='lonely') id='connect-now';
+  else if(fam==='surprise') id='grounding';
+  if(id==='slow-exhale' && state.ratings['slow-exhale']==='no'){ id='box-breath'; why.push('slow-exhale did not help you last time'); }
+  if(id==='shift-reset') why.push('role: '+p.role.toLowerCase());
+  return {id, why};
+}
+function reflectFor(fam){
+  const p=state.p;
+  const m = {anger:'feeling-under', fear:'story-fact', overwhelm:'triage', sadness:(on('household') && /widow/i.test(p.household))?'grief-checkin':'after-moment', lonely:'connect-now', shame:'self-kind', guilt:'repair-apology', envy:'comparison-reset', contempt:'story-fact', surprise:'story-fact', joy:'savour'};
+  let id = m[fam] || 'after-moment';
+  if(fam==='anger' && on('role') && p.rg==='founder' && on('household') && /relatives/i.test(p.household)) id='cousin-employee';
+  return id;
+}
+function cardFor(fam){ return {anger:'card-secondary', guilt:'card-impact', contempt:'card-impact', sadness:'card-expect'}[fam] || 'card-naming'; }
+
+function pickMoment(){
+  const p=state.p, ci=state.ci, why=[];
+  if(ci && ci.n>=7){
+    const r=resetFor(ci.fam);
+    return {id:r.id, why:[`check-in: “${ci.word}” at ${ci.n}/10`, 'strong feeling, so body first', ...r.why]};
+  }
+  let id='feeling-under';
+  const g=p.goal;
+  if(g==='self'){ id = ci && ci.fam==='envy' ? 'comparison-reset' : reflectFor(ci?ci.fam:'anger'); why.push('goal: '+GOALS[g].toLowerCase()); if(ci) why.push(`check-in word “${ci.word}”`); if(on('band')) why.push('age '+p.band); }
+  else if(g==='stress'){ id = (on('role') && p.rg==='healthcare') ? 'shift-reset' : 'box-breath'; why.push('goal: handle stress'); if(on('role') && p.rg==='healthcare') why.push('role: '+p.role.toLowerCase()); }
+  else if(g==='lead'){ const fam = on('role') && p.rg==='founder' && on('household') && /relatives/i.test(p.household); id = fam ? 'cousin-employee' : 'hard-feedback'; why.push('goal: lead people'); if(fam) why.push('family members on the payroll'); if(ci) why.push(`check-in “${ci.word}”`); }
+  else if(g==='hardtime'){ const widow = on('household') && /widow/i.test(p.household); id = widow ? 'grief-checkin' : 'after-moment'; why.push('goal: get through a hard time'); if(widow) why.push('you shared a recent loss'); }
+  else if(g==='relate'){ id='ask-for-need'; why.push('goal: improve a relationship'); }
+  else if(g==='perform'){ id='pre-performance'; why.push('goal: perform under pressure'); }
+  if(ci && ci.n<=3 && ci.fam==='joy'){ id='savour'; why.unshift('you are feeling good'); }
+  return {id, why};
+}
+function defaultPath(p){
+  const byGoal = {lead:'lead', hardtime:'hard', relate:'relate'};
+  const byBand = {'18–24':'know','25–34':'pressure','35–49':'energy','50–64':'legacy','65+':'meaning'};
+  if(byGoal[p.goal]) return {path:byGoal[p.goal], why:['goal “'+GOALS[p.goal].toLowerCase()+'” overrides the age default']};
+  return {path:byBand[p.band]||'know', why:['life stage '+p.band]};
+}
+function logEvent(title, why=[]){ state.log.unshift({t:nowStamp(), title, why}); if(state.log.length>40) state.log.pop(); }
+function adapt(reason){
+  const prev = state.moment ? state.moment.id : null;
+  state.moment = pickMoment();
+  if(reason) logEvent(reason, []);
+  if(state.moment.id!==prev) logEvent('For this moment → '+toolName(state.moment.id), state.moment.why);
+}
+
+function loadPerson(id){
+  clearTimers();
+  const src = PEOPLE[id];
+  state.pid=id; state.p=JSON.parse(JSON.stringify(src)); state.off={}; state.ci={...src.ci}; state.ratings={...src.ratings};
+  state.chat=[]; state.stack=[{v:'home'}]; state.ob=null; state.steps=null; state.reh=null; state.variant=null; state.moment=null; state.rw=null; state.intentEdit=false; state.deeperOff=false; state.calib={}; state.dc=null; state.weekPick=src.weekPick||null;
+  logEvent('Signed in as '+src.name, [src.blurb, 'language: '+src.langLabel, 'channel: '+src.channel]);
+  logEvent('Path for this season → '+PATHS[src.path].name, src.goal==='lead'||src.goal==='hardtime' ? ['goal “'+GOALS[src.goal].toLowerCase()+'” shapes the path','age '+src.band] : ['life stage '+src.band, 'goal: '+GOALS[src.goal].toLowerCase()]);
+  adapt();
+  render(); renderRail();
+}
+
+/* ---------- Navigation ---------- */
+function go(v, params={}){ clearTimers(); state.stack.push({v, ...params}); render(); scrollTop(); }
+function back(){ clearTimers(); if(state.stack.length>1) state.stack.pop(); state.steps=null; render(); scrollTop(); }
+function tab(v){ clearTimers(); state.stack=[{v}]; state.steps=null; state.reh=null; render(); scrollTop(); }
+function scrollTop(){ const s=$('#screen'); if(s) s.scrollTop=0; }
+function openTool(id){
+  if(!T[id]) return;
+  if(T[id].e==='steps') state.steps={id, i:0, a:[]};
+  if(T[id].e==='script'){ state.reh=null; state.variant=null; }
+  if(id==='calm-reply') state.rw=null;
+  if(id==='decode') state.dc=null;
+  if(id==='panic') logEvent('Panic reset opened', ['no naming, no rating','body first; questions after']);
+  go('tool',{id});
+}
+let toastTimer=null;
+function toast(msg){ state.toast=msg; renderToast(); clearTimeout(toastTimer); toastTimer=setTimeout(()=>{ state.toast=''; renderToast(); }, 2600); }
+function renderToast(){ let el=$('#toast'); if(!state.toast){ if(el) el.remove(); return; } if(!el){ el=document.createElement('div'); el.id='toast'; el.className='toast'; el.setAttribute('role','status'); $('#frame').appendChild(el); } el.textContent=state.toast; }
+
+/* ---------- Render: shell ---------- */
+const TITLES = {home:'', feel:'Name it', tools:'Tools', grow:'Grow', me:'What the OS knows', family:'', emotion:'', tool:'', program:'Program', companion:'Drishti', crisis:'Support now', checkin:'Check in', clip:'Video'};
+function render(){
+  const top = state.stack[state.stack.length-1];
+  const screen=$('#screen'), bar=$('#appbar'), nav=$('#nav');
+  if(state.ob){ bar.innerHTML = `<div class="brand"><div class="mark">EQ</div><div><b>EQ OS</b><small>Sign in</small></div></div><span style="flex:1"></span><button class="demo-btn" data-a="rail">Demo</button>`; screen.innerHTML = viewOnboard(); nav.hidden=true; bind(); return; }
+  nav.hidden=false;
+  let title = TITLES[top.v] || '';
+  if(top.v==='family') title = FAM[top.f].name;
+  if(top.v==='emotion') title = 'Emotion Atlas';
+  if(top.v==='tool') title = ENGINES[T[top.id].e].name;
+  const left = state.stack.length>1
+    ? `<button class="icon-btn" data-a="back" aria-label="Back">${I.back}</button>`
+    : `<div class="mark" aria-hidden="true">EQ</div>`;
+  bar.innerHTML = `${left}<h2>${esc(title || 'EQ OS')}</h2><button class="demo-btn" data-a="rail" aria-label="Show the demo panel">Demo</button><button class="avatar" data-a="tab" data-v="me" aria-label="Profile">${esc(state.p.ini)}</button>`;
+  const V = {clip:viewClip, home:viewHome, feel:viewFeel, family:viewFamily, emotion:viewEmotion, tools:viewTools, tool:viewTool, grow:viewGrow, program:viewProgram, me:viewMe, companion:viewCompanion, crisis:viewCrisis};
+  screen.innerHTML = (V[top.v]||viewHome)(top);
+  const root = state.stack[0].v;
+  nav.innerHTML = [['home','Home',I.home],['feel','Feel',I.feel],['tools','Tools',I.tools],['grow','Grow',I.grow],['me','Me',I.me]]
+    .map(([v,l,ic])=>`<button class="${root===v?'on':''}" data-a="tab" data-v="${v}" aria-current="${root===v?'page':'false'}">${ic}<span>${l}</span></button>`).join('');
+  bind();
+  after(top);
+}
+
+/* ---------- Views ---------- */
+function whyLine(arr){ return arr && arr.length ? `<div class="why"><span>Why this:</span>${arr.map(w=>`<span class="tag">${esc(w)}</span>`).join('')}</div>` : ''; }
+function toolRow(id, extra=''){
+  const t=T[id]; if(!t) return '';
+  return `<button class="tool" data-a="tool" data-id="${id}"><span class="gly">${ENGINE_ICON[t.e]}</span><span style="min-width:0"><b>${esc(toolName(id))}</b><span>${esc(extra || t.d || '')}</span></span><span class="meta">${esc(t.mins)}</span></button>`;
+}
+function ritualFor(h){ if(h<12) return ['set-day','Set the day','One word for how you want to show up today']; if(h>=17) return ['close-day','Close the day','One good moment, one hard one, one feeling']; return ['slow-exhale','Midday pause','Six slow breaths between meetings']; }
+function viewHome(){
+  const p=state.p, lt=localTime(), idx = lt.h<12?0:(lt.h<17?1:2);
+  const g=(GREET[p.lang]||GREET.en)[idx];
+  const m=state.moment, mt=T[m.id];
+  const ci=state.ci, rit=ritualFor(lt.h);
+  const place = p.city || (p.country && p.country!=='Other' ? p.country : '');
+  const sos = [['anger','Angry'],['fear','Anxious'],['sadness','Hurt'],['overwhelm','Swamped'],['lonely','Low']];
+  const intent = p.intent ? INTENTS[p.intent] : null, path = p.path ? PATHS[p.path] : null;
+  const deeper = p.deeper && !state.deeperOff ? PROGRAMS.find(x=>x.id===p.deeper.pid) : null;
+  const quick = [['calm-reply','Calm my reply'],['decode','Decode someone'],['meeting-plan','2-minute prep']];
+  return `
+  <div class="hello">
+    <p class="local tnum">${esc(lt.label)}${place?' in '+esc(place):''}</p>
+    <h1>${esc(g)}${p.partial?'':', '+esc(p.name)}</h1>
+  </div>
+  <p class="ask-label">Drishti · your AI companion</p>
+  <button class="ask" data-a="companion"><span class="drishti" aria-hidden="true"></span><span>${esc(ASK[p.lang]||ASK.en)}</span></button>
+  <div class="wrap-row">${quick.map(([id,l])=>`<button class="chip" data-a="tool" data-id="${id}">${l}</button>`).join('')}</div>
+  <button class="panic" data-a="tool" data-id="panic"><span class="drishti" aria-hidden="true"></span><span><b>60-second reset</b><span class="s">No questions. Just breathe first.</span></span></button>
+  ${p.partial?`<div class="card accent"><p class="eyebrow">Make it yours</p><p>Three quick questions so guidance fits your language, life stage and goals. Skip any of them.</p><div><button class="btn small primary" data-a="makeitmine">Make it mine</button></div></div>`:''}
+  <div class="section-title"><h3>Your ritual</h3><span class="note tnum">${esc(lt.hm)}</span></div>
+  <button class="tool" data-a="tool" data-id="${rit[0]}"><span class="gly">${I.wave}</span><span style="min-width:0"><b>${esc(rit[1])}</b><span>${esc(rit[2])}</span></span><span class="meta">${esc(T[rit[0]].mins)}</span></button>
+  <div class="card accent moment">
+    <p class="eyebrow">For this moment</p>
+    <h3>${esc(toolName(m.id))}</h3>
+    <p class="engine-label">${esc(ENGINES[mt.e].name)} · ${esc(mt.mins)}</p>
+    <p>${esc(mt.d||'')}</p>
+    ${whyLine(m.why)}
+    <button class="btn primary" data-a="tool" data-id="${m.id}">Start</button>
+  </div>
+  <div class="row between"><div><p class="eyebrow">Last check-in</p><p><b style="text-transform:capitalize">${esc(ci.word)}</b> <span class="muted tnum">· ${ci.n}/10</span></p></div><button class="btn small" data-a="checkin">Check in</button></div>
+  <div class="section-title"><h3>Quick reset</h3><span class="note">When it’s running hot</span></div>
+  <div class="sos">${sos.map(([f,l])=>`<button style="${fc(f)}" data-a="sos" data-f="${f}"><i></i>${l}</button>`).join('')}</div>
+  ${p.week && p.week.length ? `<div class="card">
+    <div class="row between"><p class="eyebrow">Your week ahead</p><span class="note">Asked on Monday</span></div>
+    ${state.weekPick ? `<p><b>This week’s big one:</b> ${esc(state.weekPick)}</p><p class="note">Only this conversation gets a prep card, 30 minutes before. No other meeting reminders.</p><div class="row"><button class="btn small" data-a="tool" data-id="${p.rg==='healthcare'?'one-to-one':'meeting-plan'}">Prep now</button><button class="btn small ghost" data-a="weekclear">Change</button></div>`
+      : `<p style="font-size:14px">Which <b>one</b> conversation this week carries the highest stakes for you?</p><div class="wrap-row">${p.week.map(w=>`<button class="chip" data-a="weekpick" data-v="${esc(w)}">${esc(w)}</button>`).join('')}</div>`}
+  </div>` : ''}
+  <div class="card">
+    <div class="row between"><p class="eyebrow">Your intention this week</p><button class="link" data-a="intentedit">${intent && !state.intentEdit?'Change':'Choose'}</button></div>
+    ${(!intent || state.intentEdit) ? `<p class="note">You choose. Drishti fits the daily practice to it.</p><div class="wrap-row">${Object.entries(INTENTS).map(([k,v])=>`<button class="chip ${p.intent===k?'on':''}" data-a="intent" data-k="${k}">${esc(v[0])}</button>`).join('')}</div>`
+      : `<h3 style="font-size:17px">${esc(intent[0])}</h3><div class="row between"><p class="note">Today’s practice: ${esc(toolName(intent[1]))}</p><button class="btn small" data-a="tool" data-id="${intent[1]}">Open</button></div>`}
+    ${path?`<p class="note">Suggested path: <button class="link" data-a="tab" data-v="grow">${esc(path.name)}</button> <span class="tnum">· day ${p.day} of ${path.days}</span></p>`:''}
+  </div>
+  ${p.nudge?`<div class="card soft">
+    <div class="row" style="align-items:flex-start"><span class="gly" style="color:var(--accent);width:20px;flex:none">${I.bell}</span><p>${esc(p.nudge.text)}</p></div>
+    ${whyLine([p.nudge.why])}
+    <div><button class="btn small" data-a="tool" data-id="${p.nudge.tool}">${esc(toolName(p.nudge.tool))}</button></div>
+  </div>`:''}
+  ${p.perf && p.perf.length?`<div class="section-title"><h3>Performance modes</h3><span class="note">From your role</span></div><div class="wrap-row">${p.perf.map(x=>`<button class="chip" data-a="perf">${esc(x)}</button>`).join('')}</div>`:''}
+  ${deeper?`<div class="card soft"><p class="eyebrow">Want to go deeper?</p><p style="font-size:14px">${esc(p.deeper.why)}. <b>${esc(deeper.name)}</b>, a Drishta Vidya program, takes it further.</p>${whyLine(['offered because of your own pattern, never pushed'])}<div class="row"><button class="btn small" data-a="program" data-id="${deeper.id}">Have a look</button><button class="btn small ghost" data-a="deeperno">Not now</button></div></div>`:''}
+  `;
+}
+function viewFeel(){
+  const fams = Object.keys(FAM);
+  return `
+  <div class="card soft"><p><b>Naming a feeling lowers its intensity.</b> Pick the family that fits, then the word.</p><button class="link" data-a="companion" style="text-align:left">Not sure? Describe what happened instead</button></div>
+  <div class="fam-grid">${fams.map(f=>`<button class="fam" style="${fc(f)}" data-a="family" data-f="${f}"><b>${esc(FAM[f].name)}</b><span>${FAM[f].words.slice(0,3).map(w=>w[0]).join(', ')}</span></button>`).join('')}</div>
+  <p class="note">The Emotion Atlas: 11 families, about 60 emotions, each with an intensity ladder.</p>`;
+}
+function familyWords(f){
+  let w = FAM[f].words.slice();
+  if(f==='sadness' && state.p.lang==='pt') w = [w[0],w[1],SAUDADE,...w.slice(2)];
+  return w;
+}
+function viewFamily(top){
+  const f=top.f, F=FAM[f], words=familyWords(f);
+  return `
+  <div class="emo-head" style="${fc(f)}"><p class="eyebrow">Emotion family</p><h1 style="text-transform:none">${esc(F.name)}</h1><p>${esc(F.need)}.</p></div>
+  <p class="note">From lower to higher intensity. Choose the closest word.</p>
+  <div class="ladder" style="${fc(f)}">${words.map((w,i)=>{const lvl=Math.min(5,Math.max(1,Math.round((i+1)/words.length*5)));return `<button class="rung" data-a="emotion" data-f="${f}" data-w="${esc(w[0])}"><span class="lvl" aria-hidden="true">${[1,2,3,4,5].map(k=>`<i class="${k<=lvl?'f':''}"></i>`).join('')}</span><span style="min-width:0"><b>${esc(w[0])}</b><span>${esc(w[1])}</span></span></button>`}).join('')}</div>`;
+}
+function bandOf(n){ if(n>=9) return ['Flooded','A 60-second reset only, then a safety check']; if(n>=7) return ['Hot','Body first: breath, movement, grounding']; if(n>=4) return ['Stirred','A short reflection, a script or a reframe']; return ['Noticing','Insight and practice work well now']; }
+function viewEmotion(top){
+  const f=top.f, F=FAM[f], word=top.w, def=(familyWords(f).find(x=>x[0]===word)||[word,''])[1];
+  const n = top.n ?? 5, [bName,bDesc]=bandOf(n);
+  const needSafety = (n>=9) || (n>=7 && ['sadness','lonely','shame','guilt'].includes(f));
+  let recos=[];
+  if(n>=9) recos=[[resetFor(f).id,'Start here']];
+  else if(n>=7) recos=[[resetFor(f).id,'Settle the body first'],[reflectFor(f),'Then, once it cools']];
+  else if(n>=4) recos=[[reflectFor(f),'Best fit now'],[cardFor(f),'The idea behind it']];
+  else recos=[[cardFor(f),'Learn it while you are calm'],[reflectFor(f),'Practise it']];
+  if(f==='joy') recos=[['savour','Make it last']];
+  const p=state.p;
+  const forYou = [];
+  if(on('culture') && f==='anger') forYou.push(p.culture.includes('hierarchy')||p.culture.includes('elders') ? 'Scripts use face-saving wording for seniors and elders.' : 'Scripts use direct, calm wording.');
+  if(on('role') && p.rg==='healthcare' && (f==='overwhelm'||f==='sadness')) forYou.push('Resets fit between duties: 90 seconds or less.');
+  if(p.lang==='pt') forYou.push('Prompts appear in Portuguese.');
+  if(on('faith') && /Opted in/.test(p.faith)) forYou.push('A faith-based reflection is offered beside the secular one, because you opted in.');
+  return `
+  <div class="emo-head" style="${fc(f)}"><p class="eyebrow">${esc(F.name)}</p><h1>${esc(word)}</h1><p>${esc(def)}</p></div>
+  <div class="card">
+    <div class="row between"><p class="eyebrow">How strong is it?</p><span class="big-num tnum" id="n-out">${n}</span></div>
+    <input type="range" id="intensity" min="1" max="10" value="${n}" aria-label="Intensity from 1 to 10">
+    <div class="scale"><span>1 · barely</span><span>10 · overwhelming</span></div>
+    <p class="band">${bName}: <span class="muted" style="font-weight:400">${bDesc}</span></p>
+  </div>
+  ${needSafety ? `<div class="card crisis" style="background:var(--crit-soft)"><p class="eyebrow" style="color:var(--crit)">Safety check</p><p>Are you having thoughts of harming yourself, or is anyone in danger right now?</p><div class="wrap-row"><button class="btn small" data-a="safe">No, I’m safe</button><button class="btn small" data-a="crisis">Yes, or not sure</button></div></div>`:''}
+  <div class="section-title"><h3>What to do now</h3><span class="note tnum">At ${n}/10</span></div>
+  ${recos.map(([id,l])=>toolRow(id,l)).join('')}
+  ${forYou.length?`<div class="card soft"><p class="eyebrow">Adapted for you</p>${forYou.map(x=>`<p style="font-size:13.5px">${esc(x)}</p>`).join('')}</div>`:''}
+  <div class="card">
+    <p class="eyebrow">How the OS handles ${esc(F.name.toLowerCase())}</p>
+    <div class="strategy">
+      <div><b>In the moment</b><span>${esc(F.now)}</span></div>
+      <div><b>Afterwards</b><span>${esc(F.after)}</span></div>
+      <div><b>Over time</b><span>${esc(F.over)}</span></div>
+      <div class="never"><b>Never</b><span>${esc(F.never)}</span></div>
+    </div>
+  </div>
+  <div class="card soft">
+    <p class="eyebrow">In the body</p><p style="font-size:13.5px">${esc(F.body)}</p>
+    <p class="eyebrow">Common triggers</p><p style="font-size:13.5px">${esc(F.triggers)}</p>
+  </div>
+  <button class="btn block" data-a="savecheck" data-f="${f}" data-w="${esc(word)}">Save as my check-in</button>`;
+}
+function viewTools(top){
+  const filt = top.filt || 'All';
+  const phases=['All','Before','During','After','Grow'];
+  const groups = Object.keys(ENGINES).map(e=>[e, Object.keys(T).filter(id=>T[id].e===e && (filt==='All'||T[id].phase===filt))]).filter(g=>g[1].length);
+  return `
+  <div class="card soft"><p style="font-size:13.5px">Every tool runs on one of seven engines. A tool is content plus tags, so new tools and languages need no new code.</p></div>
+  <div class="wrap-row" role="group" aria-label="Filter by moment">${phases.map(x=>`<button class="chip ${x===filt?'on':''}" data-a="filt" data-v="${x}">${x}</button>`).join('')}</div>
+  ${groups.map(([e,ids])=>`<div class="engine"><div class="engine-head"><h3>${esc(ENGINES[e].name)}</h3><span class="note tnum">${ids.length}</span></div><p class="note">${esc(ENGINES[e].d)}</p>${ids.map(id=>toolRow(id)).join('')}</div>`).join('')}`;
+}
+function viewTool(top){
+  const t=T[top.id];
+  const head = `<div><p class="eyebrow">${esc(t.phase==='Grow'?'Growth':t.phase)} · ${esc(t.mins)}</p><h1 style="font-size:24px;margin-top:4px">${esc(toolName(top.id))}</h1><div class="wrap-row" style="margin-top:8px"><span class="tag">${esc(ENGINES[t.e].name)}</span></div></div>`;
+  if(t.preview) return head + `<div class="card soft"><p>${esc(t.d)}</p><p class="note">Part of the full version. This demo shows where it sits in the OS.</p></div>`;
+  if(t.e==='reset') return head + viewReset(top.id);
+  if(t.e==='steps') return head + viewSteps(top.id);
+  if(t.rewrite) return head + viewRewrite();
+  if(t.decode) return head + viewDecode();
+  if(t.e==='script') return head + viewScript(top.id);
+  if(t.e==='card') return head + viewCard(top.id);
+  if(t.e==='checkin') return head + viewCheckin();
+  return head;
+}
+function viewRewrite(){
+  const p=state.p, rw = state.rw || (state.rw={text:p.example||'', to:p.exTo||'Colleague', out:null, busy:false, example:!!p.example});
+  return `<p class="muted">Paste a message before you send it. Drishti keeps your point and takes the heat out.</p>
+  <div class="card">
+    <div class="row between"><p class="eyebrow">Your message</p>${rw.example?'<span class="tag">Example</span>':''}</div>
+    <textarea id="rw-in" aria-label="Your message">${esc(rw.text)}</textarea>
+    <p class="eyebrow">Who is it for?</p>
+    <div class="wrap-row">${['Senior','Colleague','Team member','Family','Partner','Customer'].map(x=>`<button class="chip ${rw.to===x?'on':''}" data-a="rwto" data-v="${x}">${x}</button>`).join('')}</div>
+    <div class="row" style="flex-wrap:wrap"><button class="btn primary" data-a="rwgo" ${rw.busy?'disabled':''}>${rw.busy?'Calming…':'Calm it down'}</button><button class="btn ghost" data-a="rwwait">Wait 10 minutes</button></div>
+  </div>
+  ${rw.stage==='label' ? `<div class="card soft"><div class="row" style="align-items:flex-start"><span class="drishti" aria-hidden="true"></span><p><b>Got it.</b> Before I rewrite it: which word best fits what is driving your draft right now?</p></div><div class="wrap-row">${(state.p.lang==='pt'?[['frustrado','anger'],['encurralado','fear'],['com pressa','overwhelm'],['magoado','sadness'],['cansado','overwhelm']]:[['frustrated','anger'],['cornered','fear'],['urgent','overwhelm'],['hurt','sadness'],['tired','overwhelm']]).map(([w,f])=>`<button class="chip" data-a="rwfeel" data-w="${w}" data-f="${f}">${w}</button>`).join('')}<button class="chip" data-a="rwfeel" data-w="" data-f="">Skip</button></div><p class="note">Naming it takes two seconds and tends to cool the draft too.</p></div>`:''}
+  ${rw.out?`<div class="card accent"><div class="row between"><p class="eyebrow">Calmer version</p>${rw.feel?`<span class="tag">Driving it: ${esc(rw.feel)}</span>`:''}</div><p style="white-space:pre-wrap">${esc(rw.out.reply)}</p>
+    ${rw.out.changed&&rw.out.changed.length?`<p class="eyebrow">What changed</p><div class="noticed">${rw.out.changed.map(c=>`<p>${esc(c)}</p>`).join('')}</div>`:''}
+    <div class="wrap-row"><button class="btn small" data-a="copy" data-t="${esc(rw.out.reply)}">Copy</button></div>
+    ${rw.out.note?`<p class="note">${esc(rw.out.note)}</p>`:''}</div>${rateBlock('calm-reply')}`:''}`;
+}
+function softClean(t){
+  let s=t.replace(/([!?])\1+/g,'$1').replace(/\b([A-ZÀ-Þ]{2,})\b/g,w=>w.toLowerCase()).replace(/\b(again|always|never|nunca|sempre)\b/gi,'').replace(/\s{2,}/g,' ').replace(/\s+([.,!?])/g,'$1').trim();
+  return s + (state.p.lang==='pt' ? '\n\nPodemos conversar sobre isso amanhã?' : '\n\nCould we talk about this tomorrow? I want to sort it out together.');
+}
+async function rewriteMsg(){
+  const rw=state.rw, text=(rw.text||'').trim();
+  if(!text){ toast('Paste a message first.'); return; }
+  if(CRISIS_RE.test(text)){ logEvent('Safety check: risk words in a message', ['support route opened']); renderRail(); go('crisis'); return; }
+  const canned = rw.example && state.p.calm ? state.p.calm : null;
+  const fb = note=>({reply: canned || softClean(text), changed:['Removed capitals and repeated punctuation','Swapped blame for a clear request','Ended with a next step they can say yes to'], note});
+  if(!state.ai){ rw.out=fb('Sample rewrite. Live AI works when the viewer allows Claude.'); logEvent('Calm my reply (sample)', ['kept the point, removed the heat','recipient: '+rw.to.toLowerCase()]); render(); renderRail(); return; }
+  rw.busy=true; render();
+  try{
+    const res = await state.ai.json(`Rewrite this message so it is calm, respectful and clear, before the person sends it. Keep their point and their request. Remove blame, absolutes, capital letters used for shouting and repeated punctuation, and end with a clear, doable next step. Write it the way a respected professional in their own setting would say it. Do not use therapy language or forced "I feel" statements unless that is natural in their setting. Recipient: ${rw.to}. How this person describes the dynamic: ${styleLine(WORK_WHO.includes(rw.to)?'work':'home')}. ${rw.feel?'The writer says what is driving the draft: '+rw.feel+'. ':''}Keep it the same length or shorter. Write in the same language as the message. Reply with only JSON: {"reply": "the rewritten message", "changed": ["three very short notes on what changed"]}\n\nMessage:\n${text}`, {modelTier:'quick', cache:false});
+    rw.out = res && res.reply ? {reply:String(res.reply), changed:Array.isArray(res.changed)?res.changed.slice(0,3).map(String):[]} : fb('');
+    logEvent('Calm my reply (live AI)', ['kept the point, removed the heat','recipient: '+rw.to.toLowerCase()]);
+  }catch(e){ if(['not_granted','sampling_disabled','not_declared'].includes(e.code)) state.ai=null; rw.out=fb('Live AI did not answer, so this is a sample rewrite.'); }
+  rw.busy=false; render(); renderRail();
+}
+function viewDecode(){
+  const p=state.p, dc = state.dc || (state.dc={who:p.dcWho||'Colleague', text:p.dcText||'', out:null, busy:false, example:!!p.dcText, mine:null});
+  const whos = ['Senior','Colleague','Team member','Customer','Partner','Child','Parent','Family'];
+  return `<p class="muted">People often find it easier to understand someone else than themselves. Drishti offers possibilities to check, not verdicts.</p>
+  <div class="card">
+    <p class="eyebrow">Who is it?</p>
+    <div class="wrap-row">${whos.map(x=>`<button class="chip ${dc.who===x?'on':''}" data-a="dcwho" data-v="${x}">${x}</button>`).join('')}</div>
+    <div class="row between"><p class="eyebrow">What did they do or say?</p>${dc.example?'<span class="tag">Example</span>':''}</div>
+    <textarea id="dc-in" aria-label="What happened">${esc(dc.text)}</textarea>
+    <div><button class="btn primary" data-a="dcgo" ${dc.busy?'disabled':''}>${dc.busy?'Thinking…':'Decode it'}</button></div>
+  </div>
+  ${dc.out?`<div class="card accent">
+    <p class="eyebrow">What they might be feeling</p>
+    ${dc.out.maybe.map(m=>`<div class="maybe"><b>${esc(m[0])}</b><span>${esc(m[1])}</span></div>`).join('')}
+    <p class="eyebrow">What they might need</p><p style="font-size:14px">${esc(dc.out.need)}</p>
+    <p class="eyebrow">A line to check it</p><p style="font-size:14px">“${esc(dc.out.say)}”</p>
+    <p class="eyebrow">Avoid</p><p style="font-size:14px">${esc(dc.out.avoid)}</p>
+    <p class="note">These are guesses to check by asking, not facts about them.${dc.out.note?' '+esc(dc.out.note):''}</p>
+  </div>
+  <div class="card soft"><p class="eyebrow">And you? How did it leave you?</p><div class="wrap-row">${[['frustrated','anger'],['hurt','sadness'],['anxious','fear'],['embarrassed','shame'],['fine','joy']].map(([w,f])=>`<button class="chip ${dc.mine===w?'on':''}" data-a="dcmine" data-w="${w}" data-f="${f}">${w}</button>`).join('')}</div><p class="note">One word saves it as your check-in.</p></div>
+  ${rateBlock('decode')}`:''}`;
+}
+async function decodeIt(){
+  const dc=state.dc, text=(dc.text||'').trim();
+  if(!text){ toast('Describe what they did or said first.'); return; }
+  if(CRISIS_RE.test(text)){ logEvent('Safety check: risk words while decoding', ['support route opened']); renderRail(); go('crisis'); return; }
+  const canned = dc.example && state.p.dcOut ? state.p.dcOut : null;
+  const fb = note=>({...(canned || {maybe:[['stressed','pressure you cannot see'],['unsure','they may not know how to respond'],['hurt','something may have landed badly for them']], need:'To feel understood before being corrected.', say:'I noticed something felt off earlier. Is everything all right?', avoid:'Assuming the worst before you have asked.'}), note});
+  if(!state.ai){ dc.out=fb('Sample reading. Live AI works when the viewer allows Claude.'); logEvent('Decoded someone else (sample)', ['person: '+dc.who.toLowerCase(),'possibilities, not verdicts']); render(); renderRail(); return; }
+  dc.busy=true; render();
+  try{
+    const res = await state.ai.json(`Help the user understand another person's behaviour, without diagnosing them. Offer possibilities to check, not facts. The other person: ${dc.who}. What happened: ${text}. How the user describes the dynamic: ${styleLine(WORK_WHO.includes(dc.who)?'work':'home')}. Use plain words, no therapy language. Reply in the same language as "What happened". Reply with only JSON: {"maybe": [["one feeling word", "a short reason"], ["...", "..."], ["...", "..."]], "need": "what they might need, one sentence", "say": "one natural line the user could say to check", "avoid": "one thing to avoid"}`, {modelTier:'quick', cache:false});
+    dc.out = res && Array.isArray(res.maybe) ? {maybe:res.maybe.slice(0,3).map(m=>Array.isArray(m)?[String(m[0]),String(m[1]||'')]:[String(m.feeling||m),String(m.why||'')]), need:String(res.need||''), say:String(res.say||''), avoid:String(res.avoid||'')} : fb('');
+    logEvent('Decoded someone else (live AI)', ['person: '+dc.who.toLowerCase(),'possibilities, not verdicts']);
+  }catch(e){ if(['not_granted','sampling_disabled','not_declared'].includes(e.code)) state.ai=null; dc.out=fb('Live AI did not answer, so this is a sample reading.'); }
+  dc.busy=false; render(); renderRail();
+}
+function rateBlock(id){
+  const r = state.ratings[id];
+  return `<div class="card soft" id="rate"><p class="eyebrow">Did this help?</p><div class="wrap-row">${[['yes','Yes'],['bit','A bit'],['no','Not really']].map(([k,l])=>`<button class="chip ${r===k?'on':''}" data-a="rate" data-id="${id}" data-r="${k}">${l}</button>`).join('')}</div><p class="note">Your answer teaches the OS what works for you.</p></div>`;
+}
+function viewReset(id){
+  const t=T[id];
+  return `<p class="muted">${esc(t.d)}</p>
+  ${CARD_VID[id]?clipHtml(CARD_VID[id],'First time? Watch once'):''}
+  <div class="player">
+    <div class="orb-wrap"><div class="orb-ring"></div><div class="orb" id="orb"></div></div>
+    <p class="phase" id="phase">Ready when you are</p>
+    <p class="say" id="say">Find a comfortable position. Your eyes can stay open.</p>
+    <p class="note tnum" id="left"></p>
+    <button class="btn primary" data-a="play" data-id="${id}" id="playbtn">Start</button>
+  </div>
+  <div id="rate-slot"></div>`;
+}
+function viewSteps(id){
+  const t=T[id], s=state.steps && state.steps.id===id ? state.steps : (state.steps={id,i:0,a:[]});
+  const steps = (state.p.lang==='pt' && t.pt) ? t.pt.steps : t.steps;
+  if(s.i>=steps.length){
+    const answered = steps.map((q,i)=>[q,s.a[i]]).filter(x=>x[1]);
+    return `<div class="card accent"><p class="eyebrow">Done</p><p>${t.guided?'You brought yourself back to the room.':'Here is what you wrote.'}</p></div>
+    ${answered.map(([q,a])=>`<div class="card soft"><p class="note">${esc(q)}</p><p>${esc(a)}</p></div>`).join('')}
+    ${!t.guided && answered.length ? `<div class="card" id="reflect-box"><p class="eyebrow">Drishti reflects</p><p id="reflect-out" class="muted">Ask Drishti to reflect back what it notices, in two or three sentences.</p><button class="btn small" data-a="reflect" data-id="${id}" id="reflect-btn">Reflect with Drishti</button></div>`:''}
+    ${rateBlock(id)}`;
+  }
+  return `<p class="muted">${esc(t.d)}</p>
+  ${s.i===0 && CARD_VID[id]?clipHtml(CARD_VID[id],'First time? Watch once'):''}
+  <div class="stepper" aria-hidden="true">${steps.map((_,i)=>`<i class="${i<=s.i?'d':''}"></i>`).join('')}</div>
+  <p class="note tnum">Step ${s.i+1} of ${steps.length}</p>
+  <p class="prompt">${esc(steps[s.i])}</p>
+  ${t.guided ? '<p class="note">Take your time. Tap Next when you are ready.</p>' : `<textarea id="step-input" placeholder="${state.p.lang==='pt'?'Escreva aqui, ou deixe em branco':'Write here, or leave it blank'}">${esc(s.a[s.i]||'')}</textarea>`}
+  <div class="row between">${s.i>0?'<button class="btn ghost" data-a="sprev">Back</button>':'<span></span>'}<button class="btn primary" data-a="snext">${s.i===steps.length-1?'Finish':'Next'}</button></div>`;
+}
+function variantDefault(id){ const dom=SCRIPT_DOMAIN[id||(state.stack[state.stack.length-1]||{}).id]||'work'; return calibFor(dom)==='diplomatic' ? 'soft' : 'direct'; }
+function viewScript(id){
+  const t=T[id], v = state.variant || variantDefault(id), dom = SCRIPT_DOMAIN[id]||'work', cal = calibFor(dom);
+  const r = state.reh && state.reh.id===id ? state.reh : null;
+  return `<p class="muted">${esc(t.when)}</p>
+  ${cal ? '' : `<div class="card calib"><p class="eyebrow">Quick check · 2 taps, once</p><p>In this situation${dom==='home'?' at home':' at work'}, is the dynamic mostly…</p><div class="wrap-row"><button class="chip" data-a="calib" data-d="${dom}" data-v="direct">Direct and flat</button><button class="chip" data-a="calib" data-d="${dom}" data-v="diplomatic">Hierarchical and diplomatic</button></div><p class="note">Your answer sets the wording. The OS never guesses this from your country.</p></div>`}
+  <div class="row between"><p class="eyebrow">Wording</p><div class="seg" role="group" aria-label="Wording style"><button class="${v==='direct'?'on':''}" data-a="variant" data-v="direct">Direct</button><button class="${v==='soft'?'on':''}" data-a="variant" data-v="soft">Diplomatic</button></div></div>
+  ${cal?`<p class="note">Set by you: ${dom} feels ${cal==='diplomatic'?'hierarchical and diplomatic':'direct and flat'}. <button class="link" data-a="calibreset" data-d="${dom}">Change</button></p>`:''}
+  <div class="card">${t.steps.map((s,i)=>`<div class="script-step"><span class="n">${i+1}</span><div><b>${esc(s[0])}</b><p>${esc(v==='soft'?s[2]:s[1])}</p></div></div>`).join('')}</div>
+  ${CARD_VID[id]?clipHtml(CARD_VID[id],'Watch it done well'):''}
+  <div class="card soft">
+    <p class="eyebrow">Rehearse it</p>
+    <p style="font-size:13.5px">Practise with an AI playing ${esc(t.who)}.</p>
+    ${r ? viewRehearse(t, r) : `<div class="wrap-row">${['Calm','Defensive','Upset'].map(m=>`<button class="chip" data-a="rehearse" data-id="${id}" data-m="${m}">${m}</button>`).join('')}</div><p class="note">Choose how they react.</p>`}
+  </div>
+  ${rateBlock(id)}`;
+}
+function viewRehearse(t, r){
+  const v = state.variant || variantDefault(r.id);
+  const opener = t.steps.map(s=>v==='soft'?s[2]:s[1]).slice(0,2).join(' ');
+  return `<div class="chat" id="reh-chat">${r.turns.map((m,i)=>`<div class="msg ${m.role==='user'?'me':'them'}"><span class="who">${m.role==='user'?'You':esc(r.label)}</span><span class="txt" data-i="${i}">${m.pending?'<span class="thinking"><i></i><i></i><i></i></span>':esc(m.content)}</span></div>`).join('')}</div>
+  ${r.fb ? `<div class="card" style="gap:8px"><p class="eyebrow">Feedback</p>${['empathy','clarity','ownership'].map(k=>`<div class="cap" style="grid-template-columns:90px minmax(0,1fr) 34px"><span style="text-transform:capitalize">${k}</span><span class="track"><i class="n" style="width:${(Number(r.fb[k]?.score)||0)*20}%"></i></span><span class="tnum">${Number(r.fb[k]?.score)||0}/5</span></div><p class="note">${esc(r.fb[k]?.note||'')}</p>`).join('')}<p><b>Try next time:</b> ${esc(r.fb.next||'')}</p></div>`:''}
+  <div class="composer"><textarea id="reh-input" aria-label="Your line" placeholder="Say your line">${r.turns.length?'':esc(opener)}</textarea><button class="btn primary" data-a="rehsend" aria-label="Send">${I.send}</button></div>
+  <div class="row between"><span class="note">${state.ai?'Live AI role-play':'Sample replies (live AI is off in this view)'}</span>${r.turns.filter(x=>x.role==='user').length>=2 && !r.fb?'<button class="btn small" data-a="feedback">Get feedback</button>':''}</div>`;
+}
+function viewCard(id){
+  const t=T[id];
+  return `${CARD_VID[id]?clipHtml(CARD_VID[id],'Watch first'):''}<div class="card">${t.body.map((b,i)=>`<p style="${i===0?'font-family:var(--display);font-size:19px;font-weight:600;line-height:1.3':''}">${esc(b)}</p>`).join('')}<p class="note">${esc(t.src)}</p></div>
+  ${t.next?toolRow(t.next,'Try it'):`<button class="btn" data-a="tab" data-v="feel">Open the Emotion Atlas</button>`}
+  ${rateBlock(id)}`;
+}
+const CI_WORDS = [['calm','joy'],['content','joy'],['grateful','joy'],['stretched','overwhelm'],['anxious','fear'],['frustrated','anger'],['resentful','anger'],['hurt','sadness'],['lonely','lonely'],['behind','envy'],['guilty','guilt'],['low','sadness']];
+function viewCheckin(){
+  const words = state.p.lang==='pt' ? [['saudade','sadness'],...CI_WORDS] : CI_WORDS;
+  const ci=state.ci;
+  return `<p class="muted">One word and how strong it is. Thirty seconds.</p>
+  <div class="wrap-row" role="group" aria-label="Feeling word">${words.map(([w,f])=>`<button class="chip ${ci.word===w?'on':''}" data-a="ciword" data-w="${w}" data-f="${f}">${w}</button>`).join('')}</div>
+  <button class="link" data-a="tab" data-v="feel" style="text-align:left">More words in the Emotion Atlas</button>
+  <div class="card"><div class="row between"><p class="eyebrow">How strong?</p><span class="big-num tnum" id="ci-out">${ci.n}</span></div><input type="range" id="ci-n" min="1" max="10" value="${ci.n}" aria-label="Intensity"></div>
+  <button class="btn primary block" data-a="cisave">Save check-in</button>`;
+}
+function viewCompanion(){
+  const p=state.p;
+  const hello = p.lang==='pt' ? `Olá, ${p.name}. Estou aqui. O que está acontecendo agora?` : `Hi ${p.name}, I’m here. What’s happening right now? Tell me in your own words, in any language.`;
+  const busy = state.chat.some(m=>m.pending);
+  const langs = p.lang==='pt' ? 'Fala portugu\u00eas' : (p.lang==='ta' ? 'Speaks Tamil and English' : 'Speaks '+(LANGS[p.lang]||'English').split(' (')[0]);
+  return `
+  <div class="d-head"><span class="drishti lg ${busy?'busy':''}" aria-hidden="true"></span><b>Drishti</b><p class="note">AI companion \u00b7 ${esc(langs)} \u00b7 coaches skills, not therapy</p></div>
+  <div class="chat" id="chat">
+    <div class="msg ai"><span class="who">Drishti</span>${esc(hello)}</div>
+    ${state.chat.map((m,i)=>msgHtml(m,i)).join('')}
+  </div>
+  ${state.chat.length?'':`<div class="wrap-row">${p.chips.map(c=>`<button class="chip" data-a="chip" data-t="${esc(c)}">${esc(c)}</button>`).join('')}</div>`}
+  <div class="composer"><textarea id="chat-input" aria-label="Message" placeholder="${p.lang==='pt'?'Escreva ou fale':'Type how you feel'}"></textarea><button class="btn primary" data-a="send" aria-label="Send">${I.send}</button></div>
+  <p class="note">${state.ai?'Drishti is AI and answers live. It coaches skills; it is not therapy.':(state.ai===undefined?'Connecting to Claude…':'Sample replies in this view. Live AI works when the viewer allows Claude.')}</p>`;
+}
+function fmt(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
+function parseTokens(text){
+  const tools=[]; let crisis=false;
+  const clean = String(text||'').replace(/\[\[tool:([\w-]+)\]\]/g,(_,id)=>{ if(T[id]&&!tools.includes(id)) tools.push(id); return ''; }).replace(/\[\[crisis\]\]/g,()=>{crisis=true; return '';}).replace(/\[\[[^\]]*$/,'').trim();
+  return {clean, tools, crisis};
+}
+function msgHtml(m,i){
+  if(m.role==='user') return `<div class="msg me">${esc(m.content)}</div>`;
+  if(m.pending) return `<div class="msg ai" data-m="${i}"><span class="who">Drishti</span><span class="txt"><span class="thinking"><i></i><i></i><i></i></span></span></div>`;
+  const {clean,tools,crisis}=parseTokens(m.content);
+  return `<div class="msg ai" data-m="${i}"><span class="who">Drishti</span><span class="txt">${fmt(clean)}</span>
+    ${(tools.length||crisis||m.crisis)?`<span class="acts">${crisis||m.crisis?'<button class="btn small" data-a="crisis" style="border-color:var(--crit);color:var(--crit)">Support now</button>':''}${tools.map(id=>`<button class="btn small" data-a="tool" data-id="${id}">${esc(toolName(id))}</button>`).join('')}</span>`:''}
+    ${m.note?`<span class="note" style="display:block;margin-top:6px">${esc(m.note)}</span>`:''}</div>`;
+}
+function viewCrisis(){
+  const h = HELP[state.p.country] || HELP._;
+  return `
+  <div class="card crisis">
+    <h3>You don’t have to handle this alone</h3>
+    <p>If you might act on thoughts of harming yourself, or someone is in danger, please contact a crisis line or local emergency services now.</p>
+    <p class="eyebrow">${esc(h.name)}</p>
+    <p class="number tnum">${esc(h.num)}</p>
+    <p class="note">${esc(h.note)}</p>
+    <div class="wrap-row">${h.url?`<a class="btn small" href="${h.url}" target="_blank" rel="noopener">Open Find A Helpline</a>`:`<button class="btn small" data-a="copy" data-t="${esc(h.num)}">Copy number</button>`}</div>
+  </div>
+  <div class="card"><p class="eyebrow">A Drishta Vidya coach</p><p>A trained person can follow up with you. In the full version this books a call; here it is a placeholder.</p><button class="btn small" data-a="coach">Ask a coach to follow up</button></div>
+  <p class="note">The OS stops coaching when it sees signs of risk. It is a skills tool, not therapy or an emergency service.</p>
+  <button class="btn ghost" data-a="back">I’m safe, go back</button>`;
+}
+function spark(arr){
+  const w=300,h=84,pad=8, n=arr.length;
+  const x=i=>pad+i*(w-2*pad)/(n-1), y=v=>pad+(10-v)*(h-2*pad)/9;
+  const pts = arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const area = `${x(0)},${h-pad} ${pts} ${x(n-1)},${h-pad}`;
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Intensity of difficult feelings over the last 14 check-ins">
+    <line x1="${pad}" x2="${w-pad}" y1="${y(5)}" y2="${y(5)}" stroke="var(--line)" stroke-dasharray="3 4"/>
+    <polygon points="${area}" fill="var(--accent)" fill-opacity=".12"/>
+    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <circle cx="${x(n-1)}" cy="${y(arr[n-1])}" r="4" fill="var(--accent)"/></svg>`;
+}
+function weatherHtml(){
+  const days=weatherDays(), counts={};
+  days.forEach(x=>{ if(x.f) counts[x.f]=(counts[x.f]||0)+1; });
+  const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,4);
+  return `<div class="weather" role="img" aria-label="Main feeling each day for the last four weeks">${days.map((x,i)=>`<span class="wcell ${x.f?'':'empty'} ${i===days.length-1?'today':''}" style="${x.f?fc(x.f):''}" title="${x.d.toDateString()}${x.f?': '+FAM[x.f].name:''}">${x.d.getDate()}</span>`).join('')}</div>
+  <div class="wlegend">${top.map(([f,n])=>`<span style="${fc(f)}"><i></i>${esc(FAM[f].name)} <span class="tnum">${n}</span></span>`).join('')}</div>`;
+}
+function viewGrow(){
+  const p=state.p, path=p.path?PATHS[p.path]:null;
+  const curMod = path ? path.mods.findIndex(m=>{ const r=m[1].match(/(\d+)–(\d+)/); return r && p.day>=+r[1] && p.day<=+r[2]; }) : -1;
+  const toolsCount = Object.keys(T).length;
+  const patterns = p.patterns || ['Patterns appear after about two weeks of check-ins.'];
+  return `
+  <div class="section-title"><h3>Your story</h3><span class="tag">Example data</span></div>
+  <div class="card">
+    <p class="eyebrow">Emotional weather, last 4 weeks</p>
+    ${weatherHtml()}
+    <p class="eyebrow" style="margin-top:4px">What Drishti noticed</p><p class="note">From how you use the tools. Writing a journal is optional.</p>
+    <div class="noticed">${patterns.map(x=>`<p>${esc(x)}</p>`).join('')}</div>
+  </div>
+  <div class="card">
+    <p class="eyebrow">Difficult feelings at check-in, last 14 days</p>
+    ${spark(p.trend)}
+    <div class="row between note tnum"><span>14 days ago</span><span>Today: ${p.trend[p.trend.length-1]}/10</span></div>
+  </div>
+  <div class="card">
+    <div class="row between"><p class="eyebrow">Capability map</p><div class="legend"><span><i style="background:color-mix(in srgb,var(--accent) 35%,var(--sunk))"></i>Start</span><span><i style="background:var(--accent)"></i>Now</span></div></div>
+    ${p.caps.map((c,i)=>`<div class="cap"><span>${CAP_NAMES[i]}</span><span class="track"><i class="b" style="width:${c[1]}%"></i><i class="n" style="width:${c[0]}%"></i></span><span class="tnum">+${c[1]-c[0]}</span></div>`).join('')}
+  </div>
+  <div class="card"><p class="eyebrow">Moments I handled well</p>${p.moments.map(m=>`<p style="font-size:14px">✓ ${esc(m)}</p>`).join('')}</div>
+  <div class="share-card"><p class="eyebrow">Your week, to share</p><p class="big">${esc(p.share||'This week I started noticing my feelings.')}</p><p style="font-size:12.5px;opacity:.75">No private details. You choose if and where it goes.</p><div><button class="btn small" data-a="share">Share card</button></div></div>
+  ${path?`<div class="card">
+    <div class="row between"><p class="eyebrow">Suggested path</p><span class="note tnum">Day ${p.day} of ${path.days}</span></div>
+    <h3 style="font-size:18px">${esc(path.name)}</h3>
+    ${path.mods.map((m,i)=>`<div class="module"><span class="st ${i<curMod?'done':(i===curMod?'now':'')}"></span><div><b>${esc(m[0])}</b><span class="tnum">${esc(m[1])}${i===curMod?' · now':''}</span></div></div>`).join('')}
+  </div>`:''}
+  <div class="section-title"><h3>Short videos</h3><span class="tag">Placeholders</span></div>
+  <div class="clips-row">${['v-fine','v-presentation','v-alumni','v-naming','v-feedback'].map(id=>clipHtml(id)).join('')}</div>
+  <p class="note">Under 90 seconds, vertical, captioned, with an audio-only version. Never offered during a hot moment.</p>
+  <div class="section-title"><h3>Learn with experts</h3><span class="tag pub">Drishta Vidya</span></div>
+  <p class="note">Optional deeper programs, for when you want them.</p>
+  ${PROGRAMS.map(pr=>`<button class="tool" data-a="program" data-id="${pr.id}"><span class="gly">${I.path}</span><span style="min-width:0"><b>${esc(pr.name)}</b><span>${esc(pr.sub)} · ${pr.mods.length} modules</span></span><span class="meta">Open</span></button>`).join('')}
+  <div class="card soft">
+    <p class="eyebrow">How it fits together</p>
+    <div class="chain"><span>${toolsCount} tools</span><em>→</em><span>Practices</span><em>→</em><span>Modules</span><em>→</em><span>Paths</span><em>→</em><span>${PROGRAMS.length} programs</span></div>
+    <p class="note">Tools are shared. The same tool appears in a program module, in a path, and when Drishti suggests it at 11 pm.</p>
+  </div>
+  <div class="card soft"><p class="eyebrow">More publishers</p><p style="font-size:13.5px">Other coaches and organisations can publish programs here later. Every tool they add uses the same engines, tags and safety review.</p></div>`;
+}
+function viewProgram(top){
+  const pr = PROGRAMS.find(x=>x.id===top.id);
+  return `<div><p class="eyebrow">${esc(pr.sub)}</p><h1 style="font-size:26px">${esc(pr.name)}</h1><div class="wrap-row" style="margin-top:8px"><span class="tag pub">Drishta Vidya</span><span class="tag">Standard program</span><span class="tag">Cohort + facilitator</span></div></div>
+  <p class="muted">${esc(pr.d)}</p>
+  ${pr.mods.map((m,i)=>`<div class="card"><p class="eyebrow">Module ${i+1}</p><h3 style="font-size:16px">${esc(m[0])}</h3>${clipHtml('prog:'+pr.id+':'+i,'Facilitator clip')}${m[1].map(id=>toolRow(id)).join('')}</div>`).join('')}
+  <div class="card soft"><p class="note">Facilitators: Deepa Kannan, Anbarasu Thangavelu. Live sessions and the cohort Circle are part of the full version.</p></div>`;
+}
+const PROFILE_ROWS = [
+  ['lang','Language',p=>p.langLabel,true],['band','Age band',p=>p.band,true],['country','Country',p=>p.country+(p.city?' · '+p.city:''),true],['goal','Main goal',p=>GOALS[p.goal],true],
+  ['household','Household',p=>p.household],['children','Children',p=>p.children],['caregiving','Caregiving',p=>p.caregiving],['role','Role',p=>p.role],['pattern','Work pattern',p=>p.pattern],
+  ['culture','Cultural setting',p=>p.culture],['faith','Faith or spiritual practice',p=>p.faith,false,true],['gender','Gender',p=>p.gender,false,true]
+];
+function viewMe(){
+  const p=state.p;
+  return `
+  <div class="row"><span class="avatar" style="width:48px;height:48px;font-size:18px">${esc(p.ini)}</span><div><h3 style="font-size:20px">${esc(p.name)}</h3><p class="note">${esc(p.channel)} · private by default</p></div></div>
+  <div class="card soft"><p style="font-size:13.5px">Switch anything off and the OS stops using it for guidance, without deleting it. Watch the home suggestion and the log change.</p></div>
+  <div class="card prof">
+    ${PROFILE_ROWS.map(([k,l,fn,req,sens])=>`<div class="prof-row ${!req&&!on(k)?'off':''}"><div style="min-width:0"><b>${esc(l)}${sens?' · only if you choose':''}</b>${k==='goal'?`<select id="goal-sel" aria-label="Main goal">${Object.entries(GOALS).map(([g,gl])=>`<option value="${g}" ${p.goal===g?'selected':''}>${esc(gl)}</option>`).join('')}</select>`:`<span>${esc(fn(p))}</span>`}</div>${req?'<span class="req">Required</span>':`<label class="switch"><input type="checkbox" data-a="toggle" data-k="${k}" ${on(k)?'checked':''} aria-label="Use ${esc(l)} for guidance"><i></i></label>`}</div>`).join('')}
+  </div>
+  <div class="card"><p class="eyebrow">Who sees what</p>
+    <p style="font-size:13.5px"><b>You:</b> everything.</p>
+    <p style="font-size:13.5px"><b>Your employer:</b> anonymised group trends only, never your words, check-ins or scores.</p>
+    <p style="font-size:13.5px"><b>Shared spaces:</b> only what you share there.</p>
+  </div>
+  <div class="card"><p class="eyebrow">Spaces</p>
+    ${[['Personal','Just you','On'],['Couple','Weekly check-in for two','Invite'],['Family','Family meetings and care plans','Invite'],['Team','Rituals and anonymous mood pulse','Invite']].map(s=>`<div class="row between"><div><b style="font-size:14px">${s[0]}</b><p class="note">${s[1]}</p></div><span class="tag">${s[2]}</span></div>`).join('')}
+  </div>
+  <button class="btn block" data-a="newuser">Start as a new user</button>`;
+}
+function viewClip(top){
+  const v=getClip(top.id); if(!v) return '<p>Clip not found.</p>';
+  const where = v.on==='grow' ? 'Grow tab, Short videos' : (/^program/.test(v.on) ? v.on : 'With \u201c'+toolName(v.on)+'\u201d');
+  return `
+  <button class="poster big-poster" data-a="clipplay" aria-label="Play (placeholder)"><span class="play">${I.play}</span><span class="dur tnum">${mmss(v.secs)}</span></button>
+  <div><p class="eyebrow">${esc(v.kind)} \u00b7 placeholder</p><h1 style="font-size:24px;margin-top:4px">${esc(v.title)}</h1><div class="wrap-row" style="margin-top:8px"><span class="tag pub">Drishta Vidya</span><span class="tag">To be recorded</span></div></div>
+  <div class="card"><p class="eyebrow">Recording brief</p>
+    <div class="strategy">
+      <div><b>Presenter</b><span>${esc(v.who)}</span></div>
+      <div><b>Length</b><span class="tnum">${v.secs} seconds or less</span></div>
+      <div><b>Purpose</b><span>${esc(v.purpose)}</span></div>
+      <div><b>Appears</b><span>${esc(where)}</span></div>
+    </div>
+  </div>
+  <div class="card"><p class="eyebrow">Outline</p>${v.beats.map((b,i)=>`<div class="script-step"><span class="n">${i+1}</span><div><p>${esc(b)}</p></div></div>`).join('')}</div>
+  <div class="card soft"><p class="eyebrow">Delivery standard</p>
+    <p style="font-size:13.5px">Vertical 9:16, shot on a phone is fine. Burned-in captions in English, Tamil and Hindi. An audio-only version for low data. Works with the sound off.</p>
+  </div>`;
+}
+function viewOnboard(){
+  const o=state.ob;
+  const head = (n,t,sub)=>`<div class="stepper" aria-hidden="true">${[1,2,3].map(i=>`<i class="${i<=n?'d':''}"></i>`).join('')}</div><p class="eyebrow">Question ${n} of 3 · optional</p><h1>${t}</h1>${sub?`<p class="muted">${sub}</p>`:''}`;
+  const nav = (next, ok, done)=>`<div class="row between"><button class="btn ghost" data-a="${done?'obdone':'ob'}" data-step="${next}">Skip</button><button class="btn primary" data-a="${done?'obdone':'ob'}" data-step="${next}" ${ok?'':'disabled'}>${done?'Done':'Next'}</button></div>`;
+  if(o.step==='feel') return `<div class="ob"><span class="drishti lg" aria-hidden="true"></span><h1>How are you right now?</h1><p class="muted">One tap. No sign-up and no questions yet.</p>
+    <div class="wrap-row">${CI_WORDS.map(([w,f])=>`<button class="chip ${o.word===w?'on':''}" data-a="obset" data-k="word" data-v="${w}" data-f="${f}">${w}</button>`).join('')}</div>
+    <div class="card"><div class="row between"><p class="eyebrow">How strong?</p><span class="big-num tnum" id="ob-out">${o.n}</span></div><input type="range" id="ob-n" min="1" max="10" value="${o.n}" aria-label="Intensity"></div>
+    <button class="btn primary" data-a="obfirst" ${o.word?'':'disabled'}>Help me now</button>
+    <button class="btn ghost" data-a="obcancel">Back to the demo people</button></div>`;
+  if(o.step==='first'){ const id=o.tool; return `<div class="ob"><p class="eyebrow">Start here</p><h1>${esc(toolName(id))}</h1><p class="muted">${esc(T[id].d||'')}</p>
+    <button class="btn primary" data-a="obstart">Start now</button>
+    <div class="card soft"><p><b>Want guidance that fits you?</b> Three quick questions: language, life stage and goal. Skip any of them.</p><div><button class="btn small" data-a="ob" data-step="1">Make it mine</button></div></div>
+    <p class="note">Everything stays private until you choose otherwise.</p></div>`; }
+  if(o.step===1) return `<div class="ob">${head(1,'Which language?','You can mix languages when you talk to Drishti.')}<div class="opt-grid">${Object.entries(LANGS).map(([k,l])=>`<button class="opt ${o.lang===k?'on':''}" data-a="obset" data-k="lang" data-v="${k}">${l}</button>`).join('')}</div>${nav(2,o.lang)}</div>`;
+  if(o.step===2) return `<div class="ob">${head(2,'Your age and country','These shape your examples, local support lines and privacy rules.')}<p class="eyebrow">Age band</p><div class="opt-grid">${['18–24','25–34','35–49','50–64','65+'].map(b=>`<button class="opt ${o.band===b?'on':''}" data-a="obset" data-k="band" data-v="${b}">${b}</button>`).join('')}</div><p class="eyebrow">Country</p><div class="opt-grid">${Object.keys(TZ).map(c=>`<button class="opt ${o.country===c?'on':''}" data-a="obset" data-k="country" data-v="${c}">${c}</button>`).join('')}</div>${nav(3,o.band||o.country)}</div>`;
+  if(o.step===3) return `<div class="ob">${head(3,'What would you like help with?')}<div class="opt-grid">${Object.entries(GOALS).map(([k,l])=>`<button class="opt ${o.goal===k?'on':''}" data-a="obset" data-k="goal" data-v="${k}">${l}</button>`).join('')}</div>${nav(4,o.goal,true)}</div>`;
+  return '';
+}
+
+/* ---------- After-render hooks ---------- */
+function after(top){
+  if(top.v==='emotion'){
+    const r=$('#intensity');
+    r && r.addEventListener('input', e=>{ $('#n-out').textContent=e.target.value; });
+    r && r.addEventListener('change', e=>{ top.n=Number(e.target.value); render(); });
+  }
+  if(top.v==='tool' && T[top.id].e==='checkin'){ const r=$('#ci-n'); r && r.addEventListener('input',e=>{ $('#ci-out').textContent=e.target.value; state.ci={...state.ci, n:Number(e.target.value)}; }); }
+  if(top.v==='tool' && T[top.id].e==='steps'){ const ta=$('#step-input'); ta && ta.addEventListener('input',e=>{ state.steps.a[state.steps.i]=e.target.value; }); }
+  if(top.v==='companion'){ const c=$('#screen'); c.scrollTop=c.scrollHeight; const ta=$('#chat-input'); ta && ta.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChat(ta.value); } }); }
+  if(top.v==='tool' && T[top.id].e==='script' && state.reh){ const ta=$('#reh-input'); ta && ta.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); rehSend(); } }); }
+  const sel=$('#goal-sel'); sel && sel.addEventListener('change', e=>{ state.p.goal=e.target.value; const dp=defaultPath(state.p); state.p.path=dp.path; state.p.day=1; logEvent('Goal changed → '+GOALS[state.p.goal], []); logEvent('Path → '+PATHS[dp.path].name, dp.why); adapt(); render(); renderRail(); toast('Goal updated. Home has adapted.'); });
+  const dci=$('#dc-in'); dci && dci.addEventListener('input', e=>{ if(state.dc){ state.dc.text=e.target.value; state.dc.example=false; } });
+  const rwi=$('#rw-in'); rwi && rwi.addEventListener('input', e=>{ if(state.rw){ state.rw.text=e.target.value; state.rw.example=false; } });
+  if(state.ob && state.ob.step==='feel'){ const r=$('#ob-n'); r && r.addEventListener('input',e=>{ $('#ob-out').textContent=e.target.value; state.ob.n=Number(e.target.value); }); }
+}
+
+/* ---------- Reset player ---------- */
+function buildPhases(t){
+  if(t.custom) return t.custom.map(x=>({label:x[0], secs:x[1], kind:x[2], text:x[3]||''}));
+  const out=[]; for(let c=0;c<t.cycles;c++) t.seq.forEach(s=>out.push({label:s[0], secs:s[1], kind:s[2], text:''}));
+  return out;
+}
+function play(id){
+  const t=T[id], phases=buildPhases(t), orb=$('#orb'), ph=$('#phase'), say=$('#say'), left=$('#left'), btn=$('#playbtn');
+  if(!orb) return;
+  if(btn.dataset.running==='1'){ clearTimers(); btn.dataset.running='0'; btn.textContent='Start again'; ph.textContent='Paused'; orb.className='orb'; return; }
+  clearTimers(); btn.dataset.running='1'; btn.textContent='Stop';
+  let total = phases.reduce((a,p)=>a+p.secs,0), i=0;
+  const tick = ()=>{ left.textContent = total>0 ? `${Math.floor(total/60)}:${String(total%60).padStart(2,'0')} left` : ''; };
+  const runPhase = ()=>{
+    if(i>=phases.length){ btn.dataset.running='0'; btn.textContent='Start again'; ph.textContent='Done'; say.textContent='Notice how your body feels now.'; orb.className='orb'; left.textContent=''; if(id==='panic'){ ph.textContent='Feeling a bit steadier?'; say.textContent='Want to name what just happened, so we can plan your next move?'; }
+      $('#rate-slot').innerHTML=(id==='panic'?'<div class="row"><button class="btn primary" data-a="tab" data-v="feel">Name what happened</button><button class="btn ghost" data-a="tab" data-v="home">Not now</button></div>':'')+rateBlock(id); bind(); logEvent('Completed: '+toolName(id), id==='panic'?['naming offered only after the reset']:['follow-up check-in scheduled in 3 hours']); renderRail(); return; }
+    const p=phases[i]; ph.textContent=p.label; say.textContent=p.text || (p.kind==='hold'?'Stay still and soft.':'');
+    orb.style.transitionDuration = p.secs+'s';
+    if(p.kind==='in') orb.className='orb in'; else if(p.kind==='out') orb.className='orb out';
+    let s=p.secs; const step=()=>{ tick(); total--; s--; if(s>0) timers.push(setTimeout(step,1000)); else { i++; runPhase(); } }; step();
+  };
+  orb.className='orb out'; timers.push(setTimeout(runPhase, 60));
+}
+
+/* ---------- AI ---------- */
+const CRISIS_RE = /(suicid|kill myself|end my life|end it all|want to die|self[- ]?harm|hurt myself|cut myself|no reason to live|better off dead|hits me|beats me|abus(e|ing) me|me matar|suic[ií]dio|quero morrer|தற்கொலை|आत्महत्या)/i;
+function profileText(){
+  const p=state.p, L=[];
+  L.push(`Name: ${p.name}`); L.push(`Preferred language: ${LANGS[p.lang]||'English'}${p.lang==='ta'?' (reply in English with a little Tamil warmth if natural, since they mix Tamil and English)':''}`);
+  if(on('band')) L.push(`Age band: ${p.band}`); L.push(`Country: ${p.country}${p.city?', '+p.city:''}`); L.push(`Main goal: ${GOALS[p.goal]}`);
+  if(on('role')) L.push(`Role: ${p.role}`); if(on('household')) L.push(`Household: ${p.household}`); if(on('children')) L.push(`Children: ${p.children}`);
+  if(on('caregiving')) L.push(`Caregiving: ${p.caregiving}`); if(on('pattern')) L.push(`Work pattern: ${p.pattern}`); if(state.calib.work) L.push(`Work dynamic (set by them): ${styleLine('work')}`); if(state.calib.home) L.push(`Home dynamic (set by them): ${styleLine('home')}`);
+  if(on('faith') && /Opted in/.test(p.faith)) L.push('Faith: opted in to faith-based reflection alongside secular options');
+  if(state.ci) L.push(`Latest check-in: ${state.ci.word}, ${state.ci.n}/10`);
+  const worked = Object.entries(state.ratings).filter(([k,v])=>v==='yes').map(([k])=>toolName(k)); if(worked.length) L.push('Tools that helped before: '+worked.join(', '));
+  return L.join('\n');
+}
+function toolList(){ return Object.entries(T).filter(([k,t])=>!t.preview && t.e!=='checkin').map(([k,t])=>`${k}: ${t.name}`).join('\n'); }
+function companionRules(){
+  const h = HELP[state.p.country] || HELP._;
+  return `You are Drishti, the AI companion inside EQ OS, an emotional-intelligence app published by Drishta Vidya, an Indian EQ and high-performance training firm. You coach skills and self-help. You are not a therapist and never diagnose.
+
+How to reply:
+- Write in the person's preferred language. Short: 2 to 5 sentences, warm, plain words, no lists unless asked.
+- First help them name the feeling: offer two or three likely feeling words; never tell them what they feel.
+- If the feeling sounds intense, suggest a body-first reset before any advice.
+- Then give one practical next step that fits their culture, role, family and life stage below.
+- Use Drishta Vidya ideas where they fit: anger is often a secondary emotion; "what I expect vs what I express"; impact vs intention.
+- When one tool would clearly help, put on its own final line exactly [[tool:ID]] using one ID from this list (at most one):
+${toolList()}
+- If they mention self-harm, suicide, abuse, or someone in danger: do not coach. Respond with care, urge them to contact ${h.name} (${h.num}) or local emergency services now, and end with [[crisis]].
+- Encourage real people in their life. Never present yourself as their only support.
+
+About the person (they chose to share this):
+${profileText()}`;
+}
+function fallbackReply(text){
+  const s=text.toLowerCase(); const pt = state.p.lang==='pt';
+  const map=[[/ignor|idea|standup|overrul|front of/, 'anger', pt?'Isso parece frustrante, talvez até humilhante.':'That sounds frustrating, maybe even a little humiliating.', 'Could it be frustration, embarrassment, or feeling unseen?'],
+    [/ahead|behind|batch|compar/, 'envy', 'Comparison can sting.', 'Would you call it envy, feeling behind, or pressure?'],
+    [/snap|shout|yell/, 'guilt', 'It takes honesty to notice that.', 'Is it guilt, exhaustion, or both?'],
+    [/cried|crying|upset|nurse/, 'sadness', 'That is a lot to hold for someone else.', 'Are you feeling worried, moved, or stretched yourself?'],
+    [/switch off|sleep|night/, 'overwhelm', 'Your mind is still on shift.', 'Does it feel like overwhelm, worry, or restlessness?'],
+    [/silenc|sozinho|longe|dias|lonely|alone/, 'lonely', pt?'Sinto muito. A casa silenciosa pesa.':'I’m sorry. A quiet house can feel heavy.', pt?'Seria saudade, solidão ou tristeza?':'Would you call it longing, loneliness, or sadness?'],
+    [/deadline|cousin|late|let someone go|fire/, 'anger', 'That puts you between family and the business.', 'Is it frustration, worry about the business, or dread about the conversation?'],
+    [/marriage|amma|parents|mother/, 'fear', 'Family expectations can weigh a lot.', 'Is it pressure, guilt, or irritation?']];
+  const hit = map.find(m=>m[0].test(s)) || [null,'anger','Thank you for telling me.','What is the closest word: frustrated, anxious, hurt, or tired?'];
+  const tool = (state.ci && state.ci.n>=7) ? resetFor(hit[1]).id : reflectFor(hit[1]);
+  return `${hit[2]} ${hit[3]}\n\n${pt?'Uma ferramenta que pode ajudar agora:':'One tool that may help now:'}\n[[tool:${tool}]]`;
+}
+async function sendChat(text){
+  text = String(text||'').trim(); if(!text) return;
+  state.chat.push({role:'user', content:text});
+  if(CRISIS_RE.test(text)){
+    const h = HELP[state.p.country] || HELP._;
+    state.chat.push({role:'assistant', crisis:true, content:`I’m really glad you told me. This matters more than any exercise. Please reach out to ${h.name} at ${h.num}, or local emergency services if you are in danger right now. Would you like a Drishta Vidya coach to follow up with you too?`});
+    logEvent('Safety check: risk words detected', ['coaching stopped','local crisis line shown: '+h.name]);
+    render(); renderRail(); return;
+  }
+  const bubble={role:'assistant', content:'', pending:true}; state.chat.push(bubble); render();
+  if(!state.ai){
+    timers.push(setTimeout(()=>{ bubble.content=fallbackReply(text); bubble.pending=false; bubble.note=state.ai===null?'Sample reply. Live AI works when the viewer allows Claude.':''; logEvent('Drishti replied (sample)', ['named the feeling first','offered one tool']); render(); renderRail(); }, 700));
+    return;
+  }
+  const turns = state.chat.filter(m=>!m.pending && m!==bubble).slice(-12).map(m=>({role:m.role, content: m.role==='assistant'? (parseTokens(m.content).clean || '…') : m.content}));
+  while(turns.length && turns[0].role!=='user') turns.shift();
+  try{
+    const res = await state.ai([{role:'user', content:companionRules()}, ...turns], {cache:false, modelTier:'quick', onText:({text})=>{ bubble.pending=false; bubble.content=text; const el=document.querySelector(`[data-m="${state.chat.indexOf(bubble)}"] .txt`); if(el) el.innerHTML=fmt(parseTokens(text).clean); else render(); const s=$('#screen'); if(s) s.scrollTop=s.scrollHeight; }});
+    bubble.content=res.text; bubble.pending=false;
+    const pt=parseTokens(res.text);
+    logEvent('Drishti replied (live AI)', ['used your profile and check-in', ...(pt.tools.length?['suggested: '+toolName(pt.tools[0])]:[]), ...(pt.crisis?['crisis route shown']:[])]);
+  }catch(e){
+    bubble.pending=false;
+    if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e.code)){ state.ai=null; bubble.content=fallbackReply(text); bubble.note='Live AI is off for this view, so this is a sample reply.'; }
+    else if(e.code==='rate_limited'){ bubble.content=e.text||''; bubble.note='Too many requests just now. Try again in a minute.'; }
+    else { bubble.content=e.text||fallbackReply(text); bubble.note= e.text ? 'The reply was interrupted.' : 'Live AI did not answer, so this is a sample reply.'; }
+  }
+  render(); renderRail();
+}
+function rehSend(){
+  const ta=$('#reh-input'); const text=(ta&&ta.value||'').trim(); if(!text) return;
+  const r=state.reh, t=T[r.id];
+  r.turns.push({role:'user', content:text});
+  const reply={role:'assistant', content:'', pending:true}; r.turns.push(reply); render();
+  const userCount = r.turns.filter(x=>x.role==='user').length;
+  const fallback = ()=>{ reply.content = t.lines[Math.min(userCount-1, t.lines.length-1)]; reply.pending=false; render(); };
+  if(!state.ai){ timers.push(setTimeout(fallback, 700)); return; }
+  const rules = `Role-play for practice. You are ${t.who}. Your mood: ${r.mood.toLowerCase()}. The user is practising this conversation: "${t.name}" (${t.when}). How the user describes the dynamic: ${styleLine(SCRIPT_DOMAIN[r.id]||'work')}. Stay fully in character. Reply with only what that person would say, 1 to 3 sentences, realistic: not easily won over, but responsive to empathy and clarity. Do not coach or break character. Language: ${LANGS[state.p.lang]||'English'}.`;
+  const turns = r.turns.filter(x=>!x.pending).map(x=>({role:x.role, content:x.content}));
+  state.ai([{role:'user',content:rules}, ...turns], {cache:false, modelTier:'quick', onText:({text})=>{ reply.pending=false; reply.content=text; const el=document.querySelector(`#reh-chat .txt[data-i="${r.turns.indexOf(reply)}"]`); if(el) el.textContent=text; }})
+    .then(res=>{ reply.content=res.text; reply.pending=false; render(); })
+    .catch(e=>{ if(['not_granted','sampling_disabled','not_declared'].includes(e.code)) state.ai=null; if(e.text){ reply.content=e.text; reply.pending=false; render(); } else fallback(); });
+}
+function rehFeedback(){
+  const r=state.reh, t=T[r.id];
+  const tr = r.turns.filter(x=>!x.pending).map(x=>`${x.role==='user'?'USER':'THEM'}: ${x.content}`).join('\n');
+  const fallbackFb = {empathy:{score:4,note:'You acknowledged their view before making your point.'}, clarity:{score:3,note:'The ask came late. Say what you need in the first two sentences.'}, ownership:{score:4,note:'You owned your part without over-apologising.'}, next:t.steps[t.steps.length-1][state.variant==='soft'?2:1]};
+  if(!state.ai){ r.fb=fallbackFb; logEvent('Rehearsal feedback (sample)', ['empathy, clarity, ownership']); render(); renderRail(); return; }
+  const btn=document.querySelector('[data-a="feedback"]'); if(btn){ btn.disabled=true; btn.textContent='Scoring…'; }
+  state.ai.json(`You are an EQ coach from Drishta Vidya. Score the USER's side of this practice conversation ("${t.name}"). How the user describes the dynamic: ${styleLine(SCRIPT_DOMAIN[r.id]||'work')}. Reply with only JSON: {"empathy":{"score":1-5,"note":"one short sentence"},"clarity":{"score":1-5,"note":"..."},"ownership":{"score":1-5,"note":"..."},"next":"one better line they could say next time"}. Write notes in ${LANGS[state.p.lang]||'English'}.\n\nConversation:\n${tr}`, {modelTier:'quick', cache:false})
+    .then(fb=>{ r.fb = fb && fb.empathy ? fb : fallbackFb; logEvent('Rehearsal feedback (live AI)', ['empathy, clarity, ownership']); render(); renderRail(); })
+    .catch(()=>{ r.fb=fallbackFb; render(); });
+}
+function reflectAI(id){
+  const t=T[id], s=state.steps, steps=(state.p.lang==='pt'&&t.pt)?t.pt.steps:t.steps;
+  const out=$('#reflect-out'), btn=$('#reflect-btn');
+  const qa = steps.map((q,i)=>s.a[i]?`Q: ${q}\nA: ${s.a[i]}`:'').filter(Boolean).join('\n\n');
+  const fb = state.p.lang==='pt' ? 'Obrigado por escrever isso. Percebo carinho e coragem no que você compartilhou. Que tal fazer uma pequena coisa hoje que honre isso?' : 'Thank you for writing this down. What stands out is that you already know what you need; the next step is saying it to the right person. Pick one small moment this week to try.';
+  if(!state.ai){ out.textContent=fb; out.classList.remove('muted'); if(btn) btn.remove(); return; }
+  out.innerHTML='<span class="thinking"><i></i><i></i><i></i></span>'; if(btn) btn.disabled=true;
+  state.ai(`You are Drishti, the AI companion in EQ OS by Drishta Vidya, a skills coach (not a therapist). The person just completed the exercise "${t.name}". Reflect back what you notice in 2 to 3 warm, plain sentences, then suggest one small next step. No lists. Language: ${LANGS[state.p.lang]||'English'}. If anything suggests risk of harm, gently point them to ${(HELP[state.p.country]||HELP._).name}.\n\nTheir profile:\n${profileText()}\n\nTheir answers:\n${qa}`, {modelTier:'quick', cache:false, onText:({text})=>{ out.textContent=text; out.classList.remove('muted'); }})
+    .then(res=>{ out.textContent=res.text; out.classList.remove('muted'); if(btn) btn.remove(); logEvent('Drishti reflection (live AI)', ['based on your answers to '+toolName(id)]); renderRail(); })
+    .catch(e=>{ out.textContent = e.text || fb; out.classList.remove('muted'); if(btn) btn.remove(); if(['not_granted','sampling_disabled'].includes(e.code)) state.ai=null; });
+}
+
+/* ---------- Events ---------- */
+function bind(){
+  document.querySelectorAll('#frame [data-a]').forEach(el=>{
+    if(el.dataset.a==='toggle'){ el.onchange = ()=>{ const k=el.dataset.k; state.off[k]=!el.checked; logEvent((el.checked?'Using ':'Stopped using ')+k+' for guidance', []); adapt(); render(); renderRail(); toast(el.checked?'Back in use for guidance.':'No longer used for guidance.'); }; return; }
+    el.onclick = (ev)=>act(el, ev);
+  });
+}
+function act(el){
+  const a=el.dataset.a, top=state.stack[state.stack.length-1];
+  switch(a){
+    case 'back': back(); break;
+    case 'tab': tab(el.dataset.v); break;
+    case 'rail': if(isDesk()) setCollapsed(false); else $('#rail').classList.add('open'); renderRail(); break;
+    case 'companion': go('companion'); break;
+    case 'tool': openTool(el.dataset.id); break;
+    case 'checkin': openTool('mood-check'); break;
+    case 'sos': { const f=el.dataset.f, r=resetFor(f); state.ci={word:FAM[f].words[3][0], fam:f, n:8}; logEvent('Quick reset: '+FAM[f].name, ['intensity assumed high (8/10)','body first', ...r.why]); adapt(); renderRail(); openTool(r.id); break; }
+    case 'perf': { const m={ 'Deep work':'box-breath','First-boss feedback':'story-fact','Shift transition':'shift-reset','Team mood':'one-to-one','Decision mode':'story-fact','Hard conversations':'cousin-employee'}[el.textContent.trim()]||'pre-performance'; openTool(m); break; }
+    case 'family': go('family',{f:el.dataset.f}); break;
+    case 'emotion': go('emotion',{f:el.dataset.f, w:el.dataset.w, n:5}); break;
+    case 'safe': logEvent('Safety check: person says they are safe', ['continue with tools']); renderRail(); el.closest('.card').remove(); break;
+    case 'crisis': logEvent('Safety check: support route opened', ['coaching paused','local crisis line shown']); renderRail(); go('crisis'); break;
+    case 'savecheck': { const n=top.n??5; state.ci={word:el.dataset.w, fam:el.dataset.f, n}; adapt('Check-in saved: '+el.dataset.w+' at '+n+'/10'); renderRail(); toast('Check-in saved. Home has adapted.'); break; }
+    case 'filt': top.filt=el.dataset.v; render(); break;
+    case 'play': play(el.dataset.id); break;
+    case 'rate': { const id=el.dataset.id, r=el.dataset.r; state.ratings[id]=r; logEvent('Learned from you: '+toolName(id)+' → '+({yes:'helped',bit:'helped a bit',no:'did not help'})[r], [r==='no'?'will suggest alternatives next time':'will suggest it again in similar moments']); adapt(); renderRail(); document.querySelectorAll(`[data-a="rate"][data-id="${id}"]`).forEach(b=>b.classList.toggle('on', b.dataset.r===r)); toast('Thanks. The OS will use this.'); break; }
+    case 'snext': { const ta=$('#step-input'); if(ta) state.steps.a[state.steps.i]=ta.value; state.steps.i++; if(state.steps.i>=((state.p.lang==='pt'&&T[state.steps.id].pt)?T[state.steps.id].pt.steps:T[state.steps.id].steps).length){ if(T[state.steps.id].ritual){ logEvent('Journal entry saved: '+toolName(state.steps.id), ['private to you','adds to your emotional weather']); toast('Saved to your journal.'); } else logEvent('Completed: '+toolName(state.steps.id), ['follow-up check-in scheduled in 3 hours']); renderRail(); } render(); scrollTop(); break; }
+    case 'sprev': { const ta=$('#step-input'); if(ta) state.steps.a[state.steps.i]=ta.value; state.steps.i=Math.max(0,state.steps.i-1); render(); break; }
+    case 'reflect': reflectAI(el.dataset.id); break;
+    case 'variant': state.variant=el.dataset.v; render(); break;
+    case 'rehearse': state.reh={id:el.dataset.id, mood:el.dataset.m, label:T[el.dataset.id].who.split(/,| who /)[0].replace(/^your /,'').replace(/^a /,''), turns:[], fb:null}; logEvent('Rehearsal started', [T[el.dataset.id].name, 'counterpart mood: '+el.dataset.m.toLowerCase()]); renderRail(); render(); { const ta=$('#reh-input'); ta && ta.focus(); } break;
+    case 'rehsend': rehSend(); break;
+    case 'feedback': rehFeedback(); break;
+    case 'ciword': state.ci={...state.ci, word:el.dataset.w, fam:el.dataset.f}; document.querySelectorAll('[data-a="ciword"]').forEach(b=>b.classList.toggle('on', b===el)); break;
+    case 'cisave': adapt('Check-in saved: '+state.ci.word+' at '+state.ci.n+'/10'); renderRail(); tab('home'); toast('Check-in saved. Home has adapted.'); break;
+    case 'send': { const ta=$('#chat-input'); sendChat(ta.value); break; }
+    case 'chip': sendChat(el.dataset.t); break;
+    case 'copy': { const t=el.dataset.t; const done=()=>toast('Copied.'); try{ navigator.clipboard.writeText(t).then(done, ()=>toast('Select the number to copy it.')); }catch(e){ toast('Select the number to copy it.'); } break; }
+    case 'coach': logEvent('Coach follow-up requested', ['a human from Drishta Vidya will reach out (full version)']); renderRail(); toast('Request noted. In the full version a coach follows up.'); break;
+    case 'program': go('program',{id:el.dataset.id}); break;
+    case 'clip': go('clip',{id:el.dataset.id}); break;
+    case 'clipplay': toast('This clip has not been recorded yet.'); break;
+    case 'newuser': startOnboard(); break;
+    case 'ob': { const v=el.dataset.step; state.ob.step = isNaN(+v) ? v : +v; render(); scrollTop(); break; }
+    case 'obfirst': firstTap(); break;
+    case 'obstart': { const id=state.ob.tool; state.ob=null; state.stack=[{v:'home'}]; logEvent('Value before questions', ['first tool opened within seconds','profile can wait']); renderRail(); openTool(id); break; }
+    case 'makeitmine': state.ob={step:1, resume:true, n:state.ci.n, word:state.ci.word, fam:state.ci.fam}; logEvent('Make it mine: three optional questions', []); renderRail(); render(); scrollTop(); break;
+    case 'intentedit': state.intentEdit=!state.intentEdit; render(); break;
+    case 'intent': { const k=el.dataset.k; state.p.intent=k; state.intentEdit=false; logEvent('Intention set → '+INTENTS[k][0], ['chosen by you', 'today’s practice: '+toolName(INTENTS[k][1])]); render(); renderRail(); break; }
+    case 'deeperno': state.deeperOff=true; logEvent('Program suggestion dismissed', ['will not suggest it again this month']); render(); renderRail(); break;
+    case 'rwto': state.rw.to=el.dataset.v; document.querySelectorAll('[data-a="rwto"]').forEach(b=>b.classList.toggle('on', b===el)); break;
+    case 'rwgo': { const rw=state.rw; if(!(rw.text||'').trim()){ toast('Paste a message first.'); break; } if(rw.feel===undefined){ rw.stage='label'; render(); } else rewriteMsg(); break; }
+    case 'rwfeel': { const rw=state.rw, w=el.dataset.w; rw.feel=w||null; rw.stage=null; if(w){ state.ci={word:w, fam:el.dataset.f||state.ci.fam, n:6}; logEvent('Named it inside Calm my reply: '+w, ['affect labelling folded into a utility','check-in updated']); adapt(); } else logEvent('Feeling word skipped', []); renderRail(); rewriteMsg(); break; }
+    case 'dcwho': state.dc.who=el.dataset.v; document.querySelectorAll('[data-a="dcwho"]').forEach(b=>b.classList.toggle('on', b===el)); break;
+    case 'dcgo': decodeIt(); break;
+    case 'dcmine': { const w=el.dataset.w; state.dc.mine=w; state.ci={word:w, fam:el.dataset.f, n:5}; logEvent('Your own feeling, named: '+w, ['saved as check-in']); adapt(); renderRail(); document.querySelectorAll('[data-a="dcmine"]').forEach(b=>b.classList.toggle('on', b===el)); toast('Saved as your check-in.'); break; }
+    case 'calib': { const d=el.dataset.d, v=el.dataset.v; state.calib[d]=v; state.variant=null; logEvent('Context set by you: '+d+' \u2192 '+(v==='diplomatic'?'hierarchical and diplomatic':'direct and flat'), ['not inferred from country','sets wording for all '+d+' scripts']); render(); renderRail(); break; }
+    case 'calibreset': delete state.calib[el.dataset.d]; state.variant=null; render(); break;
+    case 'weekpick': state.weekPick=el.dataset.v; logEvent('Week\u2019s big one picked: '+el.dataset.v, ['only this one gets a prep card','no other meeting reminders']); render(); renderRail(); break;
+    case 'weekclear': state.weekPick=null; render(); break;
+    case 'rwwait': logEvent('Message held for 10 minutes', ['reminder set; nothing sent']); renderRail(); toast('Held. Drishti will remind you in 10 minutes.'); break;
+    case 'share': logEvent('Shared a week card', ['no private details included']); renderRail(); toast('Shares a card with no private details, for example to WhatsApp status.'); break;
+    case 'obset': { const k=el.dataset.k; state.ob[k]=el.dataset.v; if(k==='word') state.ob.fam=el.dataset.f; render(); break; }
+    case 'obcancel': state.ob=null; render(); break;
+    case 'obdone': finishOnboard(); break;
+  }
+}
+function startOnboard(){ clearTimers(); state.ob={step:'feel', n:5}; logEvent('New user opened the app', ['no sign-up screen','first question: how are you?']); render(); renderRail(); scrollTop(); }
+function minimalProfile(o){
+  return {id:'new', name:'You', ini:'Y', blurb:'New user', band:'Not shared', country:'Other', city:'', lang:'en', langLabel:'English', channel:'App', goal:'self', partial:true,
+    role:'Not shared yet', rg:null, household:'Not shared yet', children:'Not shared yet', caregiving:'Not shared yet', pattern:'Not shared yet', culture:'Not set yet', faith:'Not shared', gender:'Not shared',
+    path:null, day:1, intent:null, deeper:null, ci:{word:o.word, fam:o.fam, n:o.n}, season:'', nudge:null, perf:[], ratings:{},
+    chips:['Something at work upset me','I feel stretched thin','I keep comparing myself to others'], trend:[6,6,6,6,6,6,6,6,6,6,6,6,6,o.n], caps:[[40,40],[40,40],[40,40],[40,40],[40,40]],
+    moments:['Your first check-in'], patterns:['Patterns appear after about two weeks of check-ins.'], share:'This week I started noticing my feelings.'};
+}
+function firstTap(){
+  const o=state.ob;
+  state.pid='new'; state.p=minimalProfile(o); state.off={}; state.ci={word:o.word, fam:o.fam, n:o.n}; state.ratings={}; state.chat=[]; state.moment=null; state.rw=null; state.calib={}; state.dc=null; state.weekPick=null; state.intentEdit=false; state.deeperOff=false;
+  logEvent('First tap: '+o.word+' at '+o.n+'/10', ['nothing asked yet']);
+  adapt();
+  o.tool = state.moment.id; o.step='first';
+  render(); renderRail(); scrollTop();
+}
+function finishOnboard(){
+  const o=state.ob, p=state.p;
+  if(o.lang){ p.lang=o.lang; p.langLabel=LANGS[o.lang]; }
+  if(o.band) p.band=o.band;
+  if(o.country){ p.country=o.country; p.culture='Set per situation by you, never from country'; }
+  if(o.goal) p.goal=o.goal;
+  p.partial=false;
+  const dp=defaultPath(p); p.path=dp.path;
+  const h=HELP[p.country]||HELP._;
+  logEvent('Profile made yours', [o.lang?'language: '+LANGS[o.lang]:'language skipped', o.band?'age '+o.band:'age skipped', o.country||'country skipped']);
+  if(o.country) logEvent('Support line set → '+h.name, ['from country: '+o.country]);
+  logEvent('Suggested path → '+PATHS[dp.path].name, dp.why);
+  state.ob=null; state.stack=[{v:'home'}];
+  adapt();
+  render(); renderRail(); scrollTop();
+}
+
+/* ---------- Rail ---------- */
+const isDesk = ()=>{ try{ return window.matchMedia('(min-width:920px)').matches; }catch(e){ return true; } };
+const UI = {collapsed:false, fold:{}};
+try{ const saved = JSON.parse(localStorage.getItem('eqos-ui')||'null'); if(saved){ UI.collapsed=!!saved.collapsed; UI.fold=saved.fold||{}; } }catch(e){}
+function saveUI(){ try{ localStorage.setItem('eqos-ui', JSON.stringify(UI)); }catch(e){} }
+function setCollapsed(v){ UI.collapsed=v; saveUI(); applyCollapsed(); }
+function applyCollapsed(){ const w=document.querySelector('.wrap'); if(w) w.classList.toggle('collapsed', !!UI.collapsed); }
+function panel(key, title, sub, body){
+  const shut = !!UI.fold[key];
+  return `<div class="panel ${shut?'shut':''}"><button class="fold" data-r="fold" data-k="${key}" aria-expanded="${!shut}"><h3>${title}</h3>${sub?`<span class="sub">${sub}</span>`:''}${I.chev}</button>${shut?'':body}</div>`;
+}
+function renderRail(){
+  const rail=$('#rail'); if(!state.p) return;
+  const p=state.p, lt=localTime();
+  const worked = Object.entries(state.ratings).map(([k,v])=>`${toolName(k)}: ${({yes:'helped',bit:'a bit',no:'did not help'})[v]}`);
+  const who = [on('band')?p.band:null, p.country, p.langLabel, on('role')?p.role:null, 'goal: '+GOALS[p.goal]].filter(Boolean).join(' · ');
+  rail.innerHTML = `
+  <div class="rail-head"><div class="brand"><div class="mark">EQ</div><div><b>EQ OS</b><small>Demo · Drishta Vidya</small></div></div><div class="rail-actions"><button class="demo-btn" data-r="foldall" style="display:inline-flex;align-items:center">${Object.values(UI.fold).filter(Boolean).length>=4?'Unfold all':'Fold all'}</button><button class="demo-btn" data-r="close" style="display:inline-flex;align-items:center" aria-label="Hide the demo panel">${isDesk()?'Hide':'Close'}</button></div></div>
+  ${panel('try','Try it as', esc(state.ob||state.pid==='new'?'New user':p.name), `
+    <div class="people">
+      ${Object.values(PEOPLE).map(x=>`<button class="person ${state.pid===x.id&&!state.ob?'on':''}" data-r="person" data-id="${x.id}"><span class="avatar">${x.ini}</span><span><b>${esc(x.name)}</b><span>${esc(x.blurb)}</span></span></button>`).join('')}
+      <button class="person ${state.ob||state.pid==='new'?'on':''}" data-r="new"><span class="avatar">+</span><span><b>New user</b><span>One tap for help first; questions only if they want</span></span></button>
+    </div>
+    <p class="note">Illustrative people. All data in this demo is example data.</p>`)}
+  ${panel('phone','On the phone','Widgets', `
+    <div class="widgets">
+      <div class="lock"><span class="lock-time tnum">${esc(lt.hm)}</span><div class="lock-row"><div><button class="comp" data-r="w-check" aria-label="Check in from the lock screen"><span class="drishti" style="--s:24px"></span></button><p class="comp-l">Check in</p></div><div><button class="comp" data-r="w-panic" aria-label="60-second reset from the lock screen">${I.wave}</button><p class="comp-l">Reset</p></div></div></div>
+      <button class="hw" data-r="w-breathe"><span class="drishti"></span><b>Breathe</b><small>1 min</small><small>${esc(p.intent?INTENTS[p.intent][0]:'Choose an intention')}</small></button>
+    </div>
+    <p class="note">Lock-screen and home-screen widgets: one tap, without opening the app.</p>`)}
+  ${panel('hood','Under the hood', state.ai?'Live AI':'Sample replies', `
+    <div class="signals">
+      <div class="sig"><p class="eyebrow">Who you are</p><p>${esc(who)}</p></div>
+      <div class="sig"><p class="eyebrow">Where you are</p><p class="tnum">${esc(lt.label)}${p.season?' · '+esc(p.season):''}</p></div>
+      <div class="sig"><p class="eyebrow">How you are</p><p>${state.ci?esc(state.ci.word)+' · '+state.ci.n+'/10':'No check-in yet'}</p></div>
+      <div class="sig"><p class="eyebrow">What works for you</p><p>${worked.length?esc(worked.join('; ')):'Learning from your first ratings'}</p></div>
+    </div>
+    <div class="ai-status"><span class="dot ${state.ai?'live':''}"></span><span>${state.ai?'Drishti and rehearsal use live AI':(state.ai===undefined?'Checking for live AI…':'Live AI off in this view; sample replies shown')}</span></div>`)}
+  ${panel('log','Adaptation log', 'Newest first', `
+    <div class="log">${state.log.map((l,i)=>`<div class="log-item ${i<2?'new':''}"><time class="tnum">${esc(l.t)}</time><b>${esc(l.title)}</b>${l.why.length?`<ul>${l.why.map(w=>`<li>${esc(w)}</li>`).join('')}</ul>`:''}</div>`).join('')}</div>`)}`;
+  rail.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{
+    const r=b.dataset.r;
+    if(r==='close'){ if(isDesk()) setCollapsed(true); else rail.classList.remove('open'); return; }
+    if(r==='fold'){ const k=b.dataset.k; UI.fold[k]=!UI.fold[k]; saveUI(); renderRail(); return; }
+    if(r==='foldall'){ const all = Object.values(UI.fold).filter(Boolean).length>=4; ['try','phone','hood','log'].forEach(k=>UI.fold[k]=!all); saveUI(); renderRail(); return; }
+    if(r==='person'){ rail.classList.remove('open'); loadPerson(b.dataset.id); return; }
+    if(r==='new'){ rail.classList.remove('open'); startOnboard(); return; }
+    if(r==='w-panic'){ rail.classList.remove('open'); state.ob=null; state.stack=[{v:'home'}]; renderRail(); openTool('panic'); return; }
+    if(r==='w-check'||r==='w-breathe'){ rail.classList.remove('open'); if(state.ob){ state.ob=null; } state.stack=[{v:'home'}]; logEvent('Opened from a widget', [r==='w-check'?'lock-screen check-in':'one-tap breathing']); renderRail(); openTool(r==='w-check'?'mood-check':'slow-exhale'); return; }
+  });
+}
+
+/* ---------- Boot ---------- */
+applyCollapsed();
+loadPerson('priya');
+try{ window.matchMedia('(min-width:920px)').addEventListener('change', ()=>renderRail()); }catch(e){}
+(async()=>{
+  try{ state.ai = (window.claude && window.claude.use) ? await window.claude.use('sample') : null; }catch(e){ state.ai=null; }
+  if(state.ai) logEvent('Live AI connected', ['Drishti, rehearsal and reflections answer live']);
+  renderRail(); const top=state.stack[state.stack.length-1]; if(top.v==='companion') render();
+})();
+</script>

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "saying_no_upward",
+    "title": "Saying No Upward (To a Senior / Manager)",
+    "domain": "work",
+    "description": "How to decline an unreasonable deadline or request from authority without sounding insubordinate.",
+    "direct": {
+      "step_1": "Acknowledge the objective: 'I understand delivering Project Alpha by Friday is critical for the client.'",
+      "step_2": "State trade-off clearly: 'With our current committed scope, taking this on means Beta testing will slip by 4 days.'",
+      "step_3": "Offer clear choice: 'Which would you like us to prioritize: Friday delivery with reduced QA, or Tuesday with full stability?'",
+      "step_4": "Confirm and close: 'Let me know by 2 PM so I can align the engineering squad accordingly.'"
+    },
+    "diplomatic": {
+      "step_1": "Validate the importance: 'I completely see why expediting this is top of mind for the leadership team.'",
+      "step_2": "Highlight capacity constraints: 'To give this the quality our stakeholders expect, I want to be transparent about what our team is balancing.'",
+      "step_3": "Invite collaborative steering: 'Could we look at the week's priorities together to see what we might safely push back?'",
+      "step_4": "Affirm alignment: 'I want to make sure we set you up for a win without compromising our team's commitments.'"
+    }
+  },
+  {
+    "id": "delivering_tough_feedback",
+    "title": "Delivering Tough Feedback to a Colleague",
+    "domain": "work",
+    "description": "Addressing repeated performance or behavioral issues with empathy and precision.",
+    "direct": {
+      "step_1": "Set context & observation: 'In the client review yesterday, you interrupted Sarah three times while she was presenting.'",
+      "step_2": "State impact: 'The client appeared hesitant, and Sarah wasn't able to land the architecture rationale.'",
+      "step_3": "Check intention: 'I know you wanted to clarify details, but what was your read on the room?'",
+      "step_4": "Agree on standard: 'Going forward, let the lead presenter finish before we add technical remarks.'"
+    },
+    "diplomatic": {
+      "step_1": "Warm opening & shared goal: 'I appreciate how deeply you care about getting every technical detail right for our clients.'",
+      "step_2": "Gentle observation: 'I noticed in yesterday's sync that some of your points came across quickly while Sarah was mid-slide.'",
+      "step_3": "Explore together: 'How did you feel the dynamics went? I want to make sure the whole team appears cohesive.'",
+      "step_4": "Co-create agreement: 'What if we hold our follow-ups for the Q&A segment next time to maintain flow?'"
+    }
+  },
+  {
+    "id": "family_employee",
+    "title": "Managing a Family Member on the Payroll",
+    "domain": "work",
+    "description": "Holding a relative accountable for missed work deadlines without tearing family bonds apart.",
+    "direct": {
+      "step_1": "Separate hat: 'Uncle / Cousin, I love you as family, but right now I need to speak with you purely as the business owner.'",
+      "step_2": "Name objective standard: 'The dispatch logs were missed for the third time this month, and inventory was delayed.'",
+      "step_3": "Highlight company risk: 'When deadlines slip here, other staff question fairness and clients pull contracts.'",
+      "step_4": "Firm boundary: 'Can you commit to delivering this checklist daily by 5 PM, or should we look for a different arrangement outside the firm?'"
+    },
+    "diplomatic": {
+      "step_1": "Reaffirm personal respect: 'You know how much I value our family relationship and having you as part of this journey.'",
+      "step_2": "Share business strain: 'Because of how close we are, it's especially hard for me to see dispatch deadlines slipping.'",
+      "step_3": "Protect mutual dignity: 'I want both of us to succeed here and avoid any tension around the Sunday dinner table.'",
+      "step_4": "Constructive agreement: 'Let's review what's blocking you on these dispatches so we can establish a reliable routine together.'"
+    }
+  },
+  {
+    "id": "asking_for_what_you_need",
+    "title": "Asking for What You Need",
+    "domain": "home",
+    "description": "Expressing an unmet emotional or practical need without passive-aggressive hinting or blame.",
+    "direct": {
+      "step_1": "State vulnerability cleanly: 'I have felt overwhelmed managing the household chores alone this week.'",
+      "step_2": "Avoid accusation: 'This isn't about blaming you; I just need support.'",
+      "step_3": "Specific concrete request: 'Would you take full charge of dinner and bedtime routines on Tuesdays and Thursdays?'",
+      "step_4": "Appreciate partnership: 'Having that predictability will help me recharge and show up happier for both of us.'"
+    },
+    "diplomatic": {
+      "step_1": "Express appreciation first: 'I know how demanding your week has been with work.'",
+      "step_2": "Share internal state: 'I find myself running on empty by evening and feeling exhausted.'",
+      "step_3": "Propose shared division: 'Could we carve out a couple of evenings where you handle dinner so I can get a breather?'",
+      "step_4": "Check agreement: 'How does that sound to you for this coming week?'"
+    }
+  },
+  {
+    "id": "repair_after_clash",
+    "title": "Repair After an Emotional Clash",
+    "domain": "home",
+    "description": "Initiating connection and reconciliation after an argument where tempers flared.",
+    "direct": {
+      "step_1": "Own your part 100%: 'I reacted harshly and raised my voice earlier. That was wrong, and I'm sorry.'",
+      "step_2": "No 'buts': 'No excuses about being tired or what you said. My reaction was my responsibility.'",
+      "step_3": "Validate their hurt: 'I imagine that made you feel unheard and defensive.'",
+      "step_4": "Offer reset: 'When you're ready, I'd like to revisit what we were discussing calmly.'"
+    },
+    "diplomatic": {
+      "step_1": "Gentle approach: 'Things got heated between us earlier, and I hate leaving things feeling strained.'",
+      "step_2": "Acknowledge misstep: 'I let my stress get the better of me and spoke sharply, which you didn't deserve.'",
+      "step_3": "Reaffirm love/care: 'Your feelings and our peace matter more to me than winning an argument.'",
+      "step_4": "Invite reconnection: 'Can I make you some tea and just sit with you for a bit?'"
+    }
+  },
+  {
+    "id": "talking_with_teenager",
+    "title": "Connecting with a Defiant Teenager",
+    "domain": "home",
+    "description": "Engaging an upset, closed-off adolescent without triggering immediate rebellion.",
+    "direct": {
+      "step_1": "Drop the lecture: 'I can see you are furious and don't want to talk to me right now.'",
+      "step_2": "Guarantee safety: 'You are not in trouble right now. I just want to understand what happened.'",
+      "step_3": "Give space with an open door: 'I'll leave your room now, but I'm downstairs whenever you're ready to share.'",
+      "step_4": "Hold steady: 'No matter what happened, we will figure it out together.'"
+    },
+    "diplomatic": {
+      "step_1": "Notice body language: 'You seem carrying a lot today. I know school and friends can be exhausting.'",
+      "step_2": "Refrain from interrogation: 'I'm not here to grill you or take your phone away.'",
+      "step_3": "Offer unconditional presence: 'If you want to vent, I'll just listen. If you want silence, I'll just sit here.'",
+      "step_4": "Affirm trust: 'I'm on your team, even when we don't see eye to eye.'"
+    }
+  },
+  {
+    "id": "one_on_one_support",
+    "title": "1:1 Support for a Snapping Colleague",
+    "domain": "work",
+    "description": "When a normally steady teammate snaps under pressure, then says 'I'm fine'.",
+    "direct": {
+      "step_1": "Private check-in: 'Hey, that exchange in the standup didn't sound like you.'",
+      "step_2": "Challenge 'I'm fine' gently: 'You said you're fine, but you're carrying 3 simultaneous launches right now.'",
+      "step_3": "Offer pragmatic offload: 'What is the single heaviest deliverable on your plate that I can take off your hands today?'",
+      "step_4": "Hold confidence: 'This stays between us. Take 30 minutes to decompress.'"
+    },
+    "diplomatic": {
+      "step_1": "Warm inquiry: 'Do you have five minutes to grab a quick coffee or walk?'",
+      "step_2": "Create permission to struggle: 'I know how brutal this quarter's deadlines have been for everyone.'",
+      "step_3": "No pressure probe: 'Just wanted to check in on how you're personally holding up with the workload.'",
+      "step_4": "Supportive presence: 'No need to have all the answers right now, but I'm in your corner if you need a buffer.'"
+    }
+  },
+  {
+    "id": "disagreeing_with_peer",
+    "title": "Disagreeing with a Peer Respectfully",
+    "domain": "work",
+    "description": "Challenging a colleague's proposal or direction without creating personal rivalry.",
+    "direct": {
+      "step_1": "Affirm shared intent: 'We both want this launch to convert at the highest rate.'",
+      "step_2": "State divergence plainly: 'I see a major risk in your proposed pricing model based on customer churn data.'",
+      "step_3": "Show your evidence: 'Here are the three customer interviews showing resistance at that tier.'",
+      "step_4": "Invite counter-analysis: 'Show me where my reading of the data might be off.'"
+    },
+    "diplomatic": {
+      "step_1": "Credit their thinking: 'I really admire the creative angle you took in this pitch.'",
+      "step_2": "Introduce gentle question: 'One angle I'm trying to wrap my head around is how our mid-tier users might react.'",
+      "step_3": "Offer alternative perspective: 'Could we test this with a cohort of 50 users before rolling it out company-wide?'",
+      "step_4": "Emphasize team partnership: 'Let's build a hybrid option that preserves your creative concept while hedging risk.'"
+    }
+  }
+]

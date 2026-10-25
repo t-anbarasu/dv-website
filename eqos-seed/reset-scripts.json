@@ -1,0 +1,132 @@
+[
+  {
+    "id": "reset_60s",
+    "title": "60-Second Reset (Panic Button)",
+    "description": "Rapid autonomic down-regulation using extended 4/6 vagal breathing.",
+    "duration_seconds": 60,
+    "pattern": {
+      "inhale": 4,
+      "hold": 0,
+      "exhale": 6,
+      "rest": 0,
+      "cycles": 6
+    },
+    "visual_pacer": "expanding_circle",
+    "haptics_enabled": true,
+    "prompts": [
+      { "second": 0, "text": "Feet flat on the floor. Soften your jaw." },
+      { "second": 10, "text": "Breathe in through nose for 4... exhale slowly through mouth for 6." },
+      { "second": 30, "text": "Notice the weight of your body supported by the chair." },
+      { "second": 50, "text": "You are steady. You are here." },
+      { "second": 60, "text": "Reset complete." }
+    ],
+    "after_action": "prompt_naming"
+  },
+  {
+    "id": "reset_box",
+    "title": "Box Breathing (4-4-4-4)",
+    "description": "Tactical focus reset used under high cognitive stress.",
+    "duration_seconds": 120,
+    "pattern": {
+      "inhale": 4,
+      "hold": 4,
+      "exhale": 4,
+      "rest": 4,
+      "cycles": 8
+    },
+    "visual_pacer": "square_perimeter",
+    "haptics_enabled": true,
+    "prompts": [
+      { "second": 0, "text": "Sit tall. Empty your lungs." },
+      { "second": 16, "text": "Inhale 4... Hold 4... Exhale 4... Hold empty 4." },
+      { "second": 60, "text": "Stay relaxed during the holds. Don't strain." },
+      { "second": 120, "text": "Mind clear. Attention anchored." }
+    ],
+    "after_action": "return_to_task"
+  },
+  {
+    "id": "reset_slow_exhale",
+    "title": "Physiological Sigh & Slow Exhale",
+    "description": "Double inhale followed by long sighing exhale to instantly pop open collapsed alveoli and lower heart rate.",
+    "duration_seconds": 45,
+    "pattern": {
+      "inhale": 3,
+      "top_up_inhale": 1,
+      "exhale": 8,
+      "cycles": 4
+    },
+    "visual_pacer": "wave",
+    "haptics_enabled": true,
+    "prompts": [
+      { "second": 0, "text": "Two quick sniffs in through the nose, one long sigh out." },
+      { "second": 45, "text": "Heart rate slowing. Steady now." }
+    ],
+    "after_action": "return_to_task"
+  },
+  {
+    "id": "reset_cooldown",
+    "title": "Cool-Down After Conflict",
+    "description": "De-escalate nervous system arousal following an argument or tense confrontation.",
+    "duration_seconds": 180,
+    "pattern": {
+      "inhale": 4,
+      "hold": 2,
+      "exhale": 6,
+      "rest": 2,
+      "cycles": 12
+    },
+    "visual_pacer": "expanding_circle",
+    "haptics_enabled": false,
+    "prompts": [
+      { "second": 0, "text": "Step away from the scene. Loosen your shoulders." },
+      { "second": 60, "text": "Release the urge to win or retaliate right now." },
+      { "second": 120, "text": "Your only job in this minute is safety and calm." },
+      { "second": 180, "text": "Steadier now. What does this situation actually need?" }
+    ],
+    "after_action": "offer_calm_reply"
+  },
+  {
+    "id": "reset_shift_handover",
+    "title": "Work to Home Shift Handover",
+    "description": "Deliberately shed workplace vigilance before entering personal and family space.",
+    "duration_seconds": 120,
+    "pattern": {
+      "inhale": 4,
+      "hold": 0,
+      "exhale": 6,
+      "rest": 0,
+      "cycles": 12
+    },
+    "visual_pacer": "sunset_gradient",
+    "haptics_enabled": false,
+    "prompts": [
+      { "second": 0, "text": "Close your work tabs. Place your hands in your lap." },
+      { "second": 30, "text": "Acknowledge today's unfinished work: it will be there tomorrow." },
+      { "second": 60, "text": "Exhale the armor. Who is waiting for you with love?" },
+      { "second": 120, "text": "Work day complete. Arrive present." }
+    ],
+    "after_action": "set_evening_intention"
+  },
+  {
+    "id": "reset_pre_performance",
+    "title": "Pre-Performance Centering",
+    "description": "Align nervous arousal from anxiety into calm, directed readiness.",
+    "duration_seconds": 90,
+    "pattern": {
+      "inhale": 4,
+      "hold": 2,
+      "exhale": 4,
+      "rest": 0,
+      "cycles": 9
+    },
+    "visual_pacer": "pulsing_beacon",
+    "haptics_enabled": true,
+    "prompts": [
+      { "second": 0, "text": "Feel your feet pressing into the floor. Spine tall." },
+      { "second": 30, "text": "Reframe butterflies as adrenaline preparing you for focus." },
+      { "second": 60, "text": "One key intention: What is the single gift you want to deliver?" },
+      { "second": 90, "text": "Ready. Step in." }
+    ],
+    "after_action": "start_meeting"
+  }
+]

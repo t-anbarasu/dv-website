@@ -1,0 +1,138 @@
+[
+  {
+    "tool_id": "feeling_under_feeling",
+    "title": "Feeling Under the Feeling",
+    "engine": "reflection",
+    "phase": "awareness",
+    "minutes": 2,
+    "tags": ["anger", "frustration", "secondary_emotions"],
+    "steps": [
+      {
+        "prompt": "What was the visible emotion that spiked on the surface? (e.g., Anger, Irritation, Annoyance)",
+        "placeholder": "e.g., I snapped with anger when my manager changed the requirements."
+      },
+      {
+        "prompt": "Anger is often a bodyguard. What vulnerable emotion was it protecting underneath?",
+        "options": ["Fear of failing or looking incompetent", "Hurt from feeling unvalued", "Exhaustion / Overwhelm", "Sadness from broken expectations", "Shame / Imposter anxiety"]
+      },
+      {
+        "prompt": "Once you name that deeper feeling, what is one kind, honest thing you can say to yourself?",
+        "placeholder": "e.g., I'm afraid of looking bad, and it's okay to feel stretched. I will ask for realistic priorities."
+      }
+    ]
+  },
+  {
+    "tool_id": "story_vs_fact",
+    "title": "Story vs. Fact",
+    "engine": "reflection",
+    "phase": "clarity",
+    "minutes": 2,
+    "tags": ["anxiety", "overthinking", "assumptions"],
+    "steps": [
+      {
+        "prompt": "What is the stressful situation occupying your mind?",
+        "placeholder": "e.g., My team lead left my message on read for 4 hours."
+      },
+      {
+        "prompt": "What are the incontrovertible, courtroom-proven FACTS? (Only what a camera could record)",
+        "placeholder": "e.g., Message sent at 10 AM. No reply yet at 2 PM."
+      },
+      {
+        "prompt": "What is the STORY your mind created to fill the gap?",
+        "placeholder": "e.g., 'They think my draft is terrible and are discussing replacing me.'"
+      },
+      {
+        "prompt": "What are 2 other completely plausible explanations for the facts?",
+        "placeholder": "e.g., 1. They are stuck in client workshops. 2. They saw it on mobile and flagged it to review carefully at desk."
+      }
+    ]
+  },
+  {
+    "tool_id": "comparison_reset",
+    "title": "Comparison Reset",
+    "engine": "reflection",
+    "phase": "regulation",
+    "minutes": 2,
+    "tags": ["envy", "imposter_syndrome", "social_media"],
+    "steps": [
+      {
+        "prompt": "Who are you comparing yourself to right now, and what are you envying?",
+        "placeholder": "e.g., A peer who just announced a major promotion and funding round."
+      },
+      {
+        "prompt": "Remember: Envy is just desire with shame attached. What does this reveal about what YOU genuinely value?",
+        "placeholder": "e.g., I value autonomy, creative impact, and recognition for my craft."
+      },
+      {
+        "prompt": "What is one small step on YOUR path you can take today, without watching their lane?",
+        "placeholder": "e.g., Spend 45 focused minutes writing my own project proposal."
+      }
+    ]
+  },
+  {
+    "tool_id": "two_minute_prep",
+    "title": "2-Minute Pre-Meeting Prep",
+    "engine": "planning",
+    "phase": "intention",
+    "minutes": 2,
+    "tags": ["executive", "meetings", "focus"],
+    "steps": [
+      {
+        "prompt": "What is the single outcome that would make this upcoming meeting a genuine success?",
+        "placeholder": "e.g., Secure executive sign-off on the Q3 roadmap timeline."
+      },
+      {
+        "prompt": "What emotional weather might enter the room, and how do you choose to show up?",
+        "placeholder": "e.g., Stakeholders may feel defensive about budgets; I choose to be curious and non-reactive."
+      },
+      {
+        "prompt": "If tension arises, what is your grounding anchor phrase?",
+        "placeholder": "e.g., 'We both want the same business outcome. Let's look at the numbers together.'"
+      }
+    ]
+  },
+  {
+    "tool_id": "drop_delegate_defer_do",
+    "title": "Drop, Delegate, Defer, Do",
+    "engine": "planning",
+    "phase": "action",
+    "minutes": 3,
+    "tags": ["overwhelm", "burnout", "productivity"],
+    "steps": [
+      {
+        "prompt": "List the top 4 demands draining your mental bandwidth right now.",
+        "placeholder": "1. Pitch deck review\n2. Vendor invoice dispute\n3. Scheduling team offsite\n4. Bug triage"
+      },
+      {
+        "prompt": "Categorize each ruthlessly into: DROP (not critical), DELEGATE (someone else can do 80% as well), DEFER (schedule next week), DO (must happen today).",
+        "placeholder": "DROP: Vendor dispute follow-up until next billing cycle\nDELEGATE: Team offsite scheduling to project coordinator\nDEFER: Bug triage to Thursday sprint\nDO: Pitch deck review"
+      },
+      {
+        "prompt": "Take a deep breath. Focus solely on your ONE 'DO' item.",
+        "placeholder": "Acknowledged."
+      }
+    ]
+  },
+  {
+    "tool_id": "savor_it",
+    "title": "Savor It",
+    "engine": "reflection",
+    "phase": "integration",
+    "minutes": 2,
+    "tags": ["joy", "gratitude", "resilience"],
+    "steps": [
+      {
+        "prompt": "What went well today, or what moment brought a genuine sense of peace or satisfaction?",
+        "placeholder": "e.g., My presentation resonated with the team, and a junior engineer thanked me for mentoring them."
+      },
+      {
+        "prompt": "Pause for 20 seconds. Where do you feel this warmth in your physical body?",
+        "placeholder": "e.g., Warmth in the center of my chest and lightness in my neck."
+      },
+      {
+        "prompt": "Who contributed to this moment whom you can silently or outwardly thank?",
+        "placeholder": "e.g., My team for staying late to help rehearse."
+      }
+    ]
+  }
+]

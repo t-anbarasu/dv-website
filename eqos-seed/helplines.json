@@ -1,0 +1,38 @@
+[
+  {
+    "country": "IN",
+    "name": "Tele-MANAS (National Tele Mental Health Programme of India)",
+    "numbers": ["14416", "1800-891-4416"],
+    "hours": "24/7 (Free, Government of India)",
+    "languages": ["English", "Tamil", "Hindi", "Telugu", "Kannada", "Malayalam", "Bengali", "Marathi", "Gujarati", "Odia", "Punjabi", "Assamese"],
+    "url": "https://telemanas.mohfw.gov.in",
+    "verified_at": "2026-10-24"
+  },
+  {
+    "country": "IN_KIRAN",
+    "name": "KIRAN Mental Health Rehabilitation Helpline",
+    "numbers": ["1800-599-0019"],
+    "hours": "24/7 (Free, Ministry of Social Justice & Empowerment)",
+    "languages": ["Hindi", "English", "Tamil", "13 Regional Languages"],
+    "url": "https://disabilityaffairs.gov.in",
+    "verified_at": "2026-10-24"
+  },
+  {
+    "country": "IN_VANDREVALA",
+    "name": "Vandrevala Foundation Helpline",
+    "numbers": ["+91 9999 666 555"],
+    "hours": "24/7 (Free & Confidential)",
+    "languages": ["English", "Hindi", "Tamil", "Gujarati", "Marathi"],
+    "url": "https://www.vandrevalafoundation.com",
+    "verified_at": "2026-10-24"
+  },
+  {
+    "country": "GLOBAL",
+    "name": "Find A Helpline (International Directory)",
+    "numbers": [],
+    "hours": "24/7 Online Search across 175+ countries",
+    "languages": ["Global"],
+    "url": "https://findahelpline.com",
+    "verified_at": "2026-10-24"
+  }
+]

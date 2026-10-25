@@ -65,6 +65,11 @@ function sendWelcomeEmail($toEmail, $toName, $programName, $dateDisplay, $venue)
                 <li><strong>Venue:</strong> ' . htmlspecialchars($venue) . '</li>
             </ul>
             
+            <div style="margin: 20px 0; padding: 16px; background: #f8f9fb; border-left: 4px solid #c8960c; border-radius: 4px;">
+                <h4 style="margin: 0 0 8px; color: #0d2137;">Access Your EQ OS Companion</h4>
+                <p style="margin: 0; font-size: 14px;">As a registered participant, you receive full access to your digital EQ OS companion tools, practice rituals, and AI rehearsal coach. An activation voucher code will be issued to your email to unlock your program modules at <a href="https://eqos.drishtavidya.com" style="color: #c8960c; font-weight: bold;">eqos.drishtavidya.com</a>.</p>
+            </div>
+            
             <p>To help you get the most out of your experience, please feel free to explore other valuable resources on our website at <a href="https://drishtavidya.com/resources.html" style="color: #c8960c;">drishtavidya.com</a>.</p>
             
             <p>Thank you once again for choosing Drishta Vidya. If you have any questions or need further assistance, please do not hesitate to connect with our support team at <a href="mailto:support@drishtavidya.com" style="color: #c8960c;">support@drishtavidya.com</a>.</p>
