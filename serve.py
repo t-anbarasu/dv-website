@@ -138,54 +138,14 @@ var coursesData = window.coursesData;
 
 window.upcomingPrograms = [
   {
-    "id": "EQ-LDR-NOV26-CBE",
-    "program": "EQuip for Leaders",
-    "courseId": 1,
-    "date": "Nov 14–15, 2026",
-    "location": "Coimbatore",
-    "venue": "Coimbatore, Tamil Nadu",
-    "mode": "In-Person",
-    "seats": 12
-  },
-  {
-    "id": "SIMP-NOV26-CHE",
-    "program": "SimplifAI Workshop",
+    "id": "RUN-OCT2026-VIR",
+    "program": "GenAI for Business",
     "courseId": 5,
-    "date": "Nov 28, 2026",
-    "location": "Chennai",
-    "venue": "Chennai, Tamil Nadu",
-    "mode": "In-Person",
-    "seats": 8
-  },
-  {
-    "id": "EQ-TMS-DEC26-CBE",
-    "program": "EQuip for Teams",
-    "courseId": 2,
-    "date": "Dec 5–6, 2026",
-    "location": "Coimbatore",
-    "venue": "Coimbatore, Tamil Nadu",
-    "mode": "In-Person",
-    "seats": 15
-  },
-  {
-    "id": "EQ-EDU-DEC26-ONL",
-    "program": "EQuip for Educators",
-    "courseId": 3,
-    "date": "Dec 19–20, 2026",
-    "location": "Online",
-    "venue": "Online (Zoom link shared after registration)",
+    "date": "Oct 10, 2026",
+    "location": "Virtual",
+    "venue": "",
     "mode": "Online",
-    "seats": 20
-  },
-  {
-    "id": "SIMP-JAN27-BLR",
-    "program": "SimplifAI Workshop",
-    "courseId": 5,
-    "date": "Jan 16, 2027",
-    "location": "Bangalore",
-    "venue": "Bangalore, Karnataka",
-    "mode": "In-Person",
-    "seats": 10
+    "seats": 30
   }
 ];
 var upcomingPrograms = window.upcomingPrograms;

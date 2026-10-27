@@ -228,68 +228,15 @@ const _defaultCoursesData = [
   }
 ];
 
-const _defaultUpcomingPrograms = [
-  {
-    id: "EQ-LDR-NOV26-CBE",
-    program: "EQuip for Leaders",
-    courseId: 1,
-    date: "Nov 14–15, 2026",
-    location: "Coimbatore",
-    venue: "Coimbatore, Tamil Nadu",
-    mode: "In-Person",
-    seats: 12
-  },
-  {
-    id: "SIMP-NOV26-CHE",
-    program: "SimplifAI Workshop",
-    courseId: 5,
-    date: "Nov 28, 2026",
-    location: "Chennai",
-    venue: "Chennai, Tamil Nadu",
-    mode: "In-Person",
-    seats: 8
-  },
-  {
-    id: "EQ-TMS-DEC26-CBE",
-    program: "EQuip for Teams",
-    courseId: 2,
-    date: "Dec 5–6, 2026",
-    location: "Coimbatore",
-    venue: "Coimbatore, Tamil Nadu",
-    mode: "In-Person",
-    seats: 15
-  },
-  {
-    id: "EQ-EDU-DEC26-ONL",
-    program: "EQuip for Educators",
-    courseId: 3,
-    date: "Dec 19–20, 2026",
-    location: "Online",
-    venue: "Online (Zoom link shared after registration)",
-    mode: "Online",
-    seats: 20
-  },
-  {
-    id: "SIMP-JAN27-BLR",
-    program: "SimplifAI Workshop",
-    courseId: 5,
-    date: "Jan 16, 2027",
-    location: "Bangalore",
-    venue: "Bangalore, Karnataka",
-    mode: "In-Person",
-    seats: 10
-  }
-];
-
-if (typeof window.coursesData === 'undefined' || !window.coursesData || window.coursesData.length === 0) {
+if (typeof window.coursesData === 'undefined' || !window.coursesData) {
   window.coursesData = _defaultCoursesData;
 }
 if (typeof coursesData === 'undefined') {
   var coursesData = window.coursesData;
 }
 
-if (typeof window.upcomingPrograms === 'undefined' || !window.upcomingPrograms || window.upcomingPrograms.length === 0) {
-  window.upcomingPrograms = _defaultUpcomingPrograms;
+if (typeof window.upcomingPrograms === 'undefined' || !window.upcomingPrograms) {
+  window.upcomingPrograms = [];
 }
 if (typeof upcomingPrograms === 'undefined') {
   var upcomingPrograms = window.upcomingPrograms;
@@ -299,12 +246,18 @@ if (typeof upcomingPrograms === 'undefined') {
    UPCOMING PROGRAMS TICKER
    ============================================= */
 (function () {
+  const tickerContainer = document.querySelector('.upcoming-ticker');
   const tickerInner = document.getElementById('ticker-inner');
-  const runs = (typeof window.upcomingPrograms !== 'undefined' && window.upcomingPrograms && window.upcomingPrograms.length)
+  const runs = (typeof window.upcomingPrograms !== 'undefined' && Array.isArray(window.upcomingPrograms))
     ? window.upcomingPrograms
-    : ((typeof upcomingPrograms !== 'undefined' && upcomingPrograms) ? upcomingPrograms : _defaultUpcomingPrograms);
+    : [];
 
-  if (!tickerInner || !runs || !runs.length) return;
+  if (!runs || !runs.length) {
+    if (tickerContainer) tickerContainer.style.display = 'none';
+    return;
+  }
+
+  if (tickerContainer) tickerContainer.style.display = '';
 
   function buildItem(p, idx) {
     const seatsHtml = p.seats > 0
@@ -322,9 +275,12 @@ if (typeof upcomingPrograms === 'undefined') {
     </div>`;
   }
 
-  // Render items twice for seamless infinite loop
-  const html = runs.map((p, i) => buildItem(p, i)).join('');
-  tickerInner.innerHTML = html + html;
+  // Render items with repetition for smooth marquee scrolling
+  let repeatCount = runs.length === 1 ? 4 : (runs.length < 3 ? 3 : 2);
+  let html = runs.map((p, i) => buildItem(p, i)).join('');
+  let fullHtml = '';
+  for (let r = 0; r < repeatCount; r++) fullHtml += html;
+  tickerInner.innerHTML = fullHtml;
 
   // Click to open registration
   tickerInner.addEventListener('click', (e) => {
@@ -370,9 +326,9 @@ function _updateBreakdownUI() {
 }
 
 function openRegModal(progIdx) {
-  const runs = (typeof window.upcomingPrograms !== 'undefined' && window.upcomingPrograms && window.upcomingPrograms.length)
+  const runs = (typeof window.upcomingPrograms !== 'undefined' && Array.isArray(window.upcomingPrograms))
     ? window.upcomingPrograms
-    : ((typeof upcomingPrograms !== 'undefined' && upcomingPrograms) ? upcomingPrograms : _defaultUpcomingPrograms);
+    : [];
 
   const p = runs[progIdx];
   if (!p) return;
@@ -712,9 +668,9 @@ function openRegForCourse(courseIdOrNameOrObj) {
     target = courseIdOrNameOrObj.id || courseIdOrNameOrObj.title || courseIdOrNameOrObj.program;
   }
 
-  const allRuns = (typeof window.upcomingPrograms !== 'undefined' && window.upcomingPrograms && window.upcomingPrograms.length)
+  const allRuns = (typeof window.upcomingPrograms !== 'undefined' && Array.isArray(window.upcomingPrograms))
     ? window.upcomingPrograms
-    : ((typeof upcomingPrograms !== 'undefined' && upcomingPrograms && upcomingPrograms.length) ? upcomingPrograms : _defaultUpcomingPrograms);
+    : [];
 
   const allCourses = (typeof window.coursesData !== 'undefined' && window.coursesData && window.coursesData.length)
     ? window.coursesData
