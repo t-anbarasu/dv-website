@@ -1,0 +1,24 @@
+# ==============================================================================
+# Drishta Vidya LLP — Server Configuration (.htaccess)
+# ==============================================================================
+
+RewriteEngine On
+
+# 1. Clean Extensionless URLs (e.g. /equip -> equip.html, /simplifai -> simplifai.html)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f [OR]
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([a-zA-Z0-9_-]+)/?$ $1.html [L]
+
+# 2. Block sensitive files
+<FilesMatch "^\.(env|git|htaccess|htpasswd)">
+  Require all denied
+</FilesMatch>
+
+# 3. Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+</IfModule>

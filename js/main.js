@@ -22,11 +22,25 @@
       toggle.classList.toggle('open', open);
     });
 
+    // Mobile dropdown toggle
+    menu.querySelectorAll('.nav-dropdown-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          const parent = btn.closest('.nav-dropdown');
+          if (parent) {
+            parent.classList.toggle('open');
+          }
+        }
+      });
+    });
+
     // Close on nav link click
-    menu.querySelectorAll('.nav-link').forEach(link => {
+    menu.querySelectorAll('.nav-link, .nav-dropdown-item').forEach(link => {
       link.addEventListener('click', () => {
         menu.classList.remove('open');
         toggle.classList.remove('open');
+        document.querySelectorAll('.nav-dropdown.open').forEach(d => d.classList.remove('open'));
       });
     });
 
@@ -35,17 +49,27 @@
       if (!navbar.contains(e.target)) {
         menu.classList.remove('open');
         toggle.classList.remove('open');
+        document.querySelectorAll('.nav-dropdown.open').forEach(d => d.classList.remove('open'));
       }
     });
   }
 
   // Active link highlighting
   const currentPage = location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-link').forEach(link => {
+  document.querySelectorAll('.nav-link, .nav-dropdown-item').forEach(link => {
     const href = link.getAttribute('href');
-    if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+    if (href === currentPage || (currentPage === '' && href === 'index.html') || (href && href.startsWith(currentPage) && currentPage !== '')) {
       link.classList.add('active');
+      const parentDropdown = link.closest('.nav-dropdown');
+      if (parentDropdown) {
+        parentDropdown.querySelector('.nav-dropdown-toggle')?.classList.add('active');
+      }
     }
+  });
+
+  // Footer copyright year auto-update
+  document.querySelectorAll('.footer-year').forEach(el => {
+    el.textContent = new Date().getFullYear();
   });
 })();
 
@@ -72,11 +96,203 @@
 })();
 
 /* =============================================
+   FALLBACK DATASETS (COURSES & UPCOMING RUNS)
+   Guarantees View & Enroll works across local & production
+   ============================================= */
+const _defaultCoursesData = [
+  {
+    id: 1,
+    title: "EQuip for Leaders",
+    program: "EQuip",
+    audience: "Senior executives, business owners & entrepreneurs",
+    description: "Build a high-performance culture by leading with clarity, steadiness and empathy through change and uncertainty.",
+    duration: "2-Day Live Workshop",
+    durationDays: 2,
+    followUp: "60-day in EQ OS",
+    participants: "20–30",
+    icon: "🚀",
+    featured: true,
+    tags: ["Leadership", "Organization Development", "Emotional Intelligence", "EQ OS"],
+    price: 15000,
+    priceLabel: "₹15,000",
+    priceNote: "per participant + 18% GST",
+    paymentLink: "",
+    upiId: "drishtavidya@upi"
+  },
+  {
+    id: 2,
+    title: "EQuip for Teams",
+    program: "EQuip",
+    audience: "Mid-level managers, team leads & professionals",
+    description: "Break the mindset barriers that hold teams back during growth and change. Handle conflict and work with less friction.",
+    duration: "2-Day Live Workshop",
+    durationDays: 2,
+    followUp: "60-day in EQ OS",
+    participants: "20–30",
+    icon: "🔄",
+    featured: true,
+    tags: ["Emotional Intelligence", "Team Performance", "Collaboration", "EQ OS"],
+    price: 12000,
+    priceLabel: "₹12,000",
+    priceNote: "per participant + 18% GST",
+    paymentLink: "",
+    upiId: "drishtavidya@upi"
+  },
+  {
+    id: 3,
+    title: "EQuip for Educators",
+    program: "EQuip",
+    audience: "Teachers, faculty & educational institutions",
+    description: "Build emotionally intelligent classrooms and campuses. Foster better relationships between teachers, students and parents.",
+    duration: "2-Day Live Workshop",
+    durationDays: 2,
+    followUp: "60-day in EQ OS",
+    participants: "20–30",
+    icon: "🧠",
+    featured: true,
+    tags: ["Education", "Teacher Training", "Emotional Intelligence", "EQ OS"],
+    price: 10000,
+    priceLabel: "₹10,000",
+    priceNote: "per participant + 18% GST",
+    paymentLink: "",
+    upiId: "drishtavidya@upi"
+  },
+  {
+    id: 4,
+    title: "LEAD — Virtual L&D",
+    program: "LEAD",
+    audience: "HR teams, L&D managers & training departments",
+    description: "Your learning & development department without the headcount: needs assessment, learning roadmaps, delivery and effectiveness tracking.",
+    duration: "Ongoing Engagement",
+    durationDays: 0,
+    followUp: "",
+    participants: "Open",
+    icon: "📚",
+    featured: true,
+    tags: ["Virtual L&D", "Learning Design", "HR Partnership"],
+    price: 0,
+    priceLabel: "Custom Quote",
+    priceNote: "Monthly / annual engagement",
+    paymentLink: "",
+    upiId: "drishtavidya@upi"
+  },
+  {
+    id: 5,
+    title: "SimplifAI Workshop",
+    program: "SimplifAI",
+    audience: "MSME owners, professional practices & managers",
+    description: "A hands-on workshop for business owners: simplify a real process first, then put AI to work on it with a 90-day action plan.",
+    duration: "1–2 Day Workshop",
+    durationDays: 2,
+    followUp: "90-day action plan",
+    participants: "15–20",
+    icon: "⚡",
+    featured: true,
+    tags: ["SimplifAI", "CLEAR Method", "AI Adoption", "Process Optimization"],
+    price: 7500,
+    priceLabel: "₹7,500",
+    priceNote: "per participant + 18% GST",
+    paymentLink: "",
+    upiId: "drishtavidya@upi"
+  },
+  {
+    id: 6,
+    title: "SimplifAI Consulting",
+    program: "SimplifAI",
+    audience: "Growing businesses & leadership teams",
+    description: "Takes the CLEAR method into your business over 30 to 90 days. Process audit, AI workflow automation, and team adoption.",
+    duration: "30–90 Days",
+    durationDays: 60,
+    followUp: "Ongoing advisory",
+    participants: "Custom",
+    icon: "🤖",
+    featured: false,
+    tags: ["Consulting", "Automation", "Advisory"],
+    price: 0,
+    priceLabel: "Custom Quote",
+    priceNote: "Based on scope & processes",
+    paymentLink: "",
+    upiId: "drishtavidya@upi"
+  }
+];
+
+const _defaultUpcomingPrograms = [
+  {
+    id: "EQ-LDR-NOV26-CBE",
+    program: "EQuip for Leaders",
+    courseId: 1,
+    date: "Nov 14–15, 2026",
+    location: "Coimbatore",
+    venue: "Coimbatore, Tamil Nadu",
+    mode: "In-Person",
+    seats: 12
+  },
+  {
+    id: "SIMP-NOV26-CHE",
+    program: "SimplifAI Workshop",
+    courseId: 5,
+    date: "Nov 28, 2026",
+    location: "Chennai",
+    venue: "Chennai, Tamil Nadu",
+    mode: "In-Person",
+    seats: 8
+  },
+  {
+    id: "EQ-TMS-DEC26-CBE",
+    program: "EQuip for Teams",
+    courseId: 2,
+    date: "Dec 5–6, 2026",
+    location: "Coimbatore",
+    venue: "Coimbatore, Tamil Nadu",
+    mode: "In-Person",
+    seats: 15
+  },
+  {
+    id: "EQ-EDU-DEC26-ONL",
+    program: "EQuip for Educators",
+    courseId: 3,
+    date: "Dec 19–20, 2026",
+    location: "Online",
+    venue: "Online (Zoom link shared after registration)",
+    mode: "Online",
+    seats: 20
+  },
+  {
+    id: "SIMP-JAN27-BLR",
+    program: "SimplifAI Workshop",
+    courseId: 5,
+    date: "Jan 16, 2027",
+    location: "Bangalore",
+    venue: "Bangalore, Karnataka",
+    mode: "In-Person",
+    seats: 10
+  }
+];
+
+if (typeof window.coursesData === 'undefined' || !window.coursesData || window.coursesData.length === 0) {
+  window.coursesData = _defaultCoursesData;
+}
+if (typeof coursesData === 'undefined') {
+  var coursesData = window.coursesData;
+}
+
+if (typeof window.upcomingPrograms === 'undefined' || !window.upcomingPrograms || window.upcomingPrograms.length === 0) {
+  window.upcomingPrograms = _defaultUpcomingPrograms;
+}
+if (typeof upcomingPrograms === 'undefined') {
+  var upcomingPrograms = window.upcomingPrograms;
+}
+
+/* =============================================
    UPCOMING PROGRAMS TICKER
    ============================================= */
 (function () {
   const tickerInner = document.getElementById('ticker-inner');
-  if (!tickerInner || typeof upcomingPrograms === 'undefined' || !upcomingPrograms.length) return;
+  const runs = (typeof window.upcomingPrograms !== 'undefined' && window.upcomingPrograms && window.upcomingPrograms.length)
+    ? window.upcomingPrograms
+    : ((typeof upcomingPrograms !== 'undefined' && upcomingPrograms) ? upcomingPrograms : _defaultUpcomingPrograms);
+
+  if (!tickerInner || !runs || !runs.length) return;
 
   function buildItem(p, idx) {
     const seatsHtml = p.seats > 0
@@ -95,7 +311,7 @@
   }
 
   // Render items twice for seamless infinite loop
-  const html = upcomingPrograms.map((p, i) => buildItem(p, i)).join('');
+  const html = runs.map((p, i) => buildItem(p, i)).join('');
   tickerInner.innerHTML = html + html;
 
   // Click to open registration
@@ -141,9 +357,12 @@ function _updateBreakdownUI() {
   }
 }
 
-
 function openRegModal(progIdx) {
-  const p = upcomingPrograms[progIdx];
+  const runs = (typeof window.upcomingPrograms !== 'undefined' && window.upcomingPrograms && window.upcomingPrograms.length)
+    ? window.upcomingPrograms
+    : ((typeof upcomingPrograms !== 'undefined' && upcomingPrograms) ? upcomingPrograms : _defaultUpcomingPrograms);
+
+  const p = runs[progIdx];
   if (!p) return;
   _currentProgram = p;
 
@@ -151,16 +370,23 @@ function openRegModal(progIdx) {
   if (!overlay) return;
 
   // Look up course for pricing & program badge
-  const course = (typeof coursesData !== 'undefined')
-    ? coursesData.find(c => c.id === p.courseId)
-    : null;
+  const allCourses = (typeof window.coursesData !== 'undefined' && window.coursesData && window.coursesData.length)
+    ? window.coursesData
+    : ((typeof coursesData !== 'undefined' && coursesData) ? coursesData : _defaultCoursesData);
+
+  const course = allCourses.find(c => c.id == p.courseId);
 
   // Populate header
-  document.getElementById('reg-program-badge').textContent  = course ? course.program : 'PROGRAM';
-  document.getElementById('reg-program-title').textContent  = p.program;
-  document.getElementById('reg-date-badge').textContent     = '📅 ' + p.date;
-  document.getElementById('reg-location-badge').textContent = '📍 ' + p.location;
-  document.getElementById('reg-mode-badge').textContent     = p.mode;
+  const badgeEl = document.getElementById('reg-program-badge');
+  if (badgeEl) badgeEl.textContent  = course ? course.program : 'EQuip';
+  const titleEl = document.getElementById('reg-program-title');
+  if (titleEl) titleEl.textContent  = p.program;
+  const dateEl = document.getElementById('reg-date-badge');
+  if (dateEl) dateEl.textContent     = '📅 ' + p.date;
+  const locEl = document.getElementById('reg-location-badge');
+  if (locEl) locEl.textContent = '📍 ' + p.location;
+  const modeEl = document.getElementById('reg-mode-badge');
+  if (modeEl) modeEl.textContent     = p.mode;
 
   _currentPromoCode = null;
   _currentDiscount = 0;
@@ -179,18 +405,26 @@ function openRegModal(progIdx) {
     _currentFinalAmount = _currentBaseAmount + _currentTax;
     _updateBreakdownUI();
 
-    document.getElementById('reg-price').textContent = `₹${_currentBaseAmount.toLocaleString('en-IN')}`;
-    document.getElementById('reg-price-row').style.display = '';
+    const priceEl = document.getElementById('reg-price');
+    if (priceEl) priceEl.textContent = `₹${_currentBaseAmount.toLocaleString('en-IN')}`;
+    const priceRow = document.getElementById('reg-price-row');
+    if (priceRow) priceRow.style.display = '';
   } else {
-    document.getElementById('reg-price-row').style.display = 'none';
-    document.getElementById('reg-pay-btn-text').textContent = 'Complete Registration';
+    const priceRow = document.getElementById('reg-price-row');
+    if (priceRow) priceRow.style.display = 'none';
+    const payText = document.getElementById('reg-pay-btn-text');
+    if (payText) payText.textContent = 'Complete Registration';
   }
 
   // Reset form
-  document.getElementById('reg-form').reset();
-  document.getElementById('reg-error').style.display = 'none';
-  document.getElementById('reg-step-1').style.display = '';
-  document.getElementById('reg-step-2').style.display = 'none';
+  const regForm = document.getElementById('reg-form');
+  if (regForm) regForm.reset();
+  const regErr = document.getElementById('reg-error');
+  if (regErr) regErr.style.display = 'none';
+  const step1 = document.getElementById('reg-step-1');
+  if (step1) step1.style.display = '';
+  const step2 = document.getElementById('reg-step-2');
+  if (step2) step2.style.display = 'none';
 
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -313,7 +547,7 @@ function _launchRazorpay(registrant, course, program) {
   const rzp = new Razorpay(options);
   rzp.on('payment.failed', function () {
     const errEl = document.getElementById('reg-error');
-    errEl.textContent = 'Payment failed. Please try again or contact us at learn@drishtavidya.com.';
+    errEl.textContent = 'Payment failed. Please try again or contact us at namaste@drishtavidya.com.';
     errEl.style.display = 'block';
     const btn = document.getElementById('reg-pay-btn');
     if (btn) btn.disabled = false;
@@ -326,6 +560,15 @@ function _launchRazorpay(registrant, course, program) {
 function _showRegSuccess(razorpayResponse, registrant, program, course) {
   document.getElementById('reg-step-1').style.display = 'none';
   document.getElementById('reg-step-2').style.display = '';
+
+  const noteEl = document.getElementById('reg-success-note');
+  if (noteEl) {
+    const isEquip = (program && program.program && program.program.toLowerCase().includes('equip')) ||
+                    (course && course.program && course.program.toLowerCase().includes('equip'));
+    noteEl.textContent = isEquip
+      ? 'Payment successful. Check your email for receipt and your EQ OS unlock voucher code.'
+      : 'Payment successful. Check your email for registration receipt and workshop preparation pack.';
+  }
 
   const paymentId = razorpayResponse ? razorpayResponse.razorpay_payment_id : '—';
   const rows = [
@@ -415,44 +658,71 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showNoDatesAlert(course) {
+  // Remove existing alert if any
+  const existing = document.getElementById('no-dates-modal');
+  if (existing && typeof existing.remove === 'function') existing.remove();
+
   const overlay = document.createElement('div');
+  overlay.id = 'no-dates-modal';
   overlay.className = 'modal-overlay';
   overlay.style.zIndex = '3000'; // Above other modals if any
   
   const title = course ? encodeURIComponent(course.title) : '';
+  const courseName = course ? course.title : 'this program';
   const redirectUrl = `contact.html?course=${title}`;
 
   overlay.innerHTML = `
-    <div class="modal" style="max-width: 400px; text-align: center;">
-      <div class="modal-header" style="padding: 30px 20px 20px; background: transparent; border: none;">
-        <div style="font-size: 48px; margin-bottom: 16px;">📅</div>
+    <div class="modal" style="max-width: 440px; text-align: center;">
+      <div class="modal-header" style="padding: 30px 20px 16px; background: transparent; border: none; flex-direction: column; align-items: center;">
+        <div style="font-size: 48px; margin-bottom: 12px;">📅</div>
         <h3 style="color: var(--navy); font-size: 20px; margin: 0; font-family: 'Playfair Display', serif; font-weight: 700;">No Scheduled Dates</h3>
       </div>
       <div class="modal-body" style="padding: 0 28px 30px;">
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
-          There are currently no upcoming dates scheduled for this program. We can notify you when new dates are announced or discuss a custom session for your team.
+          There are currently no upcoming open cohort dates scheduled for <strong>${courseName}</strong>. You can register your interest to be notified when new dates are announced, or discuss an in-house session for your team.
         </p>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="window.location.href='${redirectUrl}'">
+        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-bottom: 10px;" onclick="window.location.href='${redirectUrl}'">
           Enquire Now
         </button>
-        <button class="btn btn-outline" style="width: 100%; justify-content: center; margin-top: 10px; border: none; background: transparent; color: var(--text-muted);" onclick="this.closest('.modal-overlay').remove()">
+        <button class="btn btn-outline-navy" style="width: 100%; justify-content: center;" onclick="this.closest('.modal-overlay').remove()">
           Close
         </button>
       </div>
     </div>
   `;
   document.body.appendChild(overlay);
-  // Trigger animation
-  setTimeout(() => overlay.classList.add('open'), 10);
+  overlay.classList.add('open');
 }
 
-function openRegForCourse(courseId) {
-  if (typeof upcomingPrograms === 'undefined') return;
-  const runIdx = upcomingPrograms.findIndex(p => p.courseId === courseId);
+function openRegForCourse(courseIdOrNameOrObj) {
+  let target = courseIdOrNameOrObj;
+  if (typeof courseIdOrNameOrObj === 'object' && courseIdOrNameOrObj !== null) {
+    target = courseIdOrNameOrObj.id || courseIdOrNameOrObj.title || courseIdOrNameOrObj.program;
+  }
+
+  const allRuns = (typeof window.upcomingPrograms !== 'undefined' && window.upcomingPrograms && window.upcomingPrograms.length)
+    ? window.upcomingPrograms
+    : ((typeof upcomingPrograms !== 'undefined' && upcomingPrograms && upcomingPrograms.length) ? upcomingPrograms : _defaultUpcomingPrograms);
+
+  const allCourses = (typeof window.coursesData !== 'undefined' && window.coursesData && window.coursesData.length)
+    ? window.coursesData
+    : ((typeof coursesData !== 'undefined' && coursesData && coursesData.length) ? coursesData : _defaultCoursesData);
+
+  // Match by course ID or course/program title
+  let runIdx = allRuns.findIndex(p => p.courseId == target);
+  if (runIdx < 0 && typeof target === 'string') {
+    const t = target.trim().toLowerCase();
+    runIdx = allRuns.findIndex(p => p.program && p.program.trim().toLowerCase() === t);
+  }
+
   if (runIdx >= 0) {
     openRegModal(runIdx);
   } else {
-    const course = (typeof coursesData !== 'undefined') ? coursesData.find(c => c.id === courseId) : null;
+    let course = allCourses.find(c => c.id == target);
+    if (!course && typeof target === 'string') {
+      const t = target.trim().toLowerCase();
+      course = allCourses.find(c => c.title && c.title.trim().toLowerCase() === t);
+    }
     showNoDatesAlert(course);
   }
 }
@@ -500,8 +770,8 @@ function buildCourseCard(course, showEnquireBtn = true) {
            Enquire
          </a>
          ${course.price > 0
-           ? `<button class="btn btn-primary" onclick="openRegForCourse(${course.id})">
-                💳 Pay &amp; Enroll
+           ? `<button type="button" class="btn btn-primary" onclick="openRegForCourse(${course.id})">
+                💳 View &amp; Enroll
               </button>`
            : `<a href="contact.html?course=${encodeURIComponent(course.title)}" class="btn btn-primary">
                 Get Quote
@@ -540,39 +810,71 @@ function buildCourseCard(course, showEnquireBtn = true) {
 /* =============================================
    PAYMENT MODAL
    ============================================= */
-function openPaymentModal(courseId) {
-  const course = (typeof coursesData !== 'undefined')
-    ? coursesData.find(c => c.id === courseId)
-    : null;
-  if (!course) return;
+function openPaymentModal(courseIdOrObj) {
+  let courseId = courseIdOrObj;
+  let targetTitle = '';
+  if (typeof courseIdOrObj === 'object' && courseIdOrObj !== null) {
+    courseId = courseIdOrObj.id;
+    targetTitle = courseIdOrObj.title || courseIdOrObj.program || '';
+  }
+
+  const allCourses = (typeof window.coursesData !== 'undefined' && window.coursesData && window.coursesData.length)
+    ? window.coursesData
+    : ((typeof coursesData !== 'undefined' && coursesData) ? coursesData : _defaultCoursesData);
+
+  let course = null;
+  if (courseId) {
+    course = allCourses.find(c => c.id == courseId);
+  }
+  if (!course && targetTitle) {
+    const t = targetTitle.toLowerCase();
+    course = allCourses.find(c => c.title && c.title.toLowerCase().includes(t));
+  }
+  if (!course && typeof courseIdOrObj === 'string') {
+    const t = courseIdOrObj.toLowerCase();
+    course = allCourses.find(c => (c.title && c.title.toLowerCase().includes(t)) || (c.program && c.program.toLowerCase() === t));
+  }
+
+  // If reg-modal is present on this page and course is identified, delegate to openRegForCourse
+  const regOverlay = document.getElementById('reg-modal');
+  if (regOverlay && course) {
+    openRegForCourse(course.id);
+    return;
+  }
 
   const overlay = document.getElementById('payment-modal');
   if (!overlay) return;
 
-  // Populate modal fields
-  document.getElementById('modal-program').textContent      = course.program;
-  document.getElementById('modal-course-title').textContent = course.title;
-  document.getElementById('modal-price').textContent        = course.priceLabel;
-  document.getElementById('modal-price-note').textContent   = course.priceNote;
-  document.getElementById('modal-upi-id').textContent       = course.upiId || 'drishtavidya@upi';
+  if (course) {
+    const pBadge = document.getElementById('modal-program');
+    if (pBadge) pBadge.textContent = course.program;
+    const cTitle = document.getElementById('modal-course-title');
+    if (cTitle) cTitle.textContent = course.title;
+    const mPrice = document.getElementById('modal-price');
+    if (mPrice) mPrice.textContent = course.priceLabel;
+    const mPriceNote = document.getElementById('modal-price-note');
+    if (mPriceNote) mPriceNote.textContent = course.priceNote;
+    const mUpi = document.getElementById('modal-upi-id');
+    if (mUpi) mUpi.textContent = course.upiId || 'drishtavidya@upi';
 
-  const razorBtn = document.getElementById('razorpay-btn');
-  if (razorBtn) {
-    if (course.paymentLink) {
-      razorBtn.href = course.paymentLink;
-      razorBtn.style.opacity = '1';
-      razorBtn.style.pointerEvents = 'auto';
-    } else {
-      razorBtn.href = '#';
-      razorBtn.style.opacity = '.5';
-      razorBtn.style.pointerEvents = 'none';
-      razorBtn.title = 'Payment link coming soon';
+    const razorBtn = document.getElementById('razorpay-btn');
+    if (razorBtn) {
+      if (course.paymentLink) {
+        razorBtn.href = course.paymentLink;
+        razorBtn.style.opacity = '1';
+        razorBtn.style.pointerEvents = 'auto';
+      } else {
+        razorBtn.href = '#';
+        razorBtn.style.opacity = '.5';
+        razorBtn.style.pointerEvents = 'none';
+        razorBtn.title = 'Payment link coming soon';
+      }
     }
-  }
 
-  const enquireLink = document.getElementById('modal-enquire-link');
-  if (enquireLink) {
-    enquireLink.href = `contact.html?course=${encodeURIComponent(course.title)}`;
+    const enquireLink = document.getElementById('modal-enquire-link');
+    if (enquireLink) {
+      enquireLink.href = `contact.html?course=${encodeURIComponent(course.title)}`;
+    }
   }
 
   // Reset to first tab
@@ -701,8 +1003,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const courseParam = params.get('course');
   const courseSelect = document.getElementById('course-interest');
   if (courseParam && courseSelect) {
+    const searchVal = courseParam.trim().toLowerCase();
     for (const opt of courseSelect.options) {
-      if (opt.value === courseParam || opt.text === courseParam) {
+      const optVal = opt.value.trim().toLowerCase();
+      const optText = opt.textContent.trim().toLowerCase();
+      if (optVal && (optVal === searchVal || optText === searchVal || optVal.includes(searchVal) || searchVal.includes(optVal))) {
         opt.selected = true;
         break;
       }
@@ -712,31 +1017,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
-  // Populate course dropdown from data
-  if (courseSelect && typeof coursesData !== 'undefined') {
-    // Clear existing options except placeholder
-    while (courseSelect.options.length > 1) courseSelect.remove(1);
-    coursesData.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = c.title;
-      opt.textContent = `${c.title} (${c.program})`;
-      if (c.title === courseParam) opt.selected = true;
-      courseSelect.appendChild(opt);
-    });
-    const other = document.createElement('option');
-    other.value = 'Other';
-    other.textContent = 'Other / General Enquiry';
-    courseSelect.appendChild(other);
-  }
-
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const btn = form.querySelector('[type="submit"]');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
+    if (btn) {
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+    }
 
-    // Simulate submission (replace with real endpoint or Formspree)
-    setTimeout(() => {
+    const formData = {
+      first_name: form.querySelector('#first-name')?.value || '',
+      last_name: form.querySelector('#last-name')?.value || '',
+      email: form.querySelector('#email')?.value || '',
+      phone: form.querySelector('#phone')?.value || '',
+      organization: form.querySelector('#organization')?.value || '',
+      course_interest: form.querySelector('#course-interest')?.value || '',
+      team_size: form.querySelector('#team-size')?.value || '',
+      message: form.querySelector('#message')?.value || ''
+    };
+
+    fetch('api/contact.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .catch(() => {})
+    .finally(() => {
       form.innerHTML = `
         <div style="text-align:center;padding:40px 20px">
           <div style="font-size:56px;margin-bottom:16px">✅</div>
@@ -744,10 +1050,10 @@ document.addEventListener('DOMContentLoaded', () => {
             Message Received!
           </h3>
           <p style="color:var(--text-muted);line-height:1.7">
-            Thank you for reaching out. We'll get back to you within 1–2 business days.
+            Thank you for reaching out. Your enquiry has been forwarded to our team at <strong>namaste@drishtavidya.com</strong>. We'll get back to you within 1–2 business days.
           </p>
         </div>`;
-    }, 1200);
+    });
   });
 })();
 
@@ -933,3 +1239,57 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error fetching special event:', err);
     });
 })();
+
+/* =============================================
+   EQUIP PAGE — TRACKS CARDS HYDRATION
+   ============================================= */
+(function () {
+  const equipGrid = document.getElementById('equip-tracks-grid');
+  if (!equipGrid || typeof coursesData === 'undefined') return;
+
+  const equipCourses = coursesData.filter(c => 
+    c.program === 'EQuip' || 
+    (c.title && c.title.toLowerCase().startsWith('equip'))
+  );
+
+  if (equipCourses.length > 0) {
+    equipGrid.innerHTML = equipCourses.map(c => buildCourseCard(c)).join('');
+    setTimeout(() => {
+      equipGrid.querySelectorAll('.reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 80);
+      });
+    }, 50);
+  }
+})();
+
+/* =============================================
+   NEWSLETTER FORM (THE EQNOMIST)
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.footer-newsletter-form').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = form.querySelector('.footer-newsletter-input');
+      const btn = form.querySelector('.footer-newsletter-btn');
+      if (!input || !input.value.trim()) return;
+      btn.textContent = 'Subscribed! ✓';
+      btn.disabled = true;
+      input.value = '';
+      setTimeout(() => {
+        btn.textContent = 'Subscribe';
+        btn.disabled = false;
+      }, 4000);
+    });
+  });
+});
+
+/* Explicit global assignments for inline onclick handlers */
+window.openRegModal = openRegModal;
+window.closeRegModal = closeRegModal;
+window.openRegForCourse = openRegForCourse;
+window.showNoDatesAlert = showNoDatesAlert;
+window.openPaymentModal = openPaymentModal;
+window.closePaymentModal = closePaymentModal;
+window.switchPaymentTab = switchPaymentTab;
+window.copyUPI = copyUPI;
+

@@ -7,3 +7,7 @@ env.php
 # IDEs
 .vscode/
 .idea/
+
+# Python
+__pycache__/
+*.pyc

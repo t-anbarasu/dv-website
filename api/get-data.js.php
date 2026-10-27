@@ -79,5 +79,7 @@ foreach ($runs as $row) {
 
 // 3. Output as Javascript
 echo "/** Auto-generated from database */\n\n";
-echo "const coursesData = " . json_encode($coursesData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ";\n\n";
-echo "const upcomingPrograms = " . json_encode($upcomingPrograms, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ";\n";
+echo "window.coursesData = " . json_encode($coursesData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ";\n";
+echo "var coursesData = window.coursesData;\n\n";
+echo "window.upcomingPrograms = " . json_encode($upcomingPrograms, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . ";\n";
+echo "var upcomingPrograms = window.upcomingPrograms;\n";
